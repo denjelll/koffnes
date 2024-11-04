@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nama_depan', 50);
             $table->string('nama_belakang', 50);
             $table->string('no_telepon', 15)->unique(); 
+            $table->string('email', 50)->unique();
+            $table->string('password', 255);
+            $table->enum('role', ['Admin', 'Kasir']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
