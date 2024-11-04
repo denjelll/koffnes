@@ -6,7 +6,23 @@
   @vite('resources/css/app.css')
 </head>
 <body>
-    <h1 class="text-3xl font-bold underline text-red-500">
+    <h1 class="text-3xl font-bold underline text-organic">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-butter">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-coconut">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-natural">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-cocoa">
       Hello world!
     </h1>
 
