@@ -205,8 +205,8 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Whoops\\' => 
         array (
@@ -362,8 +362,8 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -581,7 +581,20 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\DailyResetAntrian' => __DIR__ . '/../..' . '/app/Console/Commands/DailyResetAntrian.php',
+        'App\\Http\\Controllers\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
+        'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
+        'App\\Models\\Addons' => __DIR__ . '/../..' . '/app/Models/Addons.php',
+        'App\\Models\\DetailAddons' => __DIR__ . '/../..' . '/app/Models/DetailAddons.php',
+        'App\\Models\\DetailOrder' => __DIR__ . '/../..' . '/app/Models/DetailOrder.php',
+        'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
+        'App\\Models\\KategoriDetail' => __DIR__ . '/../..' . '/app/Models/KategoriDetail.php',
+        'App\\Models\\KategoriUtama' => __DIR__ . '/../..' . '/app/Models/KategoriUtama.php',
+        'App\\Models\\Menu' => __DIR__ . '/../..' . '/app/Models/Menu.php',
+        'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
+        'App\\Models\\Promo' => __DIR__ . '/../..' . '/app/Models/Promo.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

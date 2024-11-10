@@ -6,7 +6,20 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\DailyResetAntrian' => $baseDir . '/app/Console/Commands/DailyResetAntrian.php',
+    'App\\Http\\Controllers\\AdminController' => $baseDir . '/app/Http/Controllers/AdminController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\LoginController' => $baseDir . '/app/Http/Controllers/LoginController.php',
+    'App\\Http\\Controllers\\OrderController' => $baseDir . '/app/Http/Controllers/OrderController.php',
+    'App\\Models\\Addons' => $baseDir . '/app/Models/Addons.php',
+    'App\\Models\\DetailAddons' => $baseDir . '/app/Models/DetailAddons.php',
+    'App\\Models\\DetailOrder' => $baseDir . '/app/Models/DetailOrder.php',
+    'App\\Models\\Event' => $baseDir . '/app/Models/Event.php',
+    'App\\Models\\KategoriDetail' => $baseDir . '/app/Models/KategoriDetail.php',
+    'App\\Models\\KategoriUtama' => $baseDir . '/app/Models/KategoriUtama.php',
+    'App\\Models\\Menu' => $baseDir . '/app/Models/Menu.php',
+    'App\\Models\\Order' => $baseDir . '/app/Models/Order.php',
+    'App\\Models\\Promo' => $baseDir . '/app/Models/Promo.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
