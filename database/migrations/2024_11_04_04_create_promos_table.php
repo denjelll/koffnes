@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('promos', function (Blueprint $table) {
-            $table->string('id_promo', 50)->primary();
+            $table->id('id_promo')->autoIncrement();
             $table->decimal('diskon', 5, 2); // Misalnya 10.50 untuk diskon 10.5%
             $table->datetime('waktu_mulai'); // Menggunakan datetime untuk menyimpan waktu spesifik
             $table->datetime('waktu_berakhir');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_promos');
+        Schema::dropIfExists('promos');
     }
 };

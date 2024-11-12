@@ -22,7 +22,14 @@ Route::controller( LoginController::class)->group(function(){
 Route::controller(AdminController::class)->group(function(){
     Route::get('/admin', 'index')->name('admin.index');
     Route::get('/admin/logout', 'logout')->name('admin.logout');
+    Route::get('/admin/menu', 'menu')->name('admin.menu');
+    Route::get('/admin/menu/add', 'showAddMenuForm')->name('admin.menu.add');
+    Route::post('/admin/store', 'storeMenu')->name('admin.store');
+    Route::get('/admin/menu/edit/{id}', 'showEditMenuForm')->name('admin.menu.edit');
+    Route::get('/admin/menu/delete/{id}', 'DeleteMenu')->name('admin.menu.delete');
+    Route::post('/admin/update', 'updateMenu')->name('admin.update.menu');
 });
+
 
 Route::controller(OrderController::class)->group(function() { 
     Route::get('/order/table/{tableNumber}', 'showTableForm');

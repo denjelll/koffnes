@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('addons', function (Blueprint $table) {
-            $table->string('id_addons', 10)->primary();
+            $table->id('id_addons')->autoIncrement();
             $table->string('addons_menu', 50);
             $table->timestamps();
         });
