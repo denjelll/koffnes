@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->string('id_events', 50)->primary();
+            $table->string('id_event', 50)->primary();
             $table->string('nama_event', 100);
             $table->string('banner_event', 255); // Path untuk gambar banner
             $table->string('hadiah_event', 100);

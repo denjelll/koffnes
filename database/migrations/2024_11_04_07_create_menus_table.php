@@ -29,7 +29,14 @@ return new class extends Migration
                   ->on('promos')
                   ->onDelete('set null')
                   ->onUpdate('cascade');
-                  
+    
+            $table->string('id_addons', 50)->nullable();
+            $table->foreign('id_addons')
+                ->references('id_addons')
+                ->on('addons')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();
             $table->integer('harga')->unsigned();

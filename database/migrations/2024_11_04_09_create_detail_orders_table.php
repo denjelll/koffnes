@@ -21,8 +21,8 @@ return new class extends Migration
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
 
-            $table->string('id_menus', 50);
-            $table->foreign('id_menus')
+            $table->string('id_menu', 50);
+            $table->foreign('id_menu')
                   ->references('id_menu')
                   ->on('menus')
                   ->onDelete('cascade')
