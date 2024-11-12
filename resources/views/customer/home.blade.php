@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @vite('resources/css/app.css') 
     <style>
-      .slide {
-        display: none;
-      }
-      .slide.active {
-        display: block;
-      }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: block;
+        }
 
-            /* Hanya menyembunyikan scrollbar */
         html {
             overflow-y: scroll;
             scrollbar-width: none; /* Untuk Firefox */
@@ -81,143 +80,14 @@
       </div>
       <!-- Bundling Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5">Bundling & Deals</h1>
-      <div
-        class="mt-5 w-100 p-4 rounded-lg shadow-lg flex items-center"
-        style="background-color: #fff2e2"
-      >
-        <div class="flex-shrink-0">
-          <img
-            src="#"
-            alt="Coffee and Croissant"
-            class="w-16 h-16 rounded-full"
-          />
-        </div>
-        <div class="ml-4 flex-1">
-          <h2 class="text-lg font-semibold text-brown-800">Kopi Croisant</h2>
-          <p class="text-sm text-brown-600">
-            Minuman andalan koffness<br />Seger bet
-          </p>
-          <p class="mt-2 text-lg font-semibold text-green-600">Rp. 15.000</p>
-        </div>
-        <button
-          class="mt-20 ml-4 w-8 h-8 text-white rounded-full flex items-center justify-center"
-          style="background-color: #412f26"
-        >
-          <span class="text-lg font-semibold mb-0.5">+</span>
-        </button>
-      </div>
-      <div
-        class="mt-5 w-100 p-4 rounded-lg shadow-lg flex items-center"
-        style="background-color: #fff2e2"
-      >
-        <div class="flex-shrink-0">
-          <img
-            src="#"
-            alt="Coffee and Croissant"
-            class="w-16 h-16 rounded-full"
-          />
-        </div>
-        <div class="ml-4 flex-1">
-          <h2 class="text-lg font-semibold text-brown-800">Kopi Croisant</h2>
-          <p class="text-sm text-brown-600">
-            Minuman andalan koffness<br />Seger bet
-          </p>
-          <p class="mt-2 text-lg font-semibold text-green-600">Rp. 15.000</p>
-        </div>
-        <button
-          class="mt-20 ml-4 w-8 h-8 text-white rounded-full flex items-center justify-center"
-          style="background-color: #412f26"
-        >
-          <span class="text-lg font-semibold mb-0.5">+</span>
-        </button>
-      </div>
-      <div
-        class="mt-5 w-100 p-4 rounded-lg shadow-lg flex items-center"
-        style="background-color: #fff2e2"
-      >
-        <div class="flex-shrink-0">
-          <img
-            src="#"
-            alt="Coffee and Croissant"
-            class="w-16 h-16 rounded-full"
-          />
-        </div>
-        <div class="ml-4 flex-1">
-          <h2 class="text-lg font-semibold text-brown-800">Kopi Croisant</h2>
-          <p class="text-sm text-brown-600">
-            Minuman andalan koffness<br />Seger bet
-          </p>
-          <p class="mt-2 text-lg font-semibold text-green-600">Rp. 15.000</p>
-        </div>
-        <button
-          class="mt-20 ml-4 w-8 h-8 text-white rounded-full flex items-center justify-center"
-          style="background-color: #412f26"
-        >
-          <span class="text-lg font-semibold mb-0.5">+</span>
-        </button>
-      </div>
+        <x-customer_bundle_card />
+        <x-customer_bundle_card />
+        <x-customer_bundle_card />
       <!-- Event Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5">Event News</h1>
-      <div class="relative w-96 rounded-lg overflow-hidden shadow-lg mt-5">
-        <img src="#" alt="Event Image" class="w-full h-56 object-cover" />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent"
-        ></div>
-        <div class="absolute bottom-4 left-4 right-4 text-gray-800">
-          <h2 class="text-xl font-bold">Lomba Tekken 8 Koffnes</h2>
-          <p class="text-sm mt-1">
-            Lomba yang akan diadakan tanggal 10 Januari 2025, menangkan hadiah
-            sebesar Rp.10.000.000
-          </p>
-          <a
-            href="#"
-            class="inline-block mt-3 px-4 py-2 text-white font-semibold rounded-lg shadow-md hover:bg-brown-700"
-            style="background-color: #412f26"
-          >
-            See More
-          </a>
-        </div>
-      </div>
-      <div class="relative w-96 rounded-lg overflow-hidden shadow-lg mt-5">
-        <img src="#" alt="Event Image" class="w-full h-56 object-cover" />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent"
-        ></div>
-        <div class="absolute bottom-4 left-4 right-4 text-gray-800">
-          <h2 class="text-xl font-bold">Lomba Tekken 8 Koffnes</h2>
-          <p class="text-sm mt-1">
-            Lomba yang akan diadakan tanggal 10 Januari 2025, menangkan hadiah
-            sebesar Rp.10.000.000
-          </p>
-          <a
-            href="#"
-            class="inline-block mt-3 px-4 py-2 text-white font-semibold rounded-lg shadow-md hover:bg-brown-700"
-            style="background-color: #412f26"
-          >
-            See More
-          </a>
-        </div>
-      </div>
-      <div class="relative w-96 rounded-lg overflow-hidden shadow-lg mt-5">
-        <img src="#" alt="Event Image" class="w-full h-56 object-cover" />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent"
-        ></div>
-        <div class="absolute bottom-4 left-4 right-4 text-gray-800">
-          <h2 class="text-xl font-bold">Lomba Tekken 8 Koffnes</h2>
-          <p class="text-sm mt-1">
-            Lomba yang akan diadakan tanggal 10 Januari 2025, menangkan hadiah
-            sebesar Rp.10.000.000
-          </p>
-          <a
-            href="#"
-            class="inline-block mt-3 px-4 py-2 text-white font-semibold rounded-lg shadow-md hover:bg-brown-700"
-            style="background-color: #412f26"
-          >
-            See More
-          </a>
-        </div>
-      </div>
+      <x-customer_event_home />
+      <x-customer_event_home />
+      <x-customer_event_home />
       <div class="flex items-center justify-center mt-3">
         <a
         href="#events"
@@ -231,7 +101,6 @@
 
     <!-- Fixed Bottom Navbar -->
     <x-customer_navbar />
-
 
     <script>
       // JavaScript for slideshow functionality
