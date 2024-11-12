@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
     <style>
       body {
-        background-image: url("motif.jpeg");
+        background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
         background-repeat: repeat;
         background-position: top left;
         background-size: 400px 400px;
@@ -18,7 +18,7 @@
     </style>
   </head>
   <body class="flex items-center justify-center min-h-screen flex-col">
-    <img src="koffnes.png" alt="Koffnes Logo" class="h-14 mb-10"/>
+    <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Koffnes Logo" class="h-14 mb-10"/>
 
     <div class="bg-white p-6 shadow-lg w-80 mb-10" style="background-color: #fff2e2; border: solid 5px #412f26; border-radius: 10px;">
       <h2 class="text-2xl font-semibold text-center">
