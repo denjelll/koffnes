@@ -14,6 +14,13 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                organic: "#6A6F4C",
+                butter: "#CBB89D",
+                coconut: "#EDE1D2",
+                natural: "#806044",
+                cocoa: "#412F26",
+            },
         },
     },
     plugins: [require("daisyui")],
