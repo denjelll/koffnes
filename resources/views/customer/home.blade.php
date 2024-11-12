@@ -21,7 +21,6 @@
             display: none; /* Untuk Chrome, Safari, dan Edge */
         }
 
-
       body {
         background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
         background-repeat: repeat;
