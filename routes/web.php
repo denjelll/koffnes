@@ -9,8 +9,6 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 });
-<<<<<<< Updated upstream
-=======
 
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
@@ -32,4 +30,3 @@ Route::controller(OrderController::class)->group(function() {
 Route::get('/input', function () {
     return view('/customer/input');
 });
->>>>>>> Stashed changes
