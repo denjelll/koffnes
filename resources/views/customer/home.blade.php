@@ -12,6 +12,17 @@
         display: block;
       }
 
+            /* Hanya menyembunyikan scrollbar */
+        html {
+            overflow-y: scroll;
+            scrollbar-width: none; /* Untuk Firefox */
+        }
+
+        html::-webkit-scrollbar {
+            display: none; /* Untuk Chrome, Safari, dan Edge */
+        }
+
+
       body {
         background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
         background-repeat: repeat;
@@ -27,12 +38,7 @@
   <body class="flex flex-col min-h-screen">
     <!-- Content area -->
     <main class="flex-grow p-4">
-      <div
-        class="fixed top-0 left-0 right-0 w-full text-white text-center h-12 flex items-center justify-center"
-        style="background-color: #412f26"
-      >
-        <img src="{{ asset('storage/asset/gambar/koffnes_putih.png') }}" alt="Koffnes Logo" class="h-8" />
-      </div>
+      <x-customer_header />
       <!-- Slideshow Container -->
       <div
         class="w-100 h-60 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
@@ -66,101 +72,12 @@
       <!-- Best Seller Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
       <div class="flex space-x-4">
-        <div
-          class="w-1/2 rounded-lg shadow-lg overflow-hidden"
-          style="background-color: #fff2e2"
-        >
-          <img
-            src="foto-menu.jpg"
-            alt="Foto Menu"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
-            <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
-            </p>
-            <button
-              class="mt-4 w-full py-2 text-white rounded-lg"
-              style="background-color: #412f26"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-
-        <div
-          class="w-1/2 rounded-lg shadow-lg overflow-hidden"
-          style="background-color: #fff2e2"
-        >
-          <img
-            src="foto-menu.jpg"
-            alt="Foto Menu"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
-            <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
-            </p>
-            <button
-              class="mt-4 w-full py-2 text-white rounded-lg"
-              style="background-color: #412f26"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
+        <x-customer_menu_card />
+        <x-customer_menu_card />
       </div>
       <div class="flex space-x-4">
-        <div
-          class="w-1/2 rounded-lg shadow-lg overflow-hidden mt-3"
-          style="background-color: #fff2e2"
-        >
-          <img
-            src="foto-menu.jpg"
-            alt="Foto Menu"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
-            <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
-            </p>
-            <button
-              class="mt-4 w-full py-2 text-white rounded-lg"
-              style="background-color: #412f26"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div
-          class="w-1/2 rounded-lg shadow-lg overflow-hidden mt-3"
-          style="background-color: #fff2e2"
-        >
-          <img
-            src="foto-menu.jpg"
-            alt="Foto Menu"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
-            <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
-            </p>
-            <button
-              class="mt-4 w-full py-2 text-white rounded-lg"
-              style="background-color: #412f26"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
+        <x-customer_menu_card />
+        <x-customer_menu_card />
       </div>
       <!-- Bundling Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5">Bundling & Deals</h1>
@@ -313,25 +230,8 @@
     </main>
 
     <!-- Fixed Bottom Navbar -->
-    <nav
-      class="fixed bottom-0 left-0 right-0 text-white shadow-lg"
-      style="background-color: #412f26"
-    >
-      <div class="flex justify-around items-center py-4">
-        <a href="#" class="text-center flex flex-col items-center">
-          <img src="{{ asset('storage/asset/gambar/home.png') }}" width="24" height="24" class="mb-1" />
-          <span class="text-sm">Home</span>
-        </a>
-        <a href="#" class="text-center flex flex-col items-center">
-          <img src="{{ asset('storage/asset/gambar/menu.png') }}" width="24" height="24" class="mb-1" />
-          <span class="text-sm">Menu</span>
-        </a>
-        <a href="#" class="text-center flex flex-col items-center">
-          <img src="{{ asset('storage/asset/gambar/event.png') }}" width="24" height="24" class="mb-1" />
-          <span class="text-sm">Events</span>
-        </a>
-      </div>
-    </nav>
+    <x-customer_navbar />
+
 
     <script>
       // JavaScript for slideshow functionality
