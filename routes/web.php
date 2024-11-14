@@ -24,9 +24,13 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/logout', 'logout')->name('admin.logout');
 });
 
-Route::controller(OrderController::class)->group(function() { 
-    Route::get('/order/table/{tableNumber}', 'showTableForm');
-    Route::post('/order/table/{tableNumber}', 'storeCustomer');
-    Route::get('/order/{tableNumber}/menu', 'showMenu');
-    Route::post('/order/{tableNumber}/menu', 'checkout');
+Route::controller(OrderController::class)->group(function() {
+    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
+    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
+
+    Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
+
+    Route::post('/order/meja/{nomorMeja}/checkout', 'cart')->name('order.cart');
+    Route::get('/order/meja/{nomorMeja}/checkout', 'checkout')->name('order.checkout');
+
 });
