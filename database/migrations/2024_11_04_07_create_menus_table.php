@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
-            $table->string('id_menu', 7)->primary();
+            $table->id('id_menu')->autoIncrement();
 
             // Definisikan foreign key untuk id_kategori_detail
-            $table->string('id_kategoridetail', 50);
+            $table->unsignedBigInteger('id_kategoridetail');
             $table->foreign('id_kategoridetail')
                   ->references('id_kategoridetail')
                   ->on('kategori_detail')
@@ -23,14 +23,14 @@ return new class extends Migration
                   ->onUpdate('cascade');
 
             // Definisikan foreign key untuk id_promo
-            $table->string('id_promo', 50)->nullable();
+            $table->unsignedBigInteger('id_promo')->nullable();
             $table->foreign('id_promo')
                   ->references('id_promo')
                   ->on('promos')
                   ->onDelete('set null')
                   ->onUpdate('cascade');
     
-            $table->string('id_addons', 50)->nullable();
+            $table->unsignedBigInteger('id_addons')->nullable();
             $table->foreign('id_addons')
                 ->references('id_addons')
                 ->on('addons')

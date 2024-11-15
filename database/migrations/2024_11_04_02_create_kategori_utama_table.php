@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addons', function (Blueprint $table) {
-            $table->id('id_addons')->autoIncrement();
-            $table->string('addons_menu', 50);
-            $table->timestamps();
+        Schema::create('kategori_utama', function (Blueprint $table) {
+            $table->id('id_kategoriutama')->autoIncrement();
+            $table->string('nama_kategori', 50);
         });
     }
 
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addons');
+        Schema::dropIfExists('kategori_utama');
     }
 };

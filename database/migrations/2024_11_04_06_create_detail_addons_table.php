@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_addons', function (Blueprint $table) {
-            $table->string('id_detailaddons', 10)->primary();
+            $table->id('id_detailaddons')->autoIncrement();
 
-            $table->string('id_addons', 10);
+            $table->unsignedBigInteger('id_addons');
             $table->foreign('id_addons')
                   ->references('id_addons')
                   ->on('addons')

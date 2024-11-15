@@ -27,6 +27,16 @@ Route::controller( LoginController::class)->group(function(){
 
     Route::post('/order/meja/{nomorMeja}/checkout', 'cart')->name('order.cart');
     Route::get('/order/meja/{nomorMeja}/checkout', 'checkout')->name('order.checkout');
+    Route::get('/admin/menu', 'menu')->name('admin.menu');
+    Route::get('/admin/menu/add', 'showAddMenuForm')->name('admin.menu.add');
+    Route::post('/admin/store', 'storeMenu')->name('admin.store');
+    Route::get('/admin/menu/edit/{id}', 'showEditMenuForm')->name('admin.menu.edit');
+    Route::get('/admin/menu/delete/{id}', 'DeleteMenu')->name('admin.menu.delete');
+    Route::post('/admin/update', 'updateMenu')->name('admin.update.menu');
+});
+
+
+Route::controller(OrderController::class)->group(function() { 
     Route::get('/order/table/{tableNumber}', 'showTableForm');
     Route::post('/order/table/{tableNumber}', 'storeCustomer');
     Route::get('/order/{tableNumber}/menu', 'showMenu');

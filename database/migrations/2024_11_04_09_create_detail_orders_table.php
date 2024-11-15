@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_orders', function (Blueprint $table) {
-            $table->string('id_detailorder', 50)->primary();
+            $table->id('id_detailorder')->autoIncrement();
 
-            $table->string('id_order', 50);
+            $table->unsignedBigInteger('id_order');
             $table->foreign('id_order')
                   ->references('id_order')
                   ->on('orders')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
 
-            $table->string('id_menu', 50);
+            $table->unsignedBigInteger('id_menu');
             $table->foreign('id_menu')
                   ->references('id_menu')
                   ->on('menus')
