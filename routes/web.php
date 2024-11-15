@@ -17,14 +17,9 @@ Route::get('/home', function () {
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
     Route::post('/login/verify', 'verify')->name('login.verify');
-});
-
-Route::controller(AdminController::class)->group(function(){
     Route::get('/admin', 'index')->name('admin.index');
     Route::get('/admin/logout', 'logout')->name('admin.logout');
-});
 
-Route::controller(OrderController::class)->group(function() {
     Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
     Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
@@ -32,5 +27,17 @@ Route::controller(OrderController::class)->group(function() {
 
     Route::post('/order/meja/{nomorMeja}/checkout', 'cart')->name('order.cart');
     Route::get('/order/meja/{nomorMeja}/checkout', 'checkout')->name('order.checkout');
+    Route::get('/order/table/{tableNumber}', 'showTableForm');
+    Route::post('/order/table/{tableNumber}', 'storeCustomer');
+    Route::get('/order/{tableNumber}/menu', 'showMenu');
+    Route::post('/order/{tableNumber}/menu', 'checkout');
+});
 
+//Route Sementara untuk contoh
+Route::get('/input', function () {
+    return view('/customer_ex/input');
+});
+
+Route::get('/home', function () {
+    return view('/customer_ex/home');
 });
