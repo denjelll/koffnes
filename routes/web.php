@@ -31,11 +31,11 @@ Route::controller(OrderController::class)->group(function() {
     Route::post('/order/{tableNumber}/menu', 'checkout');
 });
 
-//Route Sementara
+//Route Sementara untuk contoh
 Route::get('/input', function () {
-    return view('/customer/input');
+    return view('/customer_ex/input');
 });
 
 Route::get('/home', function () {
-    return view('/customer/home');
+    return view('/customer_ex/home');
 });
