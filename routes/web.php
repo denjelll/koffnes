@@ -14,6 +14,10 @@ Route::get('/home', function () {
     return view('home');
 });
 
+Route::get('/cashier', function () {
+    return view('/cashier/menu');
+});
+
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
     Route::post('/login/verify', 'verify')->name('login.verify');
