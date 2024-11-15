@@ -18,7 +18,7 @@
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
             style="background-color: #412f26;">
-            <img src="../img/7.png" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
+            <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
             <!-- Mobile Menu Toggle Button -->
             <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
                 <svg
@@ -121,7 +121,7 @@
                     <a href="chart.php"><div
                         class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
                         <span>Total: Rp. 0,00-</span>
-                        <img src="../img/Cashnes.png" alt="Chart Icon" class="ml-auto h-5 w-5">
+                        <img src="{{ asset('storage/uploads/Cashnes.png') }}" alt="Chart Icon" class="ml-auto h-5 w-5">
                     </div></a>
                     
 
@@ -134,7 +134,7 @@
                 class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
                 style="background-color: #412f26;">
                 <img
-                    src="../img/8.png"
+                    src="{{ asset('storage/uploads/8.png') }}"
                     alt="Footer Logo"
                     class="h-7 md:h-7 mb-2"
                     style="max-width: 180px;">
