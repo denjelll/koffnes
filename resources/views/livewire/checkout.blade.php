@@ -1,65 +1,84 @@
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-semibold mb-4">Checkout</h1>
+<div class="p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Checkout</h2>
 
-    @if (empty($cartItems))
-        <p class="text-gray-500">Cart is empty.</p>
-    @else
-        <table class="table-auto w-full mb-4 border-collapse border border-gray-300">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-gray-300 p-2">Menu</th>
-                    <th class="border border-gray-300 p-2">Quantity</th>
-                    <th class="border border-gray-300 p-2">Add-Ons</th>
-                    <th class="border border-gray-300 p-2">Notes</th>
-                    <th class="border border-gray-300 p-2">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($cartItems as $item)
-                    <tr>
-                        <td class="border border-gray-300 p-2">
-                            <img src="{{ $item['menu']->gambar }}" alt="{{ $item['menu']->nama_menu }}" class="w-12 h-12 object-cover">
-                            <div>{{ $item['menu']->nama_menu }}</div>
-                            <div class="text-sm text-gray-500">{{ $item['menu']->deskripsi_menu }}</div>
-                        </td>
-                        <td class="border border-gray-300 p-2">
-                            <button wire:click="updateCartItem('{{ $item['menu']->id_menu }}', {{ max($item['quantity'] - 1, 0) }})" 
-                                class="px-2 py-1 bg-red-500 text-white rounded">-</button>
-                            {{ $item['quantity'] }}
-                            <button wire:click="updateCartItem('{{ $item['menu']->id_menu }}', {{ $item['quantity'] + 1 }})" 
-                                class="px-2 py-1 bg-green-500 text-white rounded">+</button>
-                        </td>
-                        <td class="border border-gray-300 p-2">
-                            @if (count($item['addOns']) > 0)
-                                <select wire:change="updateCartItem('{{ $item['menu']->id_menu }}', {{ $item['quantity'] }}, $event.target.value)"
-                                        class="border border-gray-300 rounded w-full">
-                                    <option value="" {{ !$item['selectedAddOn'] ? 'selected' : '' }}>None</option>
-                                    @foreach ($item['addOns'] as $addOn)
-                                        <option value="{{ $addOn->id_addon }}" {{ $item['selectedAddOn'] == $addOn->id_addon ? 'selected' : '' }}>
-                                            {{ $addOn->nama_addon }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @else
-                                <span>No add-ons available</span>
-                            @endif
-                        </td>
-                        <td class="border border-gray-300 p-2">
-                            <input type="text" wire:input="updateCartItem('{{ $item['menu']->id_menu }}', {{ $item['quantity'] }}, $event.target.value, '{{ $item['selectedAddOn'] }}')"
-                                   class="border border-gray-300 rounded w-full" placeholder="Notes" value="{{ $item['notes'] }}">
-                        </td>
-                        <td class="border border-gray-300 p-2">Rp {{ number_format($item['quantity'] * $item['menu']->harga, 0, ',', '.') }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <!-- Daftar Item di Cart -->
+    @foreach($cartItems as $item)
+        <div class="border-b pb-4 mb-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-700">{{ $item['menu']->nama_menu }}</h3>
+                <p class="text-sm text-gray-500">Rp {{ number_format($item['menu']->harga) }}</p>
+            </div>
 
-        <div class="mb-4 text-right">
-            <h2 class="text-lg font-semibold">Total Harga: Rp {{ number_format($totalHarga, 0, ',', '.') }}</h2>
+           <!-- List Add-On dalam bentuk card -->
+            @if($item['addOn']->isNotEmpty())
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-600 mb-2">Tambahkan Add-On</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+                    @foreach ($item['addOn'] as $addon)
+                        <div class="p-4 border rounded-lg shadow-sm">
+                            <h5 class="font-medium">{{ $addon->nama_addon }} {{ number_format($addon->harga, 0, ',', '.') }}</h5>
+                            <div class="flex items-center mt-2">
+                                <button 
+                                    class="bg-red-500 text-white px-3 py-1 rounded-l hover:bg-red-600"
+                                    wire:click="updateAddonQuantity('{{ $item['menu']->id_menu }}', '{{ $addon->id_addon }}', {{ max(($addon->quantity ?? 0) - 1, 0) }})">
+                                    -
+                                </button>
+                                <button 
+                                    class="bg-green-500 text-white px-3 py-1 rounded-r hover:bg-green-600"
+                                    wire:click="updateAddonQuantity('{{ $item['menu']->id_menu }}', '{{ $addon->id_addon }}', {{ ($addon->quantity ?? 0) + 1 }})">
+                                    +
+                                </button>
+                            </div>
+                            <p class="mt-2 text-sm font-medium text-gray-700">
+                                Total: Rp {{ number_format(($addon->quantity ?? 0) * $addon->harga, 0, ',', '.') }}
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            <!-- Notes -->
+            <div class="mt-2">
+                <label for="notes-{{ $loop->index }}" class="block text-sm font-medium text-gray-600">Catatan (Opsional)</label>
+                <textarea id="notes-{{ $loop->index }}" wire:model="cartItems.{{ $loop->index }}.notes" class="textarea textarea-bordered w-full mt-1" placeholder="Masukkan catatan untuk menu ini"></textarea>
+            </div>
+
+            <!-- Kuantitas -->
+            <div class="mt-4 flex items-center space-x-4">
+                <button 
+                    wire:click="updateMenuQuantity('{{ $item['menu']->id_menu }}', {{ $item['quantity'] - 1 }})"
+                    class="btn btn-outline btn-sm text-gray-600"
+                    :disabled="{{ $item['quantity'] <= 1 ? 'true' : 'false' }}">
+                    -
+                </button>
+                <input 
+                    type="number"
+                    wire:change="updateMenuQuantity('{{ $item['menu']->id_menu }}', $event.target.value)"
+                    value="{{ $item['quantity'] }}"
+                    class="input input-bordered w-16 text-center"
+                    min="0" />
+                <button 
+                    wire:click="updateMenuQuantity('{{ $item['menu']->id_menu }}', {{ $item['quantity'] + 1 }})"
+                    class="btn btn-outline btn-sm text-gray-600">
+                    +
+                </button>
+            </div>
+            
+            
         </div>
+    @endforeach
 
-        <button wire:click="createOrder" class="bg-blue-500 text-white px-4 py-2 rounded">
-            Open Bill
-        </button>
-    @endif
+    <!-- Total Harga -->
+    <div class="mt-4 border-t pt-4">
+        <div class="flex justify-between items-center">
+            <span class="font-semibold text-lg">Total Harga:</span>
+            <span class="text-lg text-gray-800">Rp {{ number_format($totalHarga) }}</span>
+        </div>
+    </div>
+
+    <!-- Tombol Submit -->
+    <div class="mt-6">
+        <button wire:click="createOrder" class="btn btn-primary w-full">Buat Pesanan</button>
+    </div>
 </div>

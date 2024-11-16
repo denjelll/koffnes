@@ -13,7 +13,6 @@ return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\LoginController' => $baseDir . '/app/Http/Controllers/LoginController.php',
     'App\\Http\\Controllers\\OrderController' => $baseDir . '/app/Http/Controllers/OrderController.php',
-    'App\\Livewire\\Checkout' => $baseDir . '/app/Livewire/Checkout.php',
     'App\\Livewire\\MenuItem' => $baseDir . '/app/Livewire/MenuItem.php',
     'App\\Livewire\\TotalHarga' => $baseDir . '/app/Livewire/TotalHarga.php',
     'App\\Models\\Addon' => $baseDir . '/app/Models/Addon.php',

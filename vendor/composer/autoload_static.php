@@ -207,8 +207,8 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Whoops\\' => 
         array (
@@ -594,7 +594,6 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
-        'App\\Livewire\\Checkout' => __DIR__ . '/../..' . '/app/Livewire/Checkout.php',
         'App\\Livewire\\MenuItem' => __DIR__ . '/../..' . '/app/Livewire/MenuItem.php',
         'App\\Livewire\\TotalHarga' => __DIR__ . '/../..' . '/app/Livewire/TotalHarga.php',
         'App\\Models\\Addon' => __DIR__ . '/../..' . '/app/Models/Addon.php',
