@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CashierController;
 
 
 Route::get('/', function () {
@@ -29,4 +30,12 @@ Route::controller(OrderController::class)->group(function() {
     Route::post('/order/table/{tableNumber}', 'storeCustomer');
     Route::get('/order/{tableNumber}/menu', 'showMenu');
     Route::post('/order/{tableNumber}/menu', 'checkout');
+});
+
+
+Route::controller(CashierController::class)->group(function(){
+    Route::get('/cashier', 'cashier')->name('cashier.cashier');
+    Route::get('/cashier/dashboard', 'dashboard')->name('cashier.dashboard');
+    Route::get('/cashier/inputOrder', 'inputOrder')->name('cashier.inputOrder');
+    Route::get('/cashier/logout', 'logout')->name('cashier.logout');
 });
