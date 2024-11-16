@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Checkout;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
@@ -25,11 +26,11 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/logout', 'logout')->name('admin.logout');
 });
 
-Route::controller(OrderController::class)->group(function() { 
-    Route::get('/order/table/{tableNumber}', 'showTableForm');
-    Route::post('/order/table/{tableNumber}', 'storeCustomer');
-    Route::get('/order/{tableNumber}/menu', 'showMenu');
-    Route::post('/order/{tableNumber}/menu', 'checkout');
+Route::controller(OrderController::class)->group(function() {
+    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
+    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
+
+    Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
 });
 
 
@@ -39,3 +40,4 @@ Route::controller(CashierController::class)->group(function(){
     Route::get('/cashier/inputOrder', 'inputOrder')->name('cashier.inputOrder');
     Route::get('/cashier/logout', 'logout')->name('cashier.logout');
 });
+Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');

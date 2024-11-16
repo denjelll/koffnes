@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('addons', function (Blueprint $table) {
-            $table->string('id_addons', 10)->primary();
-            $table->string('addons_menu', 50);
+            $table->string('id_addon', 10)->primary();
+            $table->string('nama_addon', 50);
+            $table->integer('harga');
             $table->timestamps();
         });
     }
