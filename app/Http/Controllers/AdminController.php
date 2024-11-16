@@ -36,19 +36,17 @@ class AdminController extends Controller
         $request->validate([
             'nama_menu' => 'required',
             'harga' => 'required|numeric',
-            'kategori' => 'required',
             'deskripsi' => 'required',
             'stok' => 'required|numeric',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
         $image = $request->file('gambar');
-        $imageName = time().'.'.$image->getClientOriginalName();
+        $imageName = time() . '_' . $image->getClientOriginalName();
         $image->move(public_path('menu'), $imageName);
 
         $menu = new Menu();
         $menu->nama_menu = $request->nama_menu;
         $menu->harga = $request->harga;
-        $menu->id_kategoridetail = 1;
         $menu->deskripsi = $request->deskripsi;
         $menu->stock = $request->stok;
         $menu->gambar = $imageName;
@@ -73,27 +71,30 @@ class AdminController extends Controller
             'harga' => 'numeric',
             'stok' => 'numeric',
         ]);
-        if($request->hasFile('gambar')){
-            $request->validate([
-                'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-            ]);
-            $image = $request->file('gambar');
-            $imageName = time().'.'.$image->getClientOriginalName();
-            $image->move(public_path('menu'), $imageName);
-            $menu = Menu::find($request->id_menu);
-            unlink(public_path('menu/'.$menu->gambar));
-            $menu->gambar = $imageName;
+        $menu = Menu::find($request->id_menu);
+
+    if ($request->hasFile('gambar')) {
+        $image = $request->file('gambar');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('menu'), $imageName);
+
+        // Hapus gambar lama setelah gambar baru disimpan
+        if ($menu->gambar && file_exists(public_path('menu/' . $menu->gambar))) {
+            unlink(public_path('menu/' . $menu->gambar));
         }
 
-        $menu = Menu::find($request->id_menu);
-        $menu->nama_menu = $request->nama_menu;
-        $menu->harga = $request->harga;
-        $menu->id_kategoridetail = 1;
-        $menu->deskripsi = $request->deskripsi;
-        $menu->stock = $request->stok;
-        $menu->save();
-        
+        // Perbarui kolom gambar di database
+        $menu->gambar = $imageName;
+    }
 
-        return redirect('/admin/menu');
+    // Perbarui kolom lainnya
+    $menu->nama_menu = $request->nama_menu;
+    $menu->harga = $request->harga;
+    $menu->stock = $request->stok;
+    $menu->deskripsi = $request->deskripsi;
+
+    $menu->save();
+
+    return redirect('/admin/menu')->with('success', 'Menu updated successfully');
     }
 }

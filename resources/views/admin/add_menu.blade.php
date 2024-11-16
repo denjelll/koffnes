@@ -14,12 +14,6 @@
         <label for="harga">Harga :</label>
         <input type="number" name="harga" id="harga">
         <br>
-        <label for="kategori">Kategori :</label>
-        <select name="kategori" id="kategori">
-            <option value="makanan">Makanan</option>
-            <option value="minuman">Minuman</option>
-        </select>
-        <br>
         <label for="deskripsi">Deskripsi :</label>
         <textarea name="deskripsi" id="deskripsi"></textarea>
         <br>

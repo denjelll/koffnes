@@ -9,16 +9,11 @@
     <br>
     <label for="stok">Stok :</label>
     <input type="number" name="stok" id="stok" value="{{ $menu->stock }}">
-    <label for="kategori">Kategori :</label>
-    <!-- <select name="kategori" id="kategori">
-        <option value="makanan" {{ $menu->kategori == 'makanan' ? 'selected' : '' }}>Makanan</option>
-        <option value="minuman" {{ $menu->kategori == 'minuman' ? 'selected' : '' }}>Minuman</option>
-    </select> -->
-       <input type="file" id="featured_image" name="gambar" accept="image/*" onchange="previewImage(event)">
-    
-       <div>
-             <img id="featured_image_preview" class="h-64 w-128 object-cover rounded-md" src="{{asset('menu/'.$menu->gambar)}}" alt="Featured image preview" />
- </div>
+    <br>
+    <input type="file" id="gambar" name="gambar" accept="image/*" onchange="previewImage(event)">
+    <div>
+        <img id="featured_image_preview" class="h-64 w-128 object-cover rounded-md" src="{{asset('menu/'.$menu->gambar)}}" alt="Featured image preview" />
+    </div>
     <br>
     <label for="deskripsi">Deskripsi :</label>
     <textarea name="deskripsi" id="deskripsi">{{ $menu->deskripsi }}</textarea>
@@ -36,8 +31,6 @@
                 preview.src = e.target.result; // Set the image source to the file's data URL
             }
             reader.readAsDataURL(file); // Read the file as a data URL
-        } else {
-            preview.src = ''; // Clear the preview if no file is selected
-        }
+        } 
     }
 </script>
