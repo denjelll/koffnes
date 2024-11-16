@@ -19,7 +19,8 @@ class DetailOrder extends Model
         'id_order',
         'id_menus',
         'kuantitas',
-        'harga'
+        'harga',
+        'notes'
     ];
 
     public function order()

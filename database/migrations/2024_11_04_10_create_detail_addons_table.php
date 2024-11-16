@@ -14,15 +14,23 @@ return new class extends Migration
         Schema::create('detail_addons', function (Blueprint $table) {
             $table->string('id_detailaddons', 10)->primary();
 
-            $table->string('id_addons', 10);
-            $table->foreign('id_addons')
-                  ->references('id_addons')
+            $table->string('id_addon', 10);
+            $table->foreign('id_addon')
+                  ->references('id_addon')
                   ->on('addons')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             
-            $table->string('detail_addons', 50);
-            $table->integer('harga_addons');
+            $table->string('id_detailorder', 10);
+            $table->foreign('id_detailorder')
+                ->references('id_detailorder')
+                ->on('detail_orders')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->integer('kuantitas');
+            $table->integer('harga');
+
         });
     }
 

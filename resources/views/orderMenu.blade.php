@@ -22,14 +22,13 @@
 
         @livewire('total-harga')
 
-       <!-- Tombol Checkout -->
-        <form method="POST" action="">
-            @csrf
-            <input type="hidden" id="cartData" name="cartData">
-            <button type="submit" onclick="validateCart(event)" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">
+        <form method="GET" action="{{ route('checkout', ['nomorMeja' => $nomorMeja]) }}">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">
                 Checkout
             </button>
         </form>
+        
+        
 
     </div>
      @livewireScripts

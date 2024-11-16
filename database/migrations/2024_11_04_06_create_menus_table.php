@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->string('id_menu', 7)->primary();
 
-            // Definisikan foreign key untuk id_kategori_detail
-            $table->string('id_kategoridetail', 50);
-            $table->foreign('id_kategoridetail')
-                  ->references('id_kategoridetail')
-                  ->on('kategori_detail')
+            // Definisikan foreign key untuk id_kategori
+            $table->string('id_kategori', 50);
+            $table->foreign('id_kategori')
+                  ->references('id_kategori')
+                  ->on('kategori')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
 
@@ -30,13 +30,6 @@ return new class extends Migration
                   ->onDelete('set null')
                   ->onUpdate('cascade');
     
-            $table->string('id_addons', 50)->nullable();
-            $table->foreign('id_addons')
-                ->references('id_addons')
-                ->on('addons')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
-
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();
             $table->integer('harga')->unsigned();

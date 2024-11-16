@@ -1,8 +1,9 @@
 <?php
 
+use App\Livewire\Checkout;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 
 
@@ -29,8 +30,6 @@ Route::controller(OrderController::class)->group(function() {
     Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
     Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
-
-    Route::post('/order/meja/{nomorMeja}/checkout', 'cart')->name('order.cart');
-    Route::get('/order/meja/{nomorMeja}/checkout', 'checkout')->name('order.checkout');
-
 });
+
+Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
