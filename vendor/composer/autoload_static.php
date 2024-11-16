@@ -207,8 +207,8 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Whoops\\' => 
         array (
@@ -593,12 +593,16 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
-        'App\\Models\\Addons' => __DIR__ . '/../..' . '/app/Models/Addons.php',
-        'App\\Models\\DetailAddons' => __DIR__ . '/../..' . '/app/Models/DetailAddons.php',
+        'App\\Livewire\\MenuItem' => __DIR__ . '/../..' . '/app/Livewire/MenuItem.php',
+        'App\\Livewire\\TotalHarga' => __DIR__ . '/../..' . '/app/Livewire/TotalHarga.php',
+        'App\\Models\\Addon' => __DIR__ . '/../..' . '/app/Models/Addon.php',
+        'App\\Models\\DetailAddon' => __DIR__ . '/../..' . '/app/Models/DetailAddon.php',
         'App\\Models\\DetailOrder' => __DIR__ . '/../..' . '/app/Models/DetailOrder.php',
         'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
+        'App\\Models\\Kategori' => __DIR__ . '/../..' . '/app/Models/Kategori.php',
         'App\\Models\\Menu' => __DIR__ . '/../..' . '/app/Models/Menu.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
+        'App\\Models\\PaketAddon' => __DIR__ . '/../..' . '/app/Models/PaketAddon.php',
         'App\\Models\\Promo' => __DIR__ . '/../..' . '/app/Models/Promo.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

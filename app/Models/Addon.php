@@ -30,4 +30,17 @@ class Addon extends Model
     {
         return $this->hasMany(DetailAddon::class, 'id_addon');
     }
+
+    public function menus()
+    {
+        return $this->belongsToMany(
+            Menu::class,
+            'paket_addons',
+            'id_addon',
+            'id_menu',
+            'id_addon',
+            'id_menu'
+        );
+    }
+
 }
