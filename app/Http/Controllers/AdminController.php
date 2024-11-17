@@ -53,23 +53,7 @@ class AdminController extends Controller
         $menu->harga = $request->harga;
         $menu->deskripsi = $request->deskripsi;
         $menu->stock = $request->stok;
-        $menu->gambar = $imageName;
-        if(isset($request->harga_promo)){
-            $promo = new Promo();
-            $promo->harga_promo = $request->harga_promo;
-            $waktu_mulai_date = $request->waktu_mulai_date;
-            $waktu_mulai_time = $request->waktu_mulai_time;
-            $waktu_mulai = $waktu_mulai_date . ' ' . $waktu_mulai_time;
-            $promo->waktu_mulai = $waktu_mulai;
-            $waktu_selesai_date = $request->waktu_selesai_date;
-            $waktu_selesai_time = $request->waktu_selesai_time;
-            $waktu_selesai = $waktu_selesai_date . ' ' . $waktu_selesai_time;
-            $promo->waktu_berakhir = $waktu_selesai;
-            $promo->save();
-            $promo = Promo::latest()->first();
-            $menu->id_promo = $promo->id_promo;
-        }
-        
+        $menu->gambar = $imageName;        
         $menu->save();
         $image->move(public_path('menu'), $imageName);
 
@@ -87,6 +71,47 @@ class AdminController extends Controller
         $menu->delete();
         unlink(public_path('menu/'.$menu->gambar));
         return redirect('/admin/menu');
+    }
+
+    public function promo(){
+        $promos = Promo::all();
+        return view('admin.promo', compact('promos'));
+    }
+
+    public function showAddPromoForm(){
+        $menus = Menu::all();
+        return view('admin.add_promo', compact('menus'));
+    }
+
+    public function storePromo(Request $request){
+        $request->validate([
+            'judul_promo' => 'required',
+            'harga_promo' => 'required|numeric',
+            'tanggal_mulai' => 'required',
+            'tanggal_selesai' => 'required',
+            'waktu_mulai' => 'required',
+            'waktu_selesai' => 'required'
+        ]);
+
+        $promo = new Promo();
+        $promo->judul_promo = $request->judul_promo;
+        $promo->harga_promo = $request->harga_promo;
+        $promo->tanggal_mulai = $request->tanggal_mulai;
+        $promo->tanggal_selesai = $request->tanggal_selesai;
+        $promo->waktu_mulai = $request->waktu_mulai;
+        $promo->waktu_selesai = $request->waktu_selesai;
+        $promo->save();
+
+        return redirect('/admin/promo');
+    }
+
+    public function showAddMenuPromoForm(Promo $promo){
+        $menus = Menu::all();
+        return view('admin.add_menu_promo', compact('promo', 'menus'));
+    }
+    public function deletePromo(Promo $promo){
+        $promo->delete();
+        return redirect('/admin/promo');
     }
     public function updateMenu(Request $request){
         $request->validate([

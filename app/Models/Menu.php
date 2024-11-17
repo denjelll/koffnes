@@ -27,10 +27,6 @@ class Menu extends Model
     ];
 
 
-    public function promo()
-    {
-        return $this->belongsTo(Promo::class, 'id_promo');
-    }
 
 
     public function detailOrder()

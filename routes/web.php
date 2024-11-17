@@ -29,6 +29,13 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/menu/delete/{id}', 'DeleteMenu')->name('admin.menu.delete');
     Route::post('/admin/update', 'updateMenu')->name('admin.update.menu');
     Route::get('/admin/kategori', 'category')->name('admin.kategori');
+    Route::get('/admin/promo', 'promo')->name('admin.promo');
+    Route::get('/admin/promo/add', 'showAddPromoForm')->name('admin.promo.add');
+    Route::post('/admin/promo/store', 'storePromo')->name('admin.promo.store');
+    Route::get('/admin/promo/edit/{promo:judul_promo}', 'showEditPromoForm')->name('admin.promo.edit');
+    Route::post('/admin/promo/update', 'updatePromo')->name('admin.promo.update');
+    Route::get('/admin/promo/delete/{promo:judul_promo}', 'deletePromo')->name('admin.promo.delete');
+    Route::get('/admin/promo/menu/{promo:judul_promo}', 'showAddMenuPromoForm')->name('admin.promo.menu');
 });
 
 

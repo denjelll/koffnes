@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('promos', function (Blueprint $table) {
             $table->id('id_promo')->autoIncrement();
-            $table->decimal('harga_promo'); // Misalnya 10.50 untuk diskon 10.5%
-            $table->datetime('waktu_mulai'); // Menggunakan datetime untuk menyimpan waktu spesifik
-            $table->datetime('waktu_berakhir');
+            $table->string('judul_promo', 50);
+            $table->integer('harga_promo'); // Misalnya 10.50 untuk diskon 10.5%
+            $table->date('tanggal_mulai'); // Menggunakan datetime untuk menyimpan waktu spesifik
+            $table->date('tanggal_berakhir');
+            $table->time('waktu_mulai');
+            $table->time('waktu_berakhir');
             $table->timestamps();
         });
     }

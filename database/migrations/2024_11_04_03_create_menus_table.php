@@ -14,14 +14,6 @@ return new class extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->id('id_menu')->autoIncrement();
 
-            // Definisikan foreign key untuk id_promo
-            $table->unsignedBigInteger('id_promo')->nullable();
-            $table->foreign('id_promo')
-                  ->references('id_promo')
-                  ->on('promos')
-                  ->onDelete('set null')
-                  ->onUpdate('cascade');
-
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();
             $table->integer('harga')->unsigned();
