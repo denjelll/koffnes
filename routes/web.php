@@ -30,7 +30,7 @@ Route::controller(AdminController::class)->group(function(){
 Route::controller(OrderController::class)->group(function() {
     Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
     Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
-
+    Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
     Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
 });
 
@@ -40,5 +40,6 @@ Route::controller(CashierController::class)->group(function(){
     Route::get('/cashier/dashboard', 'dashboard')->name('cashier.dashboard');
     Route::get('/cashier/inputOrder', 'inputOrder')->name('cashier.inputOrder');
     Route::get('/cashier/logout', 'logout')->name('cashier.logout');
+    Route::get('/cashier/print/{id_order}', 'printReceipt')->name('cashier.printReceipt');
+    Route::get('/cashier/closing', 'salesReport')->name('cashier.salesReport');
 });
-Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
