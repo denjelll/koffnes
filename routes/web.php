@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CashierController;
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
