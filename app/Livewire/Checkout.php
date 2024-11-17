@@ -25,44 +25,49 @@ class Checkout extends Component
     {
         // Mendapatkan data cart dari session
         $this->cartItems = session()->get('cart', []);
-    
+
         // Ambil detail menu berdasarkan id_menu untuk setiap item di cart
         foreach ($this->cartItems as &$item) {
             $item['menu'] = Menu::find($item['id_menu']); // Ambil menu berdasarkan id_menu
-            $item['quantity'] = $item['quantity'] ?? 1; // Pastikan ada nilai default untuk kuantitas
-            $item['notes'] = $item['notes'] ?? '';      // Pastikan notes kosong jika tidak ada
-           
-            // Ambil add-ons terkait menu, jika ada
-             if ($item['menu']) {
-                $item['addOn'] = $item['menu']->addOns()->get(); // Ambil add-on terkait
-            } else {
-                $item['addOn'] = collect(); // Koleksi kosong jika menu tidak ditemukan
-            }
+            $item['quantity'] = $item['quantity'] ?? 1; // Default kuantitas jika tidak ada
+            $item['notes'] = $item['notes'] ?? '';      // Default notes kosong jika tidak ada
 
-            Log::info('Add-ons for Menu ' . $item['id_menu'], $item['addOn']->toArray()); 
-            $item['selectedAddOn'] = $item['selectedAddOn'] ?? null; // Default null
+            // Ambil add-ons terkait menu
+            if ($item['menu']) {
+                $item['addOn'] = $item['menu']->addOns()->get()->map(function ($addon) {
+                    return [
+                        'id_addon' => $addon->id_addon,
+                        'nama_addon' => $addon->nama_addon,
+                        'harga' => $addon->harga,
+                        'quantity' => 0, // Set kuantitas awal ke 0
+                    ];
+                })->toArray();
+            } else {
+                $item['addOn'] = [];
+            }
         }
-    
+
+        Log::info('Item after fetching add-ons: ' . json_encode($item, JSON_PRETTY_PRINT)); 
         // Hitung total harga awal
         $this->calculateTotal();
     }
 
-    public function calculateTotal()
+
+    private function calculateTotal()
     {
-        $this->totalHarga = 0;
+        $total = 0;
 
         foreach ($this->cartItems as $item) {
-            $this->totalHarga += $item['menu']->harga * $item['quantity'];
+            $total += $item['menu']['harga'] * $item['quantity'];
 
-            if (!empty($item['addOn'])) {
-                foreach ($item['addOn'] as $addon) {
-                    $this->totalHarga += $addon->harga * ($addon->quantity ?? 0); // Perhitungan harga add-on
-                }
+            foreach ($item['addOn'] as $addon) {
+                $total += $addon['harga'] * $addon['quantity'];
             }
         }
+
+        $this->totalHarga = $total;
     }
 
-    
 
     public function updateMenuQuantity($idMenu, $quantity)
     {
@@ -104,31 +109,30 @@ class Checkout extends Component
         }
     }
 
-    public function updateAddonQuantity($idMenu, $idAddon, $quantity)
+    public function updateAddonQuantity($menuId, $addonId, $action)
     {
+        // Cari menu dalam cart
         foreach ($this->cartItems as &$item) {
-            // Cari item menu yang sesuai
-            if ($item['menu']->id_menu === $idMenu) {
-                // Cari add-on dalam menu tersebut
+            if ($item['id_menu'] === $menuId) {
+                // Cari add-on yang sesuai
                 foreach ($item['addOn'] as &$addon) {
-                    if ($addon->id_addon === $idAddon) {
-                        $addon->quantity = max(0, (int)$quantity); // Validasi kuantitas >= 0
-                        break;
+                    if ($addon['id_addon'] === $addonId) {
+                        if ($action === 'increment') {
+                            $addon['quantity']++; // Tambah kuantitas
+                        } elseif ($action === 'decrement' && $addon['quantity'] > 0) {
+                            $addon['quantity']--; // Kurangi kuantitas
+                        }
                     }
                 }
-                break;
             }
         }
-    
-        // Update session cart
+
+        // Simpan kembali ke session
         session()->put('cart', $this->cartItems);
-    
+
         // Hitung ulang total harga
         $this->calculateTotal();
     }
-
-
-
 
     public function createOrder()
     {
@@ -148,7 +152,7 @@ class Checkout extends Component
         // Membuat order baru
         $order = Order::create([
             'id_order' => 'ORD' . strrev(Carbon::now()->format('YmdHis')) . $antrian,
-            'id_user' => null, // Kosongkan karena akan diisi oleh kasir nanti
+            'id_user' => 'NOT PICK UP', // Kosongkan karena akan diisi oleh kasir nanti
             'antrian' => $antrian,
             'customer' => session('nama_customer'),
             'meja' => session('meja'),
@@ -159,21 +163,24 @@ class Checkout extends Component
         ]);
 
         // Menambahkan detail order untuk setiap item di cart
+        Log::info('Isi item di CreateOrder ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         foreach ($this->cartItems as $item) {
+            Log::info('ID_Menu ' . json_encode($item['menu']['id_menu'], JSON_PRETTY_PRINT)); 
+
             $detailOrder = DetailOrder::create([
                 'id_detailorder'=> 'DO' . Str::uuid(),
                 'id_order' => $order->id_order,
-                'menu_id' => $item['menu']->id_menu,
-                'quantity' => $item['quantity'],
-                'price' => $item['menu']->harga,
+                'id_menu' => $item['menu']['id_menu'],
+                'kuantitas' => $item['quantity'],
+                'harga_menu' => $item['menu']['harga'] * $item['quantity'],
                 'notes' => $item['notes'],  // Simpan notes
-                'addon_id' => $item['selectedAddOn'] ?? null,  // Simpan addon yang dipilih
             ]);
 
            // Jika ada add-ons, buat DetailAddon
-            if ($item['selectedAddOn']) {
-                $this->createDetailAddon($detailOrder->id, $item['selectedAddOn'], $item['quantity'], $item['menu']->harga);
+           if (!empty($item['addOn'])) { // Perbaikan key
+            $this->createDetailAddon($detailOrder['id_detailorder'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
             }
+        
         }
 
         // Mengosongkan cart di session
@@ -181,35 +188,25 @@ class Checkout extends Component
         $this->cartItems = [];
         $this->totalHarga = 0;
 
-        // Redirect ke halaman sukses atau halaman lain
-        return redirect()->route('/');
+        return redirect()->route('order.successful', ['nomorMeja' => session('meja'), 'id_order' => $order->id_order]);
     }
 
     // Fungsi untuk membuat DetailAddon baru
-    public function createDetailAddon($idDetailOrder, $idAddon, $quantity, $harga)
+    public function createDetailAddon($idDetailOrder, $addOns, $quantity, $menuHarga)
     {
-        // Mengecek apakah detail addon sudah ada
-        $existingAddon = DetailAddon::where('id_detailorder', $idDetailOrder)
-                                    ->where('id_addon', $idAddon)
-                                    ->first();
-
-        if ($existingAddon) {
-            // Jika sudah ada, update kuantitas dan harga
-            $existingAddon->update([
-                'kuantitas' => $existingAddon->kuantitas + $quantity,
-                'harga' => $harga * $existingAddon->kuantitas,
-            ]);
-        } else {
-            // Jika belum ada, buat DetailAddon baru
-            DetailAddon::create([
-                'id_detailaddon' => Str::uuid(), // Gunakan UUID atau ID lainnya yang sesuai
-                'id_addon' => $idAddon,
-                'id_detailorder' => $idDetailOrder,
-                'kuantitas' => $quantity,
-                'harga' => $harga * $quantity,
-            ]);
+        foreach ($addOns as $addon) {
+            if ($addon['quantity'] > 0) {
+                DetailAddon::create([
+                    'id_detailaddon' => Str::random(10),
+                    'id_addon' => $addon['id_addon'],
+                    'id_detailorder' => $idDetailOrder,
+                    'kuantitas' => $addon['quantity'],
+                    'harga' => $addon['harga'] * $addon['quantity'], // Perhitungan harga
+                ]);
+            }
         }
     }
+
 
     public function render()
     {

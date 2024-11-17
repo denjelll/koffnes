@@ -49,10 +49,21 @@ class DummySeeder extends Seeder
 
         // Menambahkan data paket addon setelah menu telah ditambahkan
         DB::table('paket_addons')->insert([
-            ['id_paketaddon' => 'PA001', 'id_menu' => 'M001', 'id_addon' => 'A001'],
-            ['id_paketaddon' => 'PA002', 'id_menu' => 'M001', 'id_addon' => 'A002'],
-            ['id_paketaddon' => 'PA003', 'id_menu' => 'M002', 'id_addon' => 'A003'],
+            ['id_paketaddon' => 'PA001', 'id_menu' => 'M020', 'id_addon' => 'A001'],
+            ['id_paketaddon' => 'PA002', 'id_menu' => 'M020', 'id_addon' => 'A002'],
+            ['id_paketaddon' => 'PA003', 'id_menu' => 'M017', 'id_addon' => 'A003'],
             ['id_paketaddon' => 'PA004', 'id_menu' => 'M003', 'id_addon' => 'A004'],
+        ]);
+
+        // Menambahkan data user dengan id_user 'NOT PICK UP'
+        DB::table('users')->insert([
+            'id_user' => 'NOT_PICK_UP',
+            'nama_depan' => 'Not',
+            'nama_belakang' => 'Pick Up',
+            'no_telepon' => '0000000000',
+            'email' => 'notpickup@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'Kasir'
         ]);
     }
 }

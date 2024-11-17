@@ -33,3 +33,7 @@ Route::controller(OrderController::class)->group(function() {
 });
 
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
+
+Route::get('/order/meja/{nomorMeja}/{id_order}', function ($nomorMeja, $id_order) {
+    return view('orderSucces', ['nomorMeja' => $nomorMeja, 'id_order' => $id_order]);
+})->name('order.successful');

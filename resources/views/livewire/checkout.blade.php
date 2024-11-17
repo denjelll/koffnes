@@ -10,34 +10,38 @@
             </div>
 
            <!-- List Add-On dalam bentuk card -->
-            @if($item['addOn']->isNotEmpty())
-            <div class="mt-4">
-                <label class="block text-sm font-medium text-gray-600 mb-2">Tambahkan Add-On</label>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
-                    @foreach ($item['addOn'] as $addon)
-                        <div class="p-4 border rounded-lg shadow-sm">
-                            <h5 class="font-medium">{{ $addon->nama_addon }} {{ number_format($addon->harga, 0, ',', '.') }}</h5>
-                            <div class="flex items-center mt-2">
-                                <button 
-                                    class="bg-red-500 text-white px-3 py-1 rounded-l hover:bg-red-600"
-                                    wire:click="updateAddonQuantity('{{ $item['menu']->id_menu }}', '{{ $addon->id_addon }}', {{ max(($addon->quantity ?? 0) - 1, 0) }})">
-                                    -
-                                </button>
-                                <button 
-                                    class="bg-green-500 text-white px-3 py-1 rounded-r hover:bg-green-600"
-                                    wire:click="updateAddonQuantity('{{ $item['menu']->id_menu }}', '{{ $addon->id_addon }}', {{ ($addon->quantity ?? 0) + 1 }})">
-                                    +
-                                </button>
-                            </div>
-                            <p class="mt-2 text-sm font-medium text-gray-700">
-                                Total: Rp {{ number_format(($addon->quantity ?? 0) * $addon->harga, 0, ',', '.') }}
-                            </p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
+           @if(!empty($item['addOn']))
+           <div class="mt-4">
+               <label class="block text-sm font-medium text-gray-600 mb-2">Tambahkan Add-On</label>
+               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+                   @foreach ($item['addOn'] as $addon)
+                       <div class="p-4 border rounded-lg shadow-sm">
+                           <h5 class="font-medium">{{ $addon['nama_addon'] }} Rp {{ number_format($addon['harga'], 0, ',', '.') }}</h5>
+                           <div class="flex items-center mt-2">
+                               <!-- Tombol Kurangi -->
+                               <button 
+                                   class="bg-red-500 text-white px-3 py-1 rounded-l hover:bg-red-600"
+                                   wire:click="updateAddonQuantity('{{ $item['menu']['id_menu'] }}', '{{ $addon['id_addon'] }}', 'decrement')">
+                                   -
+                               </button>
+                               <!-- Kuantitas -->
+                               <span class="px-4 py-1 border-t border-b">{{ $addon['quantity'] ?? 0 }}</span>
+                               <!-- Tombol Tambah -->
+                               <button 
+                                   class="bg-green-500 text-white px-3 py-1 rounded-r hover:bg-green-600"
+                                   wire:click="updateAddonQuantity('{{ $item['menu']['id_menu'] }}', '{{ $addon['id_addon'] }}', 'increment')">
+                                   +
+                               </button>
+                           </div>
+                           <p class="mt-2 text-sm font-medium text-gray-700">
+                               Total: Rp {{ number_format(($addon['quantity'] ?? 0) * $addon['harga'], 0, ',', '.') }}
+                           </p>
+                       </div>
+                   @endforeach
+               </div>
+           </div>
+           @endif
+           
             <!-- Notes -->
             <div class="mt-2">
                 <label for="notes-{{ $loop->index }}" class="block text-sm font-medium text-gray-600">Catatan (Opsional)</label>

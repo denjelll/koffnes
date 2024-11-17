@@ -12,15 +12,18 @@ class DetailOrder extends Model
     protected $table = 'detail_orders';
     protected $primaryKey = 'id_detailorder';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
         'id_detailorder',
         'id_order',
-        'id_menus',
+        'id_menu',
         'kuantitas',
-        'harga',
-        'notes'
+        'harga_menu',
+        'notes',
+        'waktu_transaksi'
+
     ];
 
     public function order()

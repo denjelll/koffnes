@@ -12,6 +12,7 @@ class Order extends Model
     protected $table = 'orders';
     protected $primaryKey = 'id_order';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
