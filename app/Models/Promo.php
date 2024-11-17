@@ -11,8 +11,6 @@ class Promo extends Model
 
     protected $table = 'promos';
     protected $primaryKey = 'id_promo';
-    public $incrementing = false;
-    protected $keyType = 'string';
     
     protected $fillable = [
         'id_promo',

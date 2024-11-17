@@ -25,9 +25,10 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/menu', 'menu')->name('admin.menu');
     Route::get('/admin/menu/add', 'showAddMenuForm')->name('admin.menu.add');
     Route::post('/admin/store', 'storeMenu')->name('admin.store');
-    Route::get('/admin/menu/edit/{id}', 'showEditMenuForm')->name('admin.menu.edit');
+    Route::get('/admin/menu/edit/{menu:nama_menu}', 'showEditMenuForm')->name('admin.menu.edit');
     Route::get('/admin/menu/delete/{id}', 'DeleteMenu')->name('admin.menu.delete');
     Route::post('/admin/update', 'updateMenu')->name('admin.update.menu');
+    Route::get('/admin/kategori', 'category')->name('admin.kategori');
 });
 
 

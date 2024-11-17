@@ -7,6 +7,9 @@
     <label for="harga">Harga :</label>
     <input type="number" name="harga" id="harga" value="{{ $menu->harga }}">
     <br>
+    <label for="deskripsi">Deskripsi :</label>
+    <textarea name="deskripsi" id="deskripsi">{{ $menu->deskripsi }}</textarea>
+    <br>
     <label for="stok">Stok :</label>
     <input type="number" name="stok" id="stok" value="{{ $menu->stock }}">
     <br>
@@ -15,9 +18,7 @@
         <img id="featured_image_preview" class="h-64 w-128 object-cover rounded-md" src="{{asset('menu/'.$menu->gambar)}}" alt="Featured image preview" />
     </div>
     <br>
-    <label for="deskripsi">Deskripsi :</label>
-    <textarea name="deskripsi" id="deskripsi">{{ $menu->deskripsi }}</textarea>
-    <br>
+    
     <button type="submit">Edit Menu</button>
     </form>
     <script>

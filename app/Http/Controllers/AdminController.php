@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Menu;
+use App\Models\KategoriAddOn;
+use App\Models\DetailAddOn;
 
 class AdminController extends Controller
 {
@@ -42,7 +45,8 @@ class AdminController extends Controller
         ]);
         $image = $request->file('gambar');
         $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('menu'), $imageName);
+
+        
 
         $menu = new Menu();
         $menu->nama_menu = $request->nama_menu;
@@ -50,14 +54,32 @@ class AdminController extends Controller
         $menu->deskripsi = $request->deskripsi;
         $menu->stock = $request->stok;
         $menu->gambar = $imageName;
-        $menu->save();
+        if(isset($request->harga_promo)){
+            $promo = new Promo();
+            $promo->harga_promo = $request->harga_promo;
+            $waktu_mulai_date = $request->waktu_mulai_date;
+            $waktu_mulai_time = $request->waktu_mulai_time;
+            $waktu_mulai = $waktu_mulai_date . ' ' . $waktu_mulai_time;
+            $promo->waktu_mulai = $waktu_mulai;
+            $waktu_selesai_date = $request->waktu_selesai_date;
+            $waktu_selesai_time = $request->waktu_selesai_time;
+            $waktu_selesai = $waktu_selesai_date . ' ' . $waktu_selesai_time;
+            $promo->waktu_berakhir = $waktu_selesai;
+            $promo->save();
+            $promo = Promo::latest()->first();
+            $menu->id_promo = $promo->id_promo;
+        }
         
+        $menu->save();
+        $image->move(public_path('menu'), $imageName);
+
+        
+
 
         return redirect('/admin/menu');
     }
 
-    public function showEditMenuForm($id){
-        $menu = Menu::find($id);
+    public function showEditMenuForm(Menu $menu){
         return view('admin.edit_menu', compact('menu'));
     }
     public function DeleteMenu($id){

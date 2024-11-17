@@ -14,6 +14,7 @@
         <a href="{{ route('admin.index') }}">Home</a>
         <a href="{{ route('admin.logout') }}">Logout</a>
         <a href="{{ route('admin.menu') }}">Menu Management</a>
+        <a href="{{ route('admin.kategori') }}">Kategori</a>
     </nav>
     @yield('content')
 </body>

@@ -21,13 +21,6 @@ return new class extends Migration
                   ->on('promos')
                   ->onDelete('set null')
                   ->onUpdate('cascade');
-    
-            $table->unsignedBigInteger('id_addons')->nullable();
-            $table->foreign('id_addons')
-                ->references('id_addons')
-                ->on('addons')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
 
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();

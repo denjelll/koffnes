@@ -26,20 +26,12 @@ class Menu extends Model
         'gambar'
     ];
 
-    public function kategoriDetail()
-    {
-        return $this->belongsTo(KategoriDetail::class, 'id_kategoridetail');
-    }
 
     public function promo()
     {
         return $this->belongsTo(Promo::class, 'id_promo');
     }
 
-    public function addons()
-    {
-        return $this->belongsTo(Addons::class, 'id_addons');
-    }
 
     public function detailOrder()
     {
