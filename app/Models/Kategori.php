@@ -5,23 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KategoriDetail extends Model
+class Kategori extends Model
 {
     use HasFactory;
 
-    protected $table = 'kategori_detail';
-    protected $primaryKey = 'id_kategoridetail';
+    protected $table = 'kategori';
+    protected $primaryKey = 'id_kategori';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id_kategoridetail',
-        'id_kategoriutama',
-        'nama_detail'
+        'id_kategori',
+        'nama_kategori'
     ];
-
-    public function kategoriUtama() 
-    {
-        return $this->belongsTo(KategoriUtama::class, 'id_kategoriutama');
-    }
 }

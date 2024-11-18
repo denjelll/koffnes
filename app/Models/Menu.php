@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Menu extends Model
 {
@@ -16,9 +16,8 @@ class Menu extends Model
 
     protected $fillable = [
         'id_menu',
-        'id_kategoridetail',
+        'id_kategori',
         'id_promo',
-        'id_addons',
         'nama_menu',
         'stock',
         'harga',
@@ -26,9 +25,9 @@ class Menu extends Model
         'gambar'
     ];
 
-    public function kategoriDetail()
+    public function kategori()
     {
-        return $this->belongsTo(KategoriDetail::class, 'id_kategoridetail');
+        return $this->belongsTo(Kategori::class, 'id_kategori');
     }
 
     public function promo()
@@ -36,13 +35,21 @@ class Menu extends Model
         return $this->belongsTo(Promo::class, 'id_promo');
     }
 
-    public function addons()
-    {
-        return $this->belongsTo(Addons::class, 'id_addons');
-    }
-
     public function detailOrder()
     {
         return $this->hasMany(DetailOrder::class, 'id_menu');
     }
+
+    public function addOns()
+    {
+        return $this->belongsToMany(
+            Addon::class,         // Model target
+            'paket_addons',       // Tabel pivot
+            'id_menu',            // FK di tabel pivot yang merujuk ke Menu
+            'id_addon',           // FK di tabel pivot yang merujuk ke AddOn
+            'id_menu',            // Primary key di tabel Menu
+            'id_addon'            // Primary key di tabel AddOn
+        );
+    }
+
 }

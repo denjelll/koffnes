@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
+class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -590,25 +590,23 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         'App\\Console\\Commands\\DailyResetAntrian' => __DIR__ . '/../..' . '/app/Console/Commands/DailyResetAntrian.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Http\\Controllers\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminController.php',
+        'App\\Http\\Controllers\\CashierController' => __DIR__ . '/../..' . '/app/Http/Controllers/CashierController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
         'App\\Livewire\\MenuItem' => __DIR__ . '/../..' . '/app/Livewire/MenuItem.php',
         'App\\Livewire\\TotalHarga' => __DIR__ . '/../..' . '/app/Livewire/TotalHarga.php',
-        'App\\Models\\Addons' => __DIR__ . '/../..' . '/app/Models/Addons.php',
-        'App\\Models\\DetailAddons' => __DIR__ . '/../..' . '/app/Models/DetailAddons.php',
+        'App\\Models\\Addon' => __DIR__ . '/../..' . '/app/Models/Addon.php',
+        'App\\Models\\DetailAddon' => __DIR__ . '/../..' . '/app/Models/DetailAddon.php',
         'App\\Models\\DetailOrder' => __DIR__ . '/../..' . '/app/Models/DetailOrder.php',
         'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
+        'App\\Models\\Kategori' => __DIR__ . '/../..' . '/app/Models/Kategori.php',
         'App\\Models\\Menu' => __DIR__ . '/../..' . '/app/Models/Menu.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
+        'App\\Models\\PaketAddon' => __DIR__ . '/../..' . '/app/Models/PaketAddon.php',
         'App\\Models\\Promo' => __DIR__ . '/../..' . '/app/Models/Promo.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
-        'App\\View\\Components\\Customer_bundle_card' => __DIR__ . '/../..' . '/app/View/Components/Customer_bundle_card.php',
-        'App\\View\\Components\\Customer_event_home' => __DIR__ . '/../..' . '/app/View/Components/Customer_event_home.php',
-        'App\\View\\Components\\Customer_header' => __DIR__ . '/../..' . '/app/View/Components/Customer_header.php',
-        'App\\View\\Components\\Customer_menu_card' => __DIR__ . '/../..' . '/app/View/Components/Customer_menu_card.php',
-        'App\\View\\Components\\Customer_navbar' => __DIR__ . '/../..' . '/app/View/Components/Customer_navbar.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
@@ -4982,6 +4980,7 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/Xml.php',
         'PHPUnit\\Util\\Xml\\Loader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/Loader.php',
         'PHPUnit\\Util\\Xml\\XmlException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Exception/XmlException.php',
+        'ParaTest\\Coverage\\CoverageMerger' => __DIR__ . '/..' . '/brianium/paratest/src/Coverage/CoverageMerger.php',
         'ParaTest\\JUnit\\LogMerger' => __DIR__ . '/..' . '/brianium/paratest/src/JUnit/LogMerger.php',
         'ParaTest\\JUnit\\MessageType' => __DIR__ . '/..' . '/brianium/paratest/src/JUnit/MessageType.php',
         'ParaTest\\JUnit\\TestCase' => __DIR__ . '/..' . '/brianium/paratest/src/JUnit/TestCase.php',
@@ -7584,9 +7583,9 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974::$classMap;
 
         }, null, ClassLoader::class);
     }

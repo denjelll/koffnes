@@ -29,7 +29,8 @@ return new class extends Migration
                   ->onUpdate('cascade');
                   
             $table->integer('kuantitas');
-            $table->integer('harga');
+            $table->integer('harga_menu');
+            $table->string('notes');
         });
     }
 
