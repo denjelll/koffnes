@@ -55,7 +55,22 @@ class AdminController extends Controller
         $menu->stock = $request->stok;
         $menu->gambar = $imageName;        
         $menu->save();
+
+        if(isset($request->harga_promo)){
+            $promo = new Promo();
+            $promo->judul_promo = $request->judul_promo;
+            $menu = Menu::latest()->first();
+            $promo->id_menu = $menu->id_menu;
+            $promo->harga_promo = $request->harga_promo;
+            $promo->tanggal_mulai = $request->tanggal_mulai;
+            $promo->tanggal_berakhir = $request->tanggal_berakhir;
+            $promo->waktu_mulai = $request->waktu_mulai;
+            $promo->waktu_berakhir = $request->waktu_berakhir;
+            $promo->save();
+        }
+
         $image->move(public_path('menu'), $imageName);
+
 
         
 
@@ -79,7 +94,8 @@ class AdminController extends Controller
     }
 
     public function showAddPromoForm(){
-        $menus = Menu::all();
+        $promoMenus = Promo::pluck('id_menu')->toArray();
+        $menus = Menu::whereNotIn('id_menu', $promoMenus)->get();
         return view('admin.add_promo', compact('menus'));
     }
 
@@ -87,20 +103,23 @@ class AdminController extends Controller
         $request->validate([
             'judul_promo' => 'required',
             'harga_promo' => 'required|numeric',
+            'product' => 'required',
             'tanggal_mulai' => 'required',
-            'tanggal_selesai' => 'required',
+            'tanggal_berakhir' => 'required',
             'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required'
+            'waktu_berakhir' => 'required'
         ]);
 
         $promo = new Promo();
         $promo->judul_promo = $request->judul_promo;
+        $promo->id_menu = $request->product;
         $promo->harga_promo = $request->harga_promo;
         $promo->tanggal_mulai = $request->tanggal_mulai;
-        $promo->tanggal_selesai = $request->tanggal_selesai;
+        $promo->tanggal_berakhir= $request->tanggal_berakhir;
         $promo->waktu_mulai = $request->waktu_mulai;
-        $promo->waktu_selesai = $request->waktu_selesai;
+        $promo->waktu_berakhir = $request->waktu_berakhir;
         $promo->save();
+
 
         return redirect('/admin/promo');
     }

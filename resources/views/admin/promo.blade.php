@@ -11,8 +11,11 @@
 @foreach ($promos as $promo)
 <div>
     <h1>{{ $promo->judul_promo }}</h1>
+    <p>{{ $promo->menu->nama_menu }}</p>
     <p>{{ $promo->harga_promo }}</p>
-    <a href="{{ route('admin.promo.menu', $promo->judul_promo) }}">Daftar Menu Promosi</a>
+    <p>{{ $promo->tanggal_m }} - {{$promo->tanggal_b}}</p>
+    
+    <p>{{ $promo->waktu_mulai }} - {{ $promo->waktu_berakhir }}</p>
     <a href="{{ route('admin.promo.edit', $promo->judul_promo) }}">Edit</a>
     <a href="{{ route('admin.promo.delete', $promo->judul_promo) }}">Delete</a>
 </div>

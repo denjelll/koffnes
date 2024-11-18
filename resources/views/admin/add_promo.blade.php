@@ -12,7 +12,8 @@
         <label for="product">Product :</label>
         <select name="product" id="product">
             @foreach ($menus as $menu)
-                <option value="{{ $menu->id_menu }}"><img src="{{asset('menu/'.$menu->gambar)}}"> {{ $menu->nama_menu }}</option>
+                
+                <option value="{{ $menu->id_menu }}">{{ $menu->nama_menu }}</option>
             @endforeach
         </select>
         <br>
@@ -25,8 +26,9 @@
         <label for="tanggal_berakhir">Tanggal Berakhir :</label>
         <input type="date" name="tanggal_berakhir" id="tanggal_berakhir">
         <br>
-        <label for="waktu">Waktu :</label>
+        <label for="waktu">Setiap Jam :</label>
         <input type="time" name="waktu_mulai" id="waktu_mulai"> - <input type="time" name="waktu_berakhir" id="waktu_berakhir">
+        <br>
         <button type="submit">Add Promo</button>
     </form>
 @endsection

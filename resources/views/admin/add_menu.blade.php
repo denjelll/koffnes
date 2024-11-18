@@ -20,7 +20,24 @@
         <label for="gambar">Gambar :</label>
         <input type="file" name="gambar" id="gambar">
         <br>
-        
+        <button type="button" onclick="togglePromo()">Add Promo</button>
+        <div id="promo-container" style="display: none;">
+            <label for="promo">Judul Promo :</label>
+            <input type="text" name="judul_promo" id="promo">
+            <br>
+            <label for="harga_promo">Harga Promo :</label>
+            <input type="number" name="harga_promo" id="harga_promo">
+            <br>
+            <label for="tanggal_mulai">Tanggal Mulai :</label>
+            <input type="date" name="tanggal_mulai" id="tanggal_mulai">
+            <br>
+            <label for="tanggal_berakhir">Tanggal Berakhir :</label>
+            <input type="date" name="tanggal_berakhir" id="tanggal_berakhir">
+            <br>
+            <label for="waktu">Setiap Jam :</label>
+            <input type="time" name="waktu_mulai" id="waktu_mulai"> - <input type="time" name="waktu_berakhir" id="waktu_berakhir">
+        </div>
+        <br>
         <button type="button" onclick="addAddOns()">Add Add-Ons</button>
         <br>
         <div id="addOns">
