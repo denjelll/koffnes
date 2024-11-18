@@ -2,7 +2,7 @@
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Checkout</h2>
 
     <!-- Daftar Item di Cart -->
-    @foreach($cartItems as $item)
+    @foreach($cartItems as $key => $item)
         <div class="border-b pb-4 mb-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-700">{{ $item['menu']->nama_menu }}</h3>
@@ -44,8 +44,15 @@
            
             <!-- Notes -->
             <div class="mt-2">
-                <label for="notes-{{ $loop->index }}" class="block text-sm font-medium text-gray-600">Catatan (Opsional)</label>
-                <textarea id="notes-{{ $loop->index }}" wire:model="cartItems.{{ $loop->index }}.notes" class="textarea textarea-bordered w-full mt-1" placeholder="Masukkan catatan untuk menu ini"></textarea>
+                <label for="notes-{{ $key }}" class="block text-sm font-medium text-gray-600">
+                    Catatan (Opsional)
+                </label>
+                <textarea
+                    id="notes-{{ $key }}"
+                    wire:model="cartItems.{{ $key }}.notes"
+                    class="textarea textarea-bordered w-full mt-1"
+                    placeholder="Masukkan catatan untuk menu ini">
+                </textarea>
             </div>
 
             <!-- Kuantitas -->
@@ -53,7 +60,7 @@
                 <button 
                     wire:click="updateMenuQuantity('{{ $item['menu']->id_menu }}', {{ $item['quantity'] - 1 }})"
                     class="btn btn-outline btn-sm text-gray-600"
-                    :disabled="{{ $item['quantity'] <= 1 ? 'true' : 'false' }}">
+                    :disabled="{{ $item['quantity'] <= 0 ? 'true' : 'false' }}">
                     -
                 </button>
                 <input 

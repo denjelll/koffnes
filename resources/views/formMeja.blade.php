@@ -26,7 +26,7 @@
         Masukan Nama anda
       </h2>
         
-        <form action="{{ url('/order/meja/' . $nomorMeja) }}" method="POST">
+        <form action="{{ route('order.saveCustomer', ['nomorMeja' => $nomorMeja]) }}" method="POST">
             @csrf
             <div>
                 <label for="nama" class="font-bold text-gray-700" style="font-family: helvetica;">

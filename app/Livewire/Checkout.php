@@ -34,17 +34,22 @@ class Checkout extends Component
 
             // Ambil add-ons terkait menu
             if ($item['menu']) {
-                $item['addOn'] = $item['menu']->addOns()->get()->map(function ($addon) {
+                $addonsFromDb = $item['menu']->addOns()->get();
+    
+                // Sinkronisasi add-on dari database dan session
+                $item['addOn'] = $addonsFromDb->map(function ($addon) use ($item) {
+                    $existingAddon = collect($item['addOn'] ?? [])->firstWhere('id_addon', $addon->id_addon);
                     return [
                         'id_addon' => $addon->id_addon,
                         'nama_addon' => $addon->nama_addon,
                         'harga' => $addon->harga,
-                        'quantity' => 0, // Set kuantitas awal ke 0
+                        'quantity' => $existingAddon['quantity'] ?? 0, // Ambil kuantitas dari session jika ada
                     ];
                 })->toArray();
             } else {
                 $item['addOn'] = [];
             }
+        
         }
 
         Log::info('Item after fetching add-ons: ' . json_encode($item, JSON_PRETTY_PRINT)); 
@@ -134,6 +139,26 @@ class Checkout extends Component
         $this->calculateTotal();
     }
 
+    public function updateNote($propertyName)
+    {
+        if (str_contains($propertyName, '.notes')) {
+            $parts = explode('.', $propertyName);
+            $menuKey = $parts[1] ?? null;
+
+            if ($menuKey && isset($this->cartItems[$menuKey])) {
+                // Validasi
+                $this->validateOnly($propertyName);
+
+                // Sanitasi
+                $this->cartItems[$menuKey]['notes'] = strip_tags($this->cartItems[$menuKey]['notes']);
+                
+                // Simpan ke session
+                session()->put('cart', $this->cartItems);
+            }
+        }
+    }
+
+
     public function createOrder()
     {
         $today = Carbon::today();
@@ -188,7 +213,7 @@ class Checkout extends Component
         $this->cartItems = [];
         $this->totalHarga = 0;
 
-        return redirect()->route('order.successful', ['nomorMeja' => session('meja'), 'id_order' => $order->id_order]);
+        return redirect()->route('order.successful', ['id_order' => $order->id_order]);
     }
 
     // Fungsi untuk membuat DetailAddon baru

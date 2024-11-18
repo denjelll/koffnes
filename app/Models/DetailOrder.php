@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Expr\FuncCall;
 
 class DetailOrder extends Model
 {
@@ -34,5 +35,10 @@ class DetailOrder extends Model
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'id_menu');
+    }
+    
+    public function detailAddon()
+    {
+        return $this->hasMany(DetailAddon::class, 'id_detailorder');
     }
 }

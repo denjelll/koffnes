@@ -2,38 +2,31 @@
 
 namespace App\Livewire;
 
+use App\Models\Menu;
 use Livewire\Component;
 
 class TotalHarga extends Component
 {
     public $totalHarga = 0;
-    public $itemQuantities = []; 
+ 
+    protected $listeners = ['updateTotalHarga' => 'calculateTotal'];
 
-    protected $listeners = ['updateTotalHarga' => 'updateHarga'];
-
-    public function updateHarga($data)
+    public function mount()
     {
-        // Data will include menuId and quantity from the MenuItem component
-        $menuId = $data['menuId'];
-        $quantity = $data['quantity'];
-        $price = $data['price']; // Assume `price` is also passed from the MenuItem component
-
-        // Update the quantity for the specific item in the array
-        $this->itemQuantities[$menuId] = [
-            'quantity' => $quantity,
-            'price' => $price
-        ];
-
-        // Recalculate totalHarga
-        $this->calculateTotalHarga();
+        // Hitung total harga saat pertama kali dimuat
+        $this->calculateTotal();
     }
 
-    private function calculateTotalHarga()
+    public function calculateTotal()
     {
-        $this->totalHarga = 0; // Reset totalHarga
+        $cart = session('cart', []);
+        $this->totalHarga = 0;
 
-        foreach ($this->itemQuantities as $item) {
-            $this->totalHarga += $item['quantity'] * $item['price'];
+        foreach ($cart as $item) {
+            $menu = Menu::find($item['id_menu']);
+            if ($menu) {
+                $this->totalHarga += $menu->harga * $item['quantity'];
+            }
         }
     }
 

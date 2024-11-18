@@ -30,10 +30,9 @@ Route::controller(OrderController::class)->group(function() {
     Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
     Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
+
+    Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
 });
 
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 
-Route::get('/order/meja/{nomorMeja}/{id_order}', function ($nomorMeja, $id_order) {
-    return view('orderSucces', ['nomorMeja' => $nomorMeja, 'id_order' => $id_order]);
-})->name('order.successful');
