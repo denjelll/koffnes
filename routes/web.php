@@ -39,3 +39,7 @@ Route::get('/input', function () {
 Route::get('/home', function () {
     return view('/customer_ex/home');
 });
+
+Route::get('/cart', function () {
+    return view('/customer_ex/cart');
+});
