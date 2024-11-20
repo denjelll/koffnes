@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('tanggal_event');
             $table->time('jam_event');
             $table->text('deskripsi_event');
+            $table->timestamps();
         });
     }
 

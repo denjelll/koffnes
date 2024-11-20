@@ -17,6 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+    protected $primaryKey = 'id_user';
     protected $fillable = [
         'id_user',
         'nama_depan',
@@ -35,7 +37,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    public function getNamaAttribute()
+    {
+        return $this->nama_depan . ' ' . $this->nama_belakang;
+    }
     /**
      * Get the attributes that should be cast.
      *

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Expr\FuncCall;
 
 class DetailOrder extends Model
 {
@@ -12,14 +13,18 @@ class DetailOrder extends Model
     protected $table = 'detail_orders';
     protected $primaryKey = 'id_detailorder';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
         'id_detailorder',
         'id_order',
-        'id_menus',
+        'id_menu',
         'kuantitas',
-        'harga'
+        'harga_menu',
+        'notes',
+        'waktu_transaksi'
+
     ];
 
     public function order()
@@ -30,5 +35,10 @@ class DetailOrder extends Model
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'id_menu');
+    }
+    
+    public function detailAddon()
+    {
+        return $this->hasMany(DetailAddon::class, 'id_detailorder');
     }
 }

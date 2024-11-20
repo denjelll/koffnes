@@ -16,6 +16,8 @@
         <a href="{{ route('admin.menu') }}">Menu Management</a>
         <a href="{{ route('admin.kategori') }}">Kategori</a>
         <a href="{{ route('admin.promo') }}">Promotion</a>
+        <a href="{{ route('admin.user') }}">User Management</a>
+        <a href="{{ route('admin.event') }}">Event Management</a>
     </nav>
     @yield('content')
 </body>
