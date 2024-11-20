@@ -12,6 +12,7 @@ class Order extends Model
     protected $table = 'orders';
     protected $primaryKey = 'id_order';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -33,14 +34,9 @@ class Order extends Model
     {
         return $this->hasMany(DetailOrder::class);
     }
-
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'id_user');
-    // }
-
-    // public function detailOrders()
-    // {
-    //     return $this->hasMany(DetailOrder::class, 'id_order');
-    // }
+    
+    public function detailOrders()
+    {
+        return $this->hasMany(DetailOrder::class, 'id_order');
+    }
 }

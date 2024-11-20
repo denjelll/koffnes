@@ -12,6 +12,7 @@ class DetailAddon extends Model
     protected $table = 'detail_addons';
     protected $primaryKey = 'id_detailaddon';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -20,6 +21,7 @@ class DetailAddon extends Model
         'id_detailorder',
         'kuantitas',
         'harga',
+        'waktu_transaksi'
     ];
 
     public function addon()

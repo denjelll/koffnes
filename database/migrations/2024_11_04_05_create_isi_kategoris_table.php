@@ -11,22 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paket_addons', function (Blueprint $table) {
-            $table->string('id_paketaddon', 10)->primary();
+        Schema::create('isi_kategoris', function (Blueprint $table) {
+            $table->id('id_isi_kategori')->autoIncrement();
+            
+            $table->unsignedBigInteger('id_kategori');
+            $table->foreign('id_kategori')
+                  ->references('id_kategori')
+                  ->on('kategoris')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
 
-            $table->string('id_menu', 10);
+            $table->unsignedBigInteger('id_menu');
             $table->foreign('id_menu')
                   ->references('id_menu')
                   ->on('menus')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            
-            $table->string('id_addon', 10);
-            $table->foreign('id_addon')
-                ->references('id_addon')
-                ->on('addons')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 
@@ -35,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paket_addons');
+        Schema::dropIfExists('isi_kategoris');
     }
 };

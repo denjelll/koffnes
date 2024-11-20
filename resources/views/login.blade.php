@@ -6,6 +6,10 @@
     <title>Login Page</title>
 </head>
 <body>
+<?php
+        $password = '123';
+        echo password_hash($password, PASSWORD_BCRYPT);
+    ?>
     <form action="{{ route('login.verify') }}" method="POST">
         @csrf
         <label for="email">Email</label>

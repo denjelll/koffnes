@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_addons', function (Blueprint $table) {
-            $table->string('id_detailaddons', 10)->primary();
+            $table->string('id_detailaddon', 10)->primary();
 
-            $table->string('id_addon', 10);
-            $table->foreign('id_addon')
-                  ->references('id_addon')
-                  ->on('addons')
-                  ->onDelete('cascade')
+            $table->unsignedBigInteger('id_addon'); 
+            $table->foreign('id_addon') 
+                  ->references('id_addon') 
+                  ->on('add_ons') 
+                  ->onDelete('cascade') 
                   ->onUpdate('cascade');
             
-            $table->string('id_detailorder', 10);
+            $table->string('id_detailorder');
             $table->foreign('id_detailorder')
                 ->references('id_detailorder')
                 ->on('detail_orders')

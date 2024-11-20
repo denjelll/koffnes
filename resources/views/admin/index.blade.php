@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-</head>
-<body>
-    <a href="{{ route('admin.logout') }}">Logout</a>
-    <h1>Welcome, {{ session('nama') }}</h1>
-</body>
-</html>
+@extends('layout.admin_navbar')
+@section('title')
+    Admin Panel
+@endsection
+@section('content')
+    <h1>Welcome to Admin Panel</h1>
+    <p>This is the admin panel</p>
+    <!-- welcome, nama user -->
+    <p>Welcome, {{ session('role')}}</p>
+@endsection
