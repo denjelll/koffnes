@@ -19,7 +19,7 @@
     </script>
     <style>
         body {
-            background-image: url("asset/Cashnes/motif.png");
+            background-image: url("{{ asset('asset/Cashnes/motif.png') }}");
             background-repeat: repeat;
             background-position: top left;
             background-size: 400px 400px;
@@ -41,8 +41,7 @@
     <nav class="bg-[#412F26] text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg">
         <!-- Logo -->
         <div class="flex items-center justify-between w-full md:w-auto">
-            <img src="asset/Cashnes/8.png" alt="Koffnes Logo" class="h-8 md:h-10">
-            <!-- Burger Icon -->
+            <img src="{{ asset('asset/Cashnes/8.png') }}" alt="Koffnes Logo" class="h-8 md:h-10">
             <button id="burger-menu" class="md:hidden text-white focus:outline-none" aria-label="Toggle Navigation">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -104,14 +103,14 @@
     </div>
 
     <script>
-        // Example data from backend
+        // Example data
         const transactionData = [
             { tanggal: '08/11/2024', totalPenjualan: 'Rp 200.000' },
             { tanggal: '09/11/2024', totalPenjualan: 'Rp 150.000' },
             { tanggal: '10/11/2024', totalPenjualan: 'Rp 300.000' },
         ];
 
-        // Populate table dynamically
+        // table dynamically
         const tableBody = document.getElementById('table-body');
         transactionData.forEach((transaction) => {
             const row = document.createElement('tr');

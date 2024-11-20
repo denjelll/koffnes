@@ -19,7 +19,7 @@
     </script>
     <style>
         body {
-            background-image: url("motif.png");
+            background-image: url("{{ asset('motif.png') }}");
             background-repeat: repeat;
             background-position: top left;
             background-size: 400px 400px;
@@ -34,9 +34,9 @@
 <body class="h-screen flex items-end bg-[#EDE1D2] relative">
 
     <!-- Logo -->
-    <img src="asset/Cashnes/6.png" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
+    <img src="{{ asset('asset/Cashnes/6.png') }}" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
 
-    <!-- Header (Teks Welcome Back!) -->
+    <!-- Header (Welcome Back!) -->
     <div class="absolute top-44 sm:top-40 lg:top-48 w-full text-center z-10">
         <h1 class="text-4xl sm:text-3xl lg:text-5xl font-bold text-[#412F26]">Welcome Back!</h1>
     </div>
@@ -48,6 +48,7 @@
             <h2 class="text-2xl font-semibold text-gray-800">Login</h2>
         </div>
         <form action="#" method="POST">
+            @csrf
             <div class="mb-4">
                 <label for="email" class="block text-gray-700">Email</label>
                 <input type="email" id="email" name="email" 

@@ -19,7 +19,7 @@
     </script>
     <style>
         body {
-            background-image: url("asset/Cashnes/motif.png");
+            background-image: url("{{ asset('asset/Cashnes/motif.png') }}");
             background-repeat: repeat;
             background-position: top left;
             background-size: 400px 400px;
@@ -39,10 +39,8 @@
 
     <!-- Navbar -->
     <nav class="bg-[#412F26] text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg">
-        <!-- Logo -->
         <div class="flex items-center justify-between w-full md:w-auto">
-            <img src="asset/Cashnes/8.png" alt="Koffnes Logo" class="h-8 md:h-10">
-            <!-- Burger Icon -->
+            <img src="{{ asset('asset/Cashnes/8.png') }}" alt="Koffnes Logo" class="h-8 md:h-10">
             <button id="burger-menu" class="md:hidden text-white focus:outline-none" aria-label="Toggle Navigation">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -66,10 +64,10 @@
         <h1 class="text-4xl sm:text-3xl lg:text-5xl font-bold text-[#412F26]">Transaction Recap</h1>
     </div>
 
-    <!-- Content (kept the same for the rest of the code) -->
+    <!-- Search and Date Range -->
     <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-6 px-4">
-        <!-- Search and Date Range -->
-        <form class="w-full md:w-1/1 lg:w-1/3">
+        <form class="w-full md:w-1/1 lg:w-1/3" method="GET" action="{{ url('transactions/search') }}">
+            @csrf
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -77,7 +75,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>
                 </div>
-                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#CBB89D] focus:border-[#CBB89D]" placeholder="Search Transactions..." required />
+                <input type="search" id="default-search" name="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#CBB89D] focus:border-[#CBB89D]" placeholder="Search Transactions..." required />
                 <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-[#412F26] hover:bg-[#CBB89D] focus:ring-4 focus:outline-none focus:ring-[#CBB89D] font-medium rounded-lg text-sm px-4 py-2">Search</button>
             </div>
         </form>
@@ -103,25 +101,27 @@
                 </tr>
             </thead>
             <tbody class="bg-white text-black">
+                @foreach($transactions as $transaction)
                 <tr class="border-b border-gray-300">
-                    <td class="p-4">08/11/2024</td>
-                    <td class="p-4">1</td>
-                    <td class="p-4">Dine In</td>
-                    <td class="p-4">Sadu</td>
-                    <td class="p-4">Kopi</td>
-                    <td class="p-4">3</td>
-                    <td class="p-4">Rp 45.000</td>
+                    <td class="p-4">{{ $transaction->date }}</td>
+                    <td class="p-4">{{ $transaction->order_no }}</td>
+                    <td class="p-4">{{ $transaction->order_type }}</td>
+                    <td class="p-4">{{ $transaction->name }}</td>
+                    <td class="p-4">{{ $transaction->menu }}</td>
+                    <td class="p-4">{{ $transaction->quantity }}</td>
+                    <td class="p-4">Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 
- <!-- Download Button -->
- <div class="flex justify-center mt-6">
-    <button class="bg-[#412F26] text-white px-6 py-3 rounded-lg hover:bg-[#CBB89D] focus:outline-none">
-        Download Excel
-    </button>
-</div>
+    <!-- Download Button -->
+    <div class="flex justify-center mt-6">
+        <a href="{{ url('transactions/export') }}" class="bg-[#412F26] text-white px-6 py-3 rounded-lg hover:bg-[#CBB89D] focus:outline-none">
+            Download Excel
+        </a>
+    </div>
 
     <script>
         const burgerMenu = document.getElementById("burger-menu");
