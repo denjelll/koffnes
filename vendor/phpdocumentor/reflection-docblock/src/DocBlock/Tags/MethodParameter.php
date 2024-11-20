@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Reflection\DocBlock\Tags;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Factory\MethodParameterFactory;
 use phpDocumentor\Reflection\Type;
 
 final class MethodParameter
@@ -25,20 +24,14 @@ final class MethodParameter
 
     private string $name;
 
-    /** @var mixed */
-    private $defaultValue;
+    private ?string $defaultValue = null;
 
-    public const NO_DEFAULT_VALUE = '__NO_VALUE__';
-
-    /**
-     * @param mixed $defaultValue
-     */
     public function __construct(
         string $name,
         Type $type,
         bool $isReference = false,
         bool $isVariadic = false,
-        $defaultValue = self::NO_DEFAULT_VALUE
+        ?string $defaultValue = null
     ) {
         $this->type = $type;
         $this->isReference = $isReference;
@@ -69,23 +62,6 @@ final class MethodParameter
 
     public function getDefaultValue(): ?string
     {
-        if ($this->defaultValue === self::NO_DEFAULT_VALUE) {
-            return null;
-        }
-
-        return (new MethodParameterFactory())->format($this->defaultValue);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getType() . ' ' .
-            ($this->isReference() ? '&' : '') .
-            ($this->isVariadic() ? '...' : '') .
-            '$' . $this->getName() .
-            (
-                $this->defaultValue !== self::NO_DEFAULT_VALUE ?
-                (new MethodParameterFactory())->format($this->defaultValue) :
-                ''
-            );
+        return $this->defaultValue;
     }
 }

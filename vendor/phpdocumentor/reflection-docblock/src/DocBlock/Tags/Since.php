@@ -59,7 +59,7 @@ final class Since extends BaseTag implements Factory\StaticMethod
         ?DescriptionFactory $descriptionFactory = null,
         ?TypeContext $context = null
     ): ?self {
-        if ($body === null || $body === '') {
+        if (empty($body)) {
             return new static();
         }
 
@@ -89,7 +89,7 @@ final class Since extends BaseTag implements Factory\StaticMethod
      */
     public function __toString(): string
     {
-        if ($this->description !== null) {
+        if ($this->description) {
             $description = $this->description->render();
         } else {
             $description = '';

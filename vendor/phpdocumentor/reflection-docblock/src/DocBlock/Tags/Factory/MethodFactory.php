@@ -57,9 +57,7 @@ final class MethodFactory implements PHPStanFactory
                         ),
                         $param->isReference,
                         $param->isVariadic,
-                        $param->defaultValue === null ?
-                            MethodParameter::NO_DEFAULT_VALUE :
-                            (string) $param->defaultValue
+                        (string) $param->defaultValue
                     );
                 },
                 $tagValue->parameters

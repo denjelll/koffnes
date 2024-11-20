@@ -59,7 +59,7 @@ final class Version extends BaseTag implements Factory\StaticMethod
         ?DescriptionFactory $descriptionFactory = null,
         ?TypeContext $context = null
     ): ?self {
-        if ($body === null || $body === '') {
+        if (empty($body)) {
             return new static();
         }
 

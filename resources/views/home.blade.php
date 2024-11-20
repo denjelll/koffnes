@@ -4,174 +4,89 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @vite('resources/css/app.css')
-  <style>
-    .slide {
-        display: none;
-    }
-    .slide.active {
-        display: block;
-    }
-
-    html {
-        overflow-y: scroll;
-        scrollbar-width: none; /* Untuk Firefox */
-    }
-
-    html::-webkit-scrollbar {
-        display: none; /* Untuk Chrome, Safari, dan Edge */
-    }
-
-    body {
-      background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
-      background-repeat: repeat;
-      background-position: top left;
-      background-size: 400px 400px;
-      padding-bottom: 80px;
-      padding-top: 60px;
-      margin: 0;
-    }
-  </style>
 </head>
-<body class="flex flex-col min-h-screen">
-  <!-- Content area -->
-  <main class="flex-grow p-4">
-    <x-customer_header />
-    <!-- Slideshow Container -->
-    <div
-      class="w-100 h-60 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
-    >
-      <!-- Slides -->
-      <div class="slide active flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 1</h2>
-      </div>
-      <div class="slide flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 2</h2>
-      </div>
-      <div class="slide flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 3</h2>
-      </div>
+<body>
+    <h1 class="text-3xl font-bold underline text-organic">
+      Hello world!
+    </h1>
 
-      <!-- Indicators -->
-      <div
-        class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2"
-      >
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
+    <h1 class="text-3xl font-bold underline bg-butter">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-coconut">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-natural">
+      Hello world!
+    </h1>
+
+    <h1 class="text-3xl font-bold underline bg-cocoa">
+      Hello world!
+    </h1>
+
+    <div class="card bg-base-100 image-full w-96 shadow-xl">
+      <figure>
+        <img
+          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+          alt="Shoes" />
+      </figure>
+      <div class="card-body">
+        <h2 class="card-title">Shoes!</h2>
+        <p>If a dog chews shoes whose shoes does he choose?</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary">Buy Now</button>
+        </div>
       </div>
-    </div>
-    <!-- Best Seller Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
-    <div class="flex space-x-4">
-      <x-customer_menu_card />
-      <x-customer_menu_card />
-    </div>
-    <div class="flex space-x-4">
-      <x-customer_menu_card />
-      <x-customer_menu_card />
-    </div>
-    <!-- Bundling Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Bundling & Deals</h1>
-      <x-customer_bundle_card />
-      <x-customer_bundle_card />
-      <x-customer_bundle_card />
-    <!-- Event Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Event News</h1>
-    <x-customer_event_home />
-    <x-customer_event_home />
-    <x-customer_event_home />
-    <div class="flex items-center justify-center mt-3">
-      <a
-      href="#events"
-      class="inline-block px-4 py-2 mt-4 text-white font-semibold" style="background-color: #412f26; border-radius: 15px; font-size: x-large;" 
-    >
-      See More Events
-    </a>
     </div>
     
-  </main>
-
-  <!-- Fixed Bottom Navbar -->
-  <x-customer_navbar />
-  <script>
-    // JavaScript for slideshow functionality
-    const slides = document.querySelectorAll(".slide");
-    const indicators = document.querySelectorAll(".indicator");
-    let currentIndex = 0;
-
-    // Function to show the active slide
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle("active", i === index);
-        indicators[i].classList.toggle("bg-green-600", i === index);
-        indicators[i].classList.toggle("opacity-100", i === index);
-        indicators[i].classList.toggle("opacity-50", i !== index);
-      });
-    }
-
-    // Handle indicator clicks
-    indicators.forEach((indicator, i) => {
-      indicator.addEventListener("click", () => {
-        currentIndex = i;
-        showSlide(currentIndex);
-      });
-    });
-
-    // Function to handle swipe left and right
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    function handleSwipe() {
-      if (touchEndX < touchStartX) {
-        // Swiped left, go to next slide
-        currentIndex = (currentIndex + 1) % slides.length;
-      }
-      if (touchEndX > touchStartX) {
-        // Swiped right, go to previous slide
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      }
-      showSlide(currentIndex);
-    }
-
-    // Add event listeners for touch events
-    slides.forEach((slide) => {
-      slide.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX; // Record the touch start position
-      });
-
-      slide.addEventListener("touchend", (e) => {
-        touchEndX = e.changedTouches[0].clientX; // Record the touch end position
-        handleSwipe(); // Determine swipe direction and show the appropriate slide
-      });
-    });
-
-    // Auto-slide functionality: move to the next slide every 5 seconds
-    function autoSlide() {
-      currentIndex = (currentIndex + 1) % slides.length; // Move to the next slide
-      showSlide(currentIndex);
-    }
-
-    // Set the interval for auto-sliding (every 5 seconds)
-    let autoSlideInterval = setInterval(autoSlide, 5000);
-
-    // Reset the interval after swipe to continue auto sliding
-    slides.forEach((slide) => {
-      slide.addEventListener("touchstart", () => {
-        clearInterval(autoSlideInterval); // Stop the auto-slide when swipe starts
-      });
-      slide.addEventListener("touchend", () => {
-        autoSlideInterval = setInterval(autoSlide, 5000); // Restart the auto-slide after swipe
-      });
-    });
-
-    // Initial display
-    showSlide(currentIndex);
-  </script>
+    <div class="btm-nav">
+      <button class="bg-pink-200 text-pink-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        <span class="btm-nav-label">Home</span>
+      </button>
+      <button class="active border-blue-600 bg-blue-200 text-blue-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="btm-nav-label">Warnings</span>
+      </button>
+      <button class="bg-teal-200 text-teal-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <span class="btm-nav-label">Statics</span>
+      </button>
+    </div>
 </body>
 </html>

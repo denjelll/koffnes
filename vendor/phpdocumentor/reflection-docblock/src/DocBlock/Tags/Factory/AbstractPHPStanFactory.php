@@ -21,10 +21,8 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\PhpDocParser\ParserConfig;
 use RuntimeException;
 
-use function class_exists;
 use function ltrim;
 use function property_exists;
 use function rtrim;
@@ -46,28 +44,16 @@ class AbstractPHPStanFactory implements Factory
 
     public function __construct(PHPStanFactory ...$factories)
     {
-        if (class_exists(ParserConfig::class)) {
-            $config = new ParserConfig(['indexes' => true, 'lines' => true]);
-            $this->lexer = new Lexer($config);
-            $constParser = new ConstExprParser($config);
-            $this->parser = new PhpDocParser(
-                $config,
-                new TypeParser($config, $constParser),
-                $constParser
-            );
-        } else {
-            $this->lexer = new Lexer(true);
-            $constParser = new ConstExprParser(true, true, ['lines' => true, 'indexes' => true]);
-            $this->parser = new PhpDocParser(
-                new TypeParser($constParser, true, ['lines' => true, 'indexes' => true]),
-                $constParser,
-                true,
-                true,
-                ['lines' => true, 'indexes' => true],
-                true
-            );
-        }
-
+        $this->lexer = new Lexer(true);
+        $constParser = new ConstExprParser(true, true, ['lines' => true, 'indexes' => true]);
+        $this->parser = new PhpDocParser(
+            new TypeParser($constParser, true, ['lines' => true, 'indexes' => true]),
+            $constParser,
+            true,
+            true,
+            ['lines' => true, 'indexes' => true],
+            true
+        );
         $this->factories = $factories;
     }
 
@@ -118,12 +104,12 @@ class AbstractPHPStanFactory implements Factory
                 $fixed[] = [
                     rtrim($token[Lexer::VALUE_OFFSET], " \t"),
                     Lexer::TOKEN_PHPDOC_EOL,
-                    $token[2] ?? 0,
+                    $token[2] ?? null,
                 ];
                 $fixed[] = [
                     ltrim($token[Lexer::VALUE_OFFSET], "\n\r"),
                     Lexer::TOKEN_HORIZONTAL_WS,
-                    ($token[2] ?? 0) + 1,
+                    ($token[2] ?? null) + 1,
                 ];
                 continue;
             }
