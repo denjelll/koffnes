@@ -52,6 +52,7 @@ Route::controller(AdminController::class)->group(function(){
     Route::post('admin/event/store', 'storeEvent')->name('admin.store_event');
     Route::get('admin/event/edit/{event:nama_event}', 'showEditEventForm')->name('admin.edit_event');
     Route::get('admin/event/delete/{event:nama_event}', 'deleteEvent')->name('admin.delete_event');
+    Route::post('admin/event/update', 'updateEvent')->name('admin.update_event');
 });
 
 
