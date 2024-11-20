@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addons', function (Blueprint $table) {
-            $table->string('id_addon', 10)->primary();
+        Schema::create('add_ons', function (Blueprint $table) {
+            $table->id('id_addon')->autoIncrement();
+            $table->unsignedBigInteger('id_menu');
+            $table->foreign('id_menu')
+                  ->references('id_menu')
+                  ->on('menus')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
             $table->string('nama_addon', 50);
             $table->integer('harga');
             $table->timestamps();
@@ -24,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addons');
+        Schema::dropIfExists('add_ons');
     }
 };

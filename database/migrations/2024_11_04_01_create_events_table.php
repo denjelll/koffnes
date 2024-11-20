@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->string('id_event', 50)->primary();
+            $table->id('id_event')->autoIncrement();
             $table->string('nama_event', 100);
             $table->string('banner_event', 255); // Path untuk gambar banner
             $table->string('hadiah_event', 100);
             $table->date('tanggal_event');
             $table->time('jam_event');
             $table->text('deskripsi_event');
+            $table->timestamps();
         });
     }
 

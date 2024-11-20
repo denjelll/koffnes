@@ -12,24 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
-            $table->string('id_menu', 7)->primary();
-
-            // Definisikan foreign key untuk id_kategori
-            $table->string('id_kategori', 50);
-            $table->foreign('id_kategori')
-                  ->references('id_kategori')
-                  ->on('kategori')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
-
-            // Definisikan foreign key untuk id_promo
-            $table->string('id_promo', 50)->nullable();
+            $table->id('id_menu')->autoIncrement();
+            $table->unsignedBigInteger('id_promo')->nullable();
             $table->foreign('id_promo')
                   ->references('id_promo')
                   ->on('promos')
-                  ->onDelete('set null')
+                  ->onDelete('cascade')
                   ->onUpdate('cascade');
-    
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();
             $table->integer('harga')->unsigned();
