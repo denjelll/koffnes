@@ -30,10 +30,10 @@
         }
     </style>
 </head>
-<body>
+<body class="h-screen flex items-end bg-[#EDE1D2] relative">
     <?php
         $password = '123';
-        echo password_hash($password, PASSWORD_BCRYPT);
+        // echo password_hash($password, PASSWORD_BCRYPT);
     ?>
 
     <!-- Logo -->
@@ -54,13 +54,13 @@
                 <label for="email" class="block text-gray-700">Email</label>
                 <input type="email" id="email" name="email" 
                        class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                required>
+                required autocomplete="off">
             </div>
             <div class="mb-6">
                 <label for="password" class="block text-gray-700">Password</label>
                 <input type="password" id="password" name="password" 
                        class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                required>
+                required autocomplete="off">
             </div>
             <button type="submit" 
                     class="w-full bg-[#412F26] text-white py-3 rounded-lg hover:bg-[#CBB89D] focus:outline-none">
