@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Koffnes</title>
+    <link rel="icon" href="{{ asset('storage/asset/gambar/icon.png') }}" type="image/x-icon">
     @vite('resources/css/app.css')
     <style>
       body {
