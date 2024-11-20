@@ -28,11 +28,24 @@
             <label for="harga_promo">Harga Promo :</label>
             <input type="number" name="harga_promo" id="harga_promo">
             <br>
-            <label for="tanggal_mulai">Tanggal Mulai :</label>
-            <input type="date" name="tanggal_mulai" id="tanggal_mulai">
-            <br>
-            <label for="tanggal_berakhir">Tanggal Berakhir :</label>
-            <input type="date" name="tanggal_berakhir" id="tanggal_berakhir">
+            <label for="hari">Hari Promo :</label>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Monday">Monday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Tuesday">Tuesday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Wednesday">Wednesday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Thursday">Thursday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Friday">Friday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Saturday">Saturday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="Sunday">Sunday</input>
+        <br>
+        <input type="radio" name="hari" id="hari" value="AllDay">Setiap hari</input>
+        <br>
             <br>
             <label for="waktu">Setiap Jam :</label>
             <input type="time" name="waktu_mulai" id="waktu_mulai"> - <input type="time" name="waktu_berakhir" id="waktu_berakhir">
@@ -59,7 +72,7 @@
             const AddOns = document.getElementById('addOns');
             AddOns.innerHTML += `
                 <input type="text" name="addOns[]" placeholder="Add-Ons"><br>
-                <input type="text" name="harga_addOns[]" placeholder="Harga"><br>
+                <input type="text" name="harga_addon[]" placeholder="Harga"><br>
             `;
         }
     </script>

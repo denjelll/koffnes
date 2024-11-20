@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id('id_menu')->autoIncrement();
-
+            $table->unsignedBigInteger('id_promo')->nullable();
+            $table->foreign('id_promo')->references('id_promo')->on('promos')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nama_menu', 50);
             $table->integer('stock')->unsigned();
             $table->integer('harga')->unsigned();

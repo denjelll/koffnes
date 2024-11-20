@@ -26,11 +26,18 @@ class Menu extends Model
         'gambar'
     ];
 
-
+    protected $with = ['promo'];
+    public function promo()
+    {
+        return $this->belongsTo(Promo::class, 'id_promo');
+    }
 
 
     public function detailOrder()
     {
         return $this->hasMany(DetailOrder::class, 'id_menu');
+    }
+    public function isi_kategori(){
+        return $this->hasMany(Isi_kategori::class, 'id_menu');
     }
 }

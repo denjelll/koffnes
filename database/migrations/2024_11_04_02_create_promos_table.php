@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('promos', function (Blueprint $table) {
             $table->id('id_promo')->autoIncrement();
             $table->string('judul_promo', 50);
-            $table->unsignedBigInteger('id_menu');
-            $table->foreign('id_menu')->references('id_menu')->on('menus')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('harga_promo'); // Misalnya 10.50 untuk diskon 10.5%
-            $table->date('tanggal_mulai'); // Menggunakan datetime untuk menyimpan waktu spesifik
-            $table->date('tanggal_berakhir');
+            $table->integer('harga_promo'); 
+            $table->enum('hari', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'AllDay']);
             $table->time('waktu_mulai');
             $table->time('waktu_berakhir');
+            $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
             $table->timestamps();
         });
     }

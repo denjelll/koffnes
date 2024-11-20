@@ -13,6 +13,21 @@
     <label for="stok">Stok :</label>
     <input type="number" name="stok" id="stok" value="{{ $menu->stock }}">
     <br>
+    @if(isset($addons))
+    @foreach ($addons as $addon)
+        <input type="hidden" name="id_addon[]" value="{{ $addon->id_addon }}">
+        <input type="text" name="addOns[]" value="{{ $addon->nama_addon }}">
+        <br>
+        <input type="number" name="harga_addon[]" value="{{$addon->harga}}">
+        <br>
+    @endforeach
+    @endif
+        @if(!isset($addons) || count($addons) == 0)
+        <button type="button" onclick="addAddOns()">Tambah Addon</button>
+            <div id="addOns">
+            </div>
+        @endif
+
     <input type="file" id="gambar" name="gambar" accept="image/*" onchange="previewImage(event)">
     <div>
         <img id="featured_image_preview" class="h-64 w-128 object-cover rounded-md" src="{{asset('menu/'.$menu->gambar)}}" alt="Featured image preview" />
@@ -34,4 +49,11 @@
             reader.readAsDataURL(file); // Read the file as a data URL
         } 
     }
+    function addAddOns() {
+            const AddOns = document.getElementById('addOns');
+            AddOns.innerHTML += `
+                <input type="text" name="addOns[]" placeholder="Add-Ons"><br>
+                <input type="text" name="harga_addon[]" placeholder="Harga"><br>
+            `;
+        }
 </script>
