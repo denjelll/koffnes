@@ -78,7 +78,6 @@
                 <p class="text-gray-600">Rp. <span id="basePriceIndomie">11000</span></p>
             </div>
         </div>
-        
         <!-- Addons Section -->
         <div class="mb-4">
             <h3 class="font-semibold text-gray-700">Tambahan</h3>
@@ -134,8 +133,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Footer: Total Price and Quantity -->
+        <!-- Total Harga Makanan Satunya -->
         <div class="flex items-center justify-between mt-4">
             <p class="font-semibold text-lg text-gray-800">Total: Rp. <span id="totalPriceIndomie">11000</span></p>
             <div class="flex items-center">
@@ -160,35 +158,10 @@
                 <p class="text-gray-600">Rp. <span id="basePriceAmericano">10000</span></p>
             </div>
         </div>
-        <!-- Addons Section -->
-        <div class="mb-4">
-            <h3 class="font-semibold text-gray-700">Takaran Gula</h3>
-            <p class="text-sm text-gray-500">*Pilih Salah Satu</p>
-            <div class="space-y-2 mt-2">
-                <div class="flex items-center justify-between">
-                    <p class="text-gray-600">Sugar</p>
-                    <div class="flex items-center">
-                        <span class="text-gray-500 text-sm mr-2">Free</span>
-                        <input type="radio" id="LessSugar" name="sugar" value="" class="form-radio text-[#6a6f4c] border-[#412f26] rounded-full w-5 h-5 focus:ring-[#6a6f4c]">
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <p class="text-gray-600">Less Sugar</p>
-                    <div class="flex items-center">
-                        <span class="text-gray-500 text-sm mr-2">Free</span>
-                        <input type="radio" id="LessSugar" name="sugar" value="" class="form-radio text-[#6a6f4c] border-[#412f26] rounded-full w-5 h-5 focus:ring-[#6a6f4c]">
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <p class="text-gray-600">No Sugar</p>
-                    <div class="flex items-center">
-                        <span class="text-gray-500 text-sm mr-2">Free</span>
-                        <input type="radio" id="LessSugar" name="sugar" value="" class="form-radio text-[#6a6f4c] border-[#412f26] rounded-full w-5 h-5 focus:ring-[#6a6f4c]">
-                    </div>
-                </div>
-            </div>
+            <div class="items-center justify-between mt-4">
+            <label for="notes" class="text-cocoa font-semibold">Catatan:</label><br>
+            <textarea id="notes" name="notes" rows="5" class="w-full p-2 border border-gray-300 rounded-md resize-none"></textarea>
         </div>
-        <!-- Footer: Total Price and Quantity -->
         <div class="flex items-center justify-between mt-4">
             <p class="font-semibold text-lg text-gray-800">Total: Rp. <span id="totalPriceAmericano">10000</span></p>
             <div class="flex items-center">
@@ -217,63 +190,67 @@
 
     <script>
         let indomieQuantity = 1;
-        let americanoQuantity = 1;
-        let totalIndomie = 11000; // Base price Indomie
-        let totalAmericano = 10000; // Base price Americano
+    let americanoQuantity = 1;
+    let totalIndomie = 11000; // Base price Indomie
+    let totalAmericano = 10000; // Base price Americano
 
-        let telorCeplokPrice = 3000;
-        let baksoPrice = 5000;
-        let sosisPrice = 6000;
+    let telorCeplokPrice = 3000;
+    let baksoPrice = 5000;
+    let sosisPrice = 6000;
 
-        // Update price based on quantity and addon choices
-        function updatePrice() {
-            document.getElementById("totalPriceIndomie").textContent = totalIndomie * indomieQuantity;
-            document.getElementById("totalPriceAmericano").textContent = totalAmericano * americanoQuantity;
-            document.getElementById("indomieQuantity").textContent = indomieQuantity;
-            document.getElementById("americanoQuantity").textContent = americanoQuantity;
+    // Tambahan harga opsi untuk Indomie
+    let indomieAddonPrice = 0;
+
+    // Update price based on quantity and addon choices
+    function updatePrice() {
+        document.getElementById("totalPriceIndomie").textContent = (totalIndomie * indomieQuantity) + indomieAddonPrice;
+        document.getElementById("totalPriceAmericano").textContent = totalAmericano * americanoQuantity;
+        document.getElementById("indomieQuantity").textContent = indomieQuantity;
+        document.getElementById("americanoQuantity").textContent = americanoQuantity;
+    }
+
+    function increaseQuantity(product) {
+        if (product === 'indomie') {
+            indomieQuantity++;
+        } else if (product === 'americano') {
+            americanoQuantity++;
         }
+        updatePrice();
+    }
 
-        function increaseQuantity(product) {
-            if (product === 'indomie') {
-                indomieQuantity++;
-            } else if (product === 'americano') {
-                americanoQuantity++;
-            }
-            updatePrice();
+    function decreaseQuantity(product) {
+        if (product === 'indomie' && indomieQuantity > 1) {
+            indomieQuantity--;
+        } else if (product === 'americano' && americanoQuantity > 1) {
+            americanoQuantity--;
         }
+        updatePrice();
+    }
 
-        function decreaseQuantity(product) {
-            if (product === 'indomie' && indomieQuantity > 1) {
-                indomieQuantity--;
-            } else if (product === 'americano' && americanoQuantity > 1) {
-                americanoQuantity--;
-            }
-            updatePrice();
+    function increaseOption(option, price, product) {
+        if (product === 'indomie') {
+            indomieAddonPrice += price; // Tambahkan harga opsi hanya satu kali
+            document.getElementById(option + "Count").textContent = parseInt(document.getElementById(option + "Count").textContent) + 1;
+        } else if (product === 'americano') {
+            totalAmericano += price;
         }
+        updatePrice();
+    }
 
-        function increaseOption(option, price, product) {
-            if (product === 'indomie') {
-                totalIndomie += price;
-                document.getElementById(option + "Count").textContent = parseInt(document.getElementById(option + "Count").textContent) + 1;
-            } else if (product === 'americano') {
-                totalAmericano += price;
-            }
-            updatePrice();
+    function decreaseOption(option, price, product) {
+        if (product === 'indomie' && parseInt(document.getElementById(option + "Count").textContent) > 0) {
+            indomieAddonPrice -= price; // Kurangi harga opsi hanya satu kali
+            document.getElementById(option + "Count").textContent = parseInt(document.getElementById(option + "Count").textContent) - 1;
+        } else if (product === 'americano') {
+            totalAmericano -= price;
         }
+        updatePrice();
+    }
 
-        function decreaseOption(option, price, product) {
-            if (product === 'indomie' && parseInt(document.getElementById(option + "Count").textContent) > 0) {
-                totalIndomie -= price;
-                document.getElementById(option + "Count").textContent = parseInt(document.getElementById(option + "Count").textContent) - 1;
-            } else if (product === 'americano') {
-                totalAmericano -= price;
-            }
-            updatePrice();
-        }
+    function openBill() {
+        alert("Bill is now open!");
+    }
 
-        function openBill() {
-            alert("Bill is now open!"); 
-        }
     </script>
 </body>
 
