@@ -26,13 +26,21 @@ class Order extends Model
         'waktu_transaksi'
     ];
 
-    public function user()
+    const CREATED_AT = 'waktu_transaksi';
+    const UPDATED_AT = null;
+
+    public function items()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->hasMany(DetailOrder::class);
     }
 
-    public function detailOrders()
-    {
-        return $this->hasMany(DetailOrder::class, 'id_order');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'id_user');
+    // }
+
+    // public function detailOrders()
+    // {
+    //     return $this->hasMany(DetailOrder::class, 'id_order');
+    // }
 }

@@ -25,6 +25,24 @@ class Dashboard extends Component
         $this->orders = Order::where('status', $this->currentTab)->get();
     }
 
+    public function approveOrder($id)
+    {
+        $order = Order::find($id);
+        if($order && $order->status === 'Open Bill') {
+            $order->update(['status' => 'Paid']);
+            $this->updateOrders();
+        }
+    }
+
+    public function cancelOrder($id)
+    {
+        $order = Order::find($id);
+        if($order && $order->status === 'Open Bill') {
+            $order->update(['status' => 'Cancelled']);
+            $this->updateOrders();
+        }
+    }
+
     public function render()
     {
         return view('livewire.dashboard', [

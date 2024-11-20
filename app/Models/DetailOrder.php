@@ -13,13 +13,14 @@ class DetailOrder extends Model
     protected $primaryKey = 'id_detailorder';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_detailorder',
         'id_order',
-        'id_menus',
+        'id_menu',
         'kuantitas',
-        'harga',
+        'harga_menu',
         'notes'
     ];
 
@@ -30,6 +31,6 @@ class DetailOrder extends Model
 
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'id_menu');
+        return $this->belongsTo(Menu::class, 'id_menu'); // Perbaiki nama kolom di sini
     }
 }

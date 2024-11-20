@@ -45,6 +45,28 @@
                     <td>{{ $order->status }}</td>
                     <td>Rp. {{ number_format($order->total_harga, 0, ',', '.') }}</td>
                     <td>{{ $order->waktu_transaksi }}</td>
+
+                    <!-- Tombol CRUD -->
+                    @if ($currentTab === 'Open Bill')
+                        <td>
+                            <button
+                                wire:click="approveOrder({{ $order->id_order }})"
+                                class="px-2 py-1 bg-green-500 text-white rounded">
+                                Approve
+                            </button>
+                            <button
+                                wire:click="editOrder({{ $order->id_order }})"
+                                class="px-2 py-1 bg-blue-500 text-white rounded">
+                                Edit
+                            </button>
+                            <button
+                                wire:click="approveOrder({{ $order->id_order }})"
+                                class="px-2 py-1 bg-red-500 text-white rounded">
+                                Delete
+                            </button>
+                        </td>
+                    @endif
+
                 </tr>
             @empty
                 <tr>
