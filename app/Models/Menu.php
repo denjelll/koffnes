@@ -11,8 +11,7 @@ class Menu extends Model
 
     protected $table = 'menus';
     protected $primaryKey = 'id_menu';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
 
     protected $fillable = [
         'id_menu',
@@ -37,5 +36,10 @@ class Menu extends Model
     
     public function isi_kategori(){
         return $this->hasMany(Isi_kategori::class, 'id_menu');
+    }
+
+    public function addOns()
+    {
+        return $this->hasMany(AddOn::class, 'id_menu', 'id_menu');
     }
 }

@@ -4,10 +4,8 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Menu;
-
 use App\Models\Order;
 use Livewire\Component;
-use App\Models\PaketAddon;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
@@ -25,6 +23,9 @@ class Checkout extends Component
     {
         // Mendapatkan data cart dari session
         $this->cartItems = session()->get('cart', []);
+        if (empty($this->cartItems)) { 
+            return redirect()->route('order.menu', ['nomorMeja' => session('meja')]); 
+        }
 
         // Ambil detail menu berdasarkan id_menu untuk setiap item di cart
         foreach ($this->cartItems as &$item) {
@@ -52,7 +53,7 @@ class Checkout extends Component
         
         }
 
-        Log::info('Item after fetching add-ons: ' . json_encode($item, JSON_PRETTY_PRINT)); 
+        Log::info('Item after fetching add-ons: ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         // Hitung total harga awal
         $this->calculateTotal();
     }
@@ -76,22 +77,43 @@ class Checkout extends Component
 
     public function updateMenuQuantity($idMenu, $quantity)
     {
-        foreach ($this->cartItems as &$item) {
+        $quantity = max(0, (int)$quantity);
+
+        Log::info('updateMenuQuantity dipanggil untuk idMenu: ' . $idMenu . ' dengan kuantitas: ' . $quantity);
+
+        // Temukan item berdasarkan idMenu
+        foreach ($this->cartItems as $index => &$item) {
             if ($item['menu']->id_menu === $idMenu) {
-                $item['quantity'] = max(0, (int)$quantity); // Validasi kuantitas tidak boleh kurang dari 0
+                if ($quantity === 0) {
+                    // Jika quantity 0, hapus item dari cart
+                    unset($this->cartItems[$index]);
+                    Log::info("Item dengan idMenu: $idMenu dihapus karena quantity = 0");
+                } else {
+                    // Update quantity
+                    $item['quantity'] = $quantity;
+                    Log::info('Item diperbarui: ' . json_encode($item, JSON_PRETTY_PRINT));
+                }
                 break;
             }
         }
 
+        // Reset indeks array untuk memastikan urutannya benar setelah unset
+        $this->cartItems = array_values($this->cartItems);
+
         // Update session cart
         session()->put('cart', $this->cartItems);
 
-        // Hitung ulang total harga
+        //Cek apakah cart kosong atau tidak
+        $this->checkEmpty();
+
+        // Hitung ulang total
         $this->calculateTotal();
     }
 
     public function validateQuantity($idMenu, $quantity)
     {
+        Log::info('validateQuantity dipanggil untuk idMenu: ' . $idMenu . ' dengan kuantitas: ' . $quantity);
+
         // Pastikan kuantitas adalah angka valid >= 0
         $quantity = max(0, (int)$quantity);
 
@@ -109,6 +131,9 @@ class Checkout extends Component
             // Update session cart
             session()->put('cart', $this->cartItems);
 
+            //cek apakah cart kosong atau tidak 
+            $this->checkEmpty();
+            
             // Hitung ulang total harga
             $this->calculateTotal();
         }
@@ -116,6 +141,7 @@ class Checkout extends Component
 
     public function updateAddonQuantity($menuId, $addonId, $action)
     {
+        Log::info("Menu ID: $menuId, Addon ID: $addonId, Action: $action");
         // Cari menu dalam cart
         foreach ($this->cartItems as &$item) {
             if ($item['id_menu'] === $menuId) {
@@ -158,9 +184,9 @@ class Checkout extends Component
         }
     }
 
-
     public function createOrder()
     {
+        $this->checkEmpty();
         $today = Carbon::today();
 
         // Cari order terakhir berdasarkan tanggal yang sama
@@ -177,7 +203,7 @@ class Checkout extends Component
         // Membuat order baru
         $order = Order::create([
             'id_order' => 'ORD' . strrev(Carbon::now()->format('YmdHis')) . $antrian,
-            'id_user' => 'NOT PICK UP', // Kosongkan karena akan diisi oleh kasir nanti
+            'id_user' => '99999999', // Kosongkan karena akan diisi oleh kasir nanti
             'antrian' => $antrian,
             'customer' => session('nama_customer'),
             'meja' => session('meja'),
@@ -229,6 +255,13 @@ class Checkout extends Component
                     'harga' => $addon['harga'] * $addon['quantity'], // Perhitungan harga
                 ]);
             }
+        }
+    }
+
+    private function checkEmpty()
+    {
+        if (empty($this->cartItems)) {
+            return redirect()->route('order.menu', ['nomorMeja' => session('meja')]);
         }
     }
 

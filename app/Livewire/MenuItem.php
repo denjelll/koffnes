@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 
 class MenuItem extends Component
 {
@@ -51,7 +52,7 @@ class MenuItem extends Component
 
     // Simpan kembali ke session
     session(['cart' => $cart]);
-
+    Log::info('Cart:' . json_encode($cart, JSON_PRETTY_PRINT)); 
     // Dispatch event untuk update total harga
     $this->dispatch('updateTotalHarga');
 }

@@ -21,7 +21,7 @@
                                <!-- Tombol Kurangi -->
                                <button 
                                    class="bg-red-500 text-white px-3 py-1 rounded-l hover:bg-red-600"
-                                   wire:click="updateAddonQuantity('{{ $item['menu']['id_menu'] }}', '{{ $addon['id_addon'] }}', 'decrement')">
+                                   wire:click="updateAddonQuantity({{ $item['menu']['id_menu'] }}, {{ $addon['id_addon'] }}, 'decrement')">
                                    -
                                </button>
                                <!-- Kuantitas -->
@@ -29,7 +29,7 @@
                                <!-- Tombol Tambah -->
                                <button 
                                    class="bg-green-500 text-white px-3 py-1 rounded-r hover:bg-green-600"
-                                   wire:click="updateAddonQuantity('{{ $item['menu']['id_menu'] }}', '{{ $addon['id_addon'] }}', 'increment')">
+                                   wire:click="updateAddonQuantity({{ $item['menu']['id_menu'] }}, {{ $addon['id_addon'] }}, 'increment')">
                                    +
                                </button>
                            </div>
@@ -58,19 +58,19 @@
             <!-- Kuantitas -->
             <div class="mt-4 flex items-center space-x-4">
                 <button 
-                    wire:click="updateMenuQuantity('{{ $item['menu']->id_menu }}', {{ $item['quantity'] - 1 }})"
+                    wire:click="updateMenuQuantity({{ $item['menu']->id_menu }}, {{ $item['quantity'] - 1 }})"
                     class="btn btn-outline btn-sm text-gray-600"
                     :disabled="{{ $item['quantity'] <= 0 ? 'true' : 'false' }}">
                     -
                 </button>
                 <input 
                     type="number"
-                    wire:change="updateMenuQuantity('{{ $item['menu']->id_menu }}', $event.target.value)"
+                    wire:change="updateMenuQuantity({{ $item['menu']->id_menu }}, $event.target.value)"
                     value="{{ $item['quantity'] }}"
                     class="input input-bordered w-16 text-center"
                     min="0" />
                 <button 
-                    wire:click="updateMenuQuantity('{{ $item['menu']->id_menu }}', {{ $item['quantity'] + 1 }})"
+                    wire:click="updateMenuQuantity({{ $item['menu']->id_menu }}, {{ $item['quantity'] + 1 }})"
                     class="btn btn-outline btn-sm text-gray-600">
                     +
                 </button>
