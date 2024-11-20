@@ -1,13 +1,14 @@
 <?php
 
+use App\Livewire\Checkout;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/home', function () {
@@ -55,10 +56,14 @@ Route::controller(AdminController::class)->group(function(){
     Route::post('admin/event/update', 'updateEvent')->name('admin.update_event');
 });
 
+Route::controller(OrderController::class)->group(function() {
+    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
+    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
-Route::controller(OrderController::class)->group(function() { 
-    Route::get('/order/table/{tableNumber}', 'showTableForm');
-    Route::post('/order/table/{tableNumber}', 'storeCustomer');
-    Route::get('/order/{tableNumber}/menu', 'showMenu');
-    Route::post('/order/{tableNumber}/menu', 'checkout');
+    Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
+
+    Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
 });
+
+Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
+

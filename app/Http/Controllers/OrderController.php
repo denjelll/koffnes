@@ -2,95 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Models\Menu;
-use App\Models\DetailOrder;
-use Carbon\Carbon;
+use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+
 
 class OrderController extends Controller
 {
-    public function showTableForm($tableNumber) 
+    public function formMeja($nomorMeja) 
     {
-        return view('order.table', compact('tableNumber'));
-    }
-
-    public function storeCustomer(Request $request, $tableNumber)
-    {
-        $request->validate([
-            'customer_name' => 'required|string|max:50',
-        ]);
-
-        session([
-            'customer_name' => $request->customer_name,
-            'table' => $tableNumber,
-        ]);
-
-        return redirect()->route('order.ShowMenu', ['table' => $tableNumber]);
-    }
-
-    public function showMenu($tableNumber)
-    {
-        $menus = Menu::all();
-
-        $customer_name = session('customer_name');
-
-        return view('order.menu', compact('menus', 'tableNumber', 'customer_name'));
-    }
-
-    public function checkout(Request $request, $tableNumber)
-    {
-        $request->validate([
-            'menu_id' => 'required|array',
-            'quantities' => 'required|array',
-            'quantities.*' => 'required|integer|min:1',
-        ]);
-
-        $customer_name = session('customer_name');
-
-        $today = Carbon::today();
-        $lastOrder = Order::whereDate('created_at', $today)
-                          ->orderBy('antrian', 'desc')
-                          ->first();
-
-        $antrian = $lastOrder ? $lastOrder->antrian + 1 : 1;
-
-        $order = new Order();
-        $order->id_order = 'ORD' . uniqid();
-        $order->customer = $customer_name;
-        $order->meja = $tableNumber;
-        $order->antrian = $antrian;
-        $order->status = 'Open Bill';
-        $order->total_harga = 0;
-        $order->save();
-
-        $totalHarga = 0;
-
-        foreach ($request->menu_ids as $index => $menu_id) {
-            $menu = Menu::findOrFail($menu_id);
-            $quantity = $request->quantities[$index];
-
-            $detailOrder = new DetailOrder();
-            $detailOrder->id_detailorder = 'DET' . uniqid();
-            $detailOrder->id_order = $order->id_order;
-            $detailOrder->id_menus = $menu->id_menu;
-            $detailOrder->kuantitas = $quantity;
-            $detailOrder->harga = $menu->harga * $quantity;
-            $detailOrder->save();
-
-            $totalHarga += $menu->harga * $quantity;
+        if (session()->has('nama_customer') && session('meja') == $nomorMeja) {
+            return redirect()->route('order.menu', ['nomorMeja' => $nomorMeja]);
         }
 
-        $order->total_harga = $totalHarga;
-        $order->save();
-
-        return redirect()->route('order.receipt', ['order' => $order->id_order]);
+        return view('formMeja', compact('nomorMeja'));
     }
 
-    public function receipt($orderId)
+    public function saveCustomer(Request $request, $nomorMeja)
     {
-        $order = Order::with('details.menu')->findOrFail($orderId);
+        $request->validate([
+            'nama_customer' => 'required|string|max:50',
+        ]);
 
-        return view('order.receipt', compact('order'));
+        $nama_customer = htmlspecialchars($request->nama_customer);
+
+        // Simpan nama customer dan nomor meja ke session
+        session([
+            'nama_customer' => $nama_customer,
+            'meja' => $nomorMeja,
+        ]);
+
+        return redirect()->route('order.menu', ['nomorMeja' => $nomorMeja]);
     }
+   
+    // Menampilkan form untuk memilih menu berdasarkan nomor meja
+    public function showMenu($nomorMeja)
+    {
+        // Validasi session
+        if (!session()->has('nama_customer') || session('meja') != $nomorMeja) {
+            return redirect()->route('order.formMeja', ['nomorMeja' => $nomorMeja])
+                ->with('error', 'Silakan isi data terlebih dahulu.');
+        }
+    
+        // Ambil data dari session
+        $customer = session('nama_customer');
+        $cart = session('cart', []);
+        $menus = Menu::all();
+        
+        Log::info('Cart di showMenu ' . json_encode($cart, JSON_PRETTY_PRINT)); 
+
+        // Pastikan data cart sesuai dengan menu yang ada
+        if(!empty($cart))
+        {
+            foreach ($cart as &$item) {
+                $item['menu'] = Menu::find($item['id_menu']);
+            }
+        }
+    
+        return view('orderMenu', compact('customer', 'nomorMeja', 'menus', 'cart'));
+    }
+
+    public function orderSuccess($id_order)
+    {
+        // Ambil data order berdasarkan ID
+        $order = Order::with(['detailOrders.menu', 'detailOrders.detailAddon.addon'])->where('id_order', $id_order)->first();
+
+        // Jika order tidak ditemukan, kembalikan view dengan pesan error
+        if (!$order) {
+            return view('orderSuccess', [
+                'id_order' => $id_order,
+                'order' => null, // Tidak ada order
+            ]);
+        }
+
+        // Kembalikan view dengan data order
+        return view('orderSuccess', [
+            'id_order' => $id_order,
+            'order' => $order,
+        ]);
+    }
+
+    
 }
