@@ -31,11 +31,6 @@
     </style>
 </head>
 <body class="h-screen flex items-end bg-[#EDE1D2] relative">
-    <?php
-        $password = '123';
-        // echo password_hash($password, PASSWORD_BCRYPT);
-    ?>
-
     <!-- Logo -->
     <img src="asset/Cashnes/6.png" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
 
