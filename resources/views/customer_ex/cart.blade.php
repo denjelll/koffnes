@@ -23,36 +23,6 @@
         padding-top: 60px;
         margin: 0;
       }
-
-        input[type="radio"] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 3px solid #412f26;
-        background-color: white;
-        position: relative;
-        cursor: pointer;
-    }
-
-    input[type="radio"]:checked {
-        background-color: #6a6f4c;
-        border: 3px solid #412f26;
-    }
-
-    input[type="radio"]:checked::after {
-        content: "";
-        position: absolute;
-        top: 4px;
-        left: 4px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #6a6f4c;
-    }
-
     </style>
     <title>Cart</title>
   </head>
