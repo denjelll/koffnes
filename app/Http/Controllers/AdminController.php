@@ -336,40 +336,23 @@ class AdminController extends Controller
     public function showEditEventForm(Event $event){
         return view('admin.edit_event', compact('event'));
     }
-    
-    public function deleteEvent(Event $event){
-        $event->delete();
-        unlink(public_path('event/'.$event->banner_event));
-        return redirect('/admin/event');
-    }
     public function updateEvent(Request $request){
         $request->validate([
-            'nama_event' => 'required',
-            'tanggal_event' => 'required',
-            'jam_event' => 'required',
-            'hadiah' => 'required',
-            'deskripsi_event' => 'required'
+            'judul_event' => 'required',
+            'tanggal' => 'required',
+            'waktu' => 'required',
+            'deskripsi' => 'required'
         ]);
         $event = Event::find($request->id_event);
-        $event->nama_event = $request->nama_event;
-        $event->tanggal_event = $request->tanggal_event;
-        $event->jam_event = $request->jam_event;
-        $event->hadiah_event = $request->hadiah;
-        $event->deskripsi_event = $request->deskripsi_event;
-        if ($request->hasFile('banner_event')) {
-            $image = $request->file('banner_event');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('event'), $imageName);
-    
-            // Hapus gambar lama setelah gambar baru disimpan
-            if ($event->banner_event && file_exists(public_path('event/' . $event->banner_event))) {
-                unlink(public_path('event/' . $event->banner_event));
-            }
-    
-            // Perbarui kolom gambar di database
-            $event->banner_event = $imageName;
-        }
+        $event->judul_event = $request->judul_event;
+        $event->tanggal = $request->tanggal;
+        $event->waktu = $request->waktu;
+        $event->deskripsi = $request->deskripsi;
         $event->save();
         return redirect('/admin/event')->with('success', 'Event updated successfully');
+    }
+    public function deleteEvent(Event $event){
+        $event->delete();
+        return redirect('/admin/event');
     }
 }
