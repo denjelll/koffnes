@@ -59,8 +59,8 @@
       >
         <a href="#promo" class="block px-4 py-2 hover:bg-gray-200">Promo</a>
         <a href="#bundle" class="block px-4 py-2 hover:bg-gray-200">Bundle</a>
+        <a href="#kopi" class="block px-4 py-2 hover:bg-gray-200">Coffee</a>
         <a href="#food" class="block px-4 py-2 hover:bg-gray-200">Food</a>
-        <a href="#coffee" class="block px-4 py-2 hover:bg-gray-200">Coffee</a>
       </div>
     </div>
 
@@ -123,19 +123,28 @@
         <x-customer_bundle_card />
         <x-customer_bundle_card />
         <x-customer_bundle_card />
-      <!-- Event Card Content -->
-      <h1 class="text-3xl font-bold mb-4 mt-5" id="food">Food</h1>
-      <x-customer_event_home />
-      <x-customer_event_home />
-      <x-customer_event_home />
-      <div class="flex items-center justify-center mt-3">
-        <a
-        href="#events"
-        class="inline-block px-4 py-2 mt-4 text-white font-semibold" style="background-color: #412f26; border-radius: 15px; font-size: x-large;" 
-      >
-        See More Events
-      </a>
-      </div>
+      <!-- Coffee Card Content -->
+      <h1 class="text-3xl font-bold mb-4 mt-5" id="kopi">Coffee</h1>
+      <div style="background-color: #fff2e2" class="rounded-lg  p-4 relative">
+            <img src="https://via.placeholder.com/150" alt="Americano" class="w-full h-32 object-cover rounded-lg" />
+            <div class="pt-4 pb-10">
+              <h3 class="text-lg font-semibold text-gray-800">Americano</h3>
+              <p class="text-green-800 text-lg">Rp 15.000</p>
+              <p class="text-sm text-gray-600 mt-1">Minuman andalan koffness. Seger bet.</p>
+              <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4" id="best-seller-controls">
+              <!-- Initial ADD TO CART button (responsive size) -->
+                <button class="bg-[#4f3222] text-white rounded-lg py-2 px-4 text-xs sm:text-sm w-full sm:w-auto">
+                    Add To Cart
+                </button>
+                <!-- Quantity controls (hidden initially) -->
+                <div class="hidden items-center space-x-1 qty-controls" id="controls-americano">
+                  <button class="bg-red-500 text-white py-1 px-2 rounded-full text-xs sm:text-sm">-</button>
+                  <span id="qty-americano" class="text-sm font-semibold">0</span>
+                  <button class="bg-green-500 text-white py-1 px-2 rounded-full text-xs sm:text-sm">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
       
     </main>
 
