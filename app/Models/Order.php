@@ -39,4 +39,5 @@ class Order extends Model
     {
         return $this->hasMany(DetailOrder::class, 'id_order');
     }
+
 }

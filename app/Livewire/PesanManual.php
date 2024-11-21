@@ -21,7 +21,7 @@ class PesanManual extends Component
 
     public function mount()
     {
-        $this->items = Menu::all();
+        $this->items = Menu::with('addOns')->get();
         $this->addItems = Addon::all();
 
         // Inisialisasi qty untuk setiap item menu
@@ -39,13 +39,16 @@ class PesanManual extends Component
     // Fungsi untuk menambah kuantitas Menu
     public function tambahMenu($id)
     {
-        // Cek apakah qty sudah terinisialisasi
+        // Periksa apakah ID menu ada dalam qtyMenu
         if (isset($this->qtyMenu[$id])) {
+            // Jika ada, tambah kuantitas menu
             $this->qtyMenu[$id]++;
         } else {
+            // Jika tidak ada, inisialisasi kuantitas dengan 1
             $this->qtyMenu[$id] = 1;
         }
-        $this->updateTotal();
+            
+            $this->updateTotal();
     }
 
     // Fungsi untuk mengurangi kuantitas Menu
@@ -80,19 +83,6 @@ class PesanManual extends Component
         $this->updateTotal();
     }
 
-    // Fungsi untuk memperbarui total harga
-    private function updateTotal()
-    {
-        $this->totalHarga = 0;
-        foreach ($this->items as $item) {
-            $this->totalHarga += $this->qtyMenu[$item->id_menu] * $item->harga;
-        }
-
-        foreach ($this->addItems as $addItem) {
-            $this->totalHarga += $this->qtyAddOns[$addItem->id_addon] * $addItem->harga;
-        }
-    }
-
     // Fungsi untuk mengonfirmasi pesanan
     public function confirmOrder()
     {
@@ -125,27 +115,30 @@ class PesanManual extends Component
         // Simpan item menu yang dipesan ke tabel detail_orders
         foreach ($this->items as $item) {
             if ($this->qtyMenu[$item->id_menu] > 0) {
-                DetailOrder::create([
-                    'id_detailorder' => 'OD' . now()->format('Ymd') . '-' . str_pad($antrian, 3, '0', STR_PAD_LEFT),
+                $idDetailOrder = 'OD' . uniqid() . '-' . mt_rand(1000, 9999);
+
+                // Buat record di tabel detail_orders
+                $detailOrder = DetailOrder::create([
+                    'id_detailorder' => $idDetailOrder,
                     'id_order' => $order->id_order,
                     'id_menu' => $item->id_menu,
                     'kuantitas' => $this->qtyMenu[$item->id_menu],
                     'harga_menu' => $item->harga,
                     'notes' => ""
                 ]);
-            }
-        }
 
-        foreach ($this->addItems as $addItem) {
-            if ($this->qtyAddons[$addItem->id_addon] > 0) {
-                DetailAddon::create([
-                    'id_detailaddon' => 'AO' . now()->format('Ymd') . '-' . str_pad($antrian, 3, '0', STR_PAD_LEFT),
-                    'id_addon' => $order->id_addon,
-                    'id_menu' => $addItem->id_addon,
-                    'kuantitas' => $this->qtyAddons[$addItem->id_addon],
-                    'harga_menu' => $addItem->harga,
-                    'notes' => "",
-                ]);
+                // Simpan add-ons yang terkait dengan menu ini ke tabel detail_addons
+                foreach ($this->addItems as $addItem) {
+                    if ($addItem->id_menu == $item->id_menu && isset($this->qtyAddOns[$addItem->id_addon]) && $this->qtyAddOns[$addItem->id_addon] > 0) {
+                        DetailAddon::create([
+                            'id_detailaddon' => 'DA' . substr(uniqid(), -5) . '-' . mt_rand(10, 99),
+                            'id_addon' => $addItem->id_addon,
+                            'id_detailorder' => $detailOrder->id_detailorder,
+                            'kuantitas' => $this->qtyAddOns[$addItem->id_addon],
+                            'harga' => $addItem->harga * $this->qtyAddOns[$addItem->id_addon],
+                        ]);
+                    }
+                }
             }
         }
 
@@ -153,7 +146,11 @@ class PesanManual extends Component
     
         // Inisialisasi kembali kuantitas untuk setiap item menu
         foreach ($this->items as $item) {
-            $this->qty[$item->id_menu] = 0; // Reset kuantitas untuk setiap item
+            $this->qtyMenu[$item->id_menu] = 0; // Reset kuantitas untuk setiap item
+        }
+
+        foreach ($this->addItems as $addItem) {
+            $this->qtyAddOns[$addItem->id_addon] = 0; // Reset kuantitas untuk setiap item
         }
 
         // Perbarui total harga setelah reset
@@ -161,6 +158,19 @@ class PesanManual extends Component
 
         // Menampilkan pesan sukses
         session()->flash('success', 'Pesanan berhasil dibuat!');
+    }
+
+    // Fungsi untuk memperbarui total harga
+    private function updateTotal()
+    {
+        $this->totalHarga = 0;
+        foreach ($this->items as $item) {
+            $this->totalHarga += $this->qtyMenu[$item->id_menu] * $item->harga;
+        }
+
+        foreach ($this->addItems as $addItem) {
+            $this->totalHarga += $this->qtyAddOns[$addItem->id_addon] * $addItem->harga;
+        }
     }
 
     public function render()
