@@ -43,11 +43,37 @@ class DummySeeder extends Seeder
             ],
         ]);
 
-        // Menambahkan data menu dengan id_menu auto increment
-        for ($i = 1; $i <= 20; $i++) {
+       //Masukin promo ke menu 1 dan 2
+        DB::table('menus')->insert([
+            [
+                'id_menu' => 1,
+                'id_promo' => 1,
+                'nama_menu' => 'Menu 1',
+                'stock' => rand(10, 50),
+                'harga' => rand(15000, 100000),
+                'deskripsi' => 'Deskripsi menu ke-1',
+                'gambar' => 'menu1.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_menu' => 2,
+                'id_promo' => 2,
+                'nama_menu' => 'Menu 2',
+                'stock' => rand(10, 50),
+                'harga' => rand(15000, 100000),
+                'deskripsi' => 'Deskripsi menu ke-2',
+                'gambar' => 'menu2.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ]);
+
+         // Menambahkan data menu dengan id_menu auto increment
+        for ($i = 3; $i <= 20; $i++) {
             DB::table('menus')->insert([
                 'id_menu' => $i,
-                'id_promo' => rand(1, 3) == 1 ? rand(1, 2) : null,
+                'id_promo' => null,
                 'nama_menu' => 'Menu ' . $i,
                 'stock' => rand(10, 50),
                 'harga' => rand(15000, 100000),
@@ -58,6 +84,7 @@ class DummySeeder extends Seeder
             ]);
         }
 
+
         // Menambahkan data addon
         DB::table('add_ons')->insert([
             ['id_addon' => 1, 'nama_addon' => 'Telur Ceplok', 'harga' => 5000, 'id_menu' => 1],
@@ -67,12 +94,21 @@ class DummySeeder extends Seeder
         ]);
 
         // Menambahkan data untuk relasi kategori dan menu
-        DB::table('isi_kategoris')->insert([
-            ['id_isi_kategori' => 1, 'id_kategori' => 1, 'id_menu' => 1, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['id_isi_kategori' => 2, 'id_kategori' => 1, 'id_menu' => 2, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['id_isi_kategori' => 3, 'id_kategori' => 2, 'id_menu' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            // Tambahkan data lainnya sesuai kebutuhan
-        ]);
+        $isiKategoriData = [];
+        $categories = [1, 2, 3]; // Sesuaikan kategori yang ada
+
+        // Mengelompokkan 20 menu ke dalam beberapa kategori secara acak
+        for ($i = 1; $i <= 20; $i++) {
+            $isiKategoriData[] = [
+                'id_isi_kategori' => $i,
+                'id_kategori' => $categories[array_rand($categories)],
+                'id_menu' => $i,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+        DB::table('isi_kategoris')->insert($isiKategoriData);
+
 
         // Menambahkan data user dengan id_user 'NOT_PICK_UP'
         DB::table('users')->insert([

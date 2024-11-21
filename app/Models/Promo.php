@@ -18,9 +18,9 @@ class Promo extends Model
         'waktu_mulai',
         'waktu_berakhir',
     ];
+    
     public function menu(){
-        return $this->hasOne(Menu::class, 'id_promo');
+        return $this->hasOne(Menu::class, 'id_promo', 'id_promo');
     }
 
-    
 }

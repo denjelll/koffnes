@@ -4,10 +4,8 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Menu;
-
 use App\Models\Order;
 use Livewire\Component;
-use App\Models\PaketAddon;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
@@ -20,11 +18,16 @@ class Checkout extends Component
 {
     public $cartItems = [];
     public $totalHarga = 0;
-
+   
     public function mount()
     {
         // Mendapatkan data cart dari session
         $this->cartItems = session()->get('cart', []);
+        if (empty($this->cartItems)) { 
+            return redirect()->route('order.menu', ['nomorMeja' => session('meja')]); 
+        }
+
+        $now = Carbon::now();
 
         // Ambil detail menu berdasarkan id_menu untuk setiap item di cart
         foreach ($this->cartItems as &$item) {
@@ -34,8 +37,15 @@ class Checkout extends Component
 
             // Ambil add-ons terkait menu
             if ($item['menu']) {
+                // Cek apakah menu memiliki promo yang masih valid
+                $promo = $item['menu']->promo;
+                if ($promo && $promo->status === 'Aktif' && 
+                    ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
+                    $now->between($promo->waktu_mulai, $promo->waktu_berakhir)) {
+                    $item['menu']['harga'] = $promo->harga_promo; // Gunakan harga promo
+                }
+
                 $addonsFromDb = $item['menu']->addOns()->get();
-    
                 // Sinkronisasi add-on dari database dan session
                 $item['addOn'] = $addonsFromDb->map(function ($addon) use ($item) {
                     $existingAddon = collect($item['addOn'] ?? [])->firstWhere('id_addon', $addon->id_addon);
@@ -52,7 +62,7 @@ class Checkout extends Component
         
         }
 
-        Log::info('Item after fetching add-ons: ' . json_encode($item, JSON_PRETTY_PRINT)); 
+        Log::info('Item after fetch from cart: ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         // Hitung total harga awal
         $this->calculateTotal();
     }
@@ -76,22 +86,54 @@ class Checkout extends Component
 
     public function updateMenuQuantity($idMenu, $quantity)
     {
-        foreach ($this->cartItems as &$item) {
+        $quantity = max(0, (int)$quantity);
+
+        Log::info('updateMenuQuantity dipanggil untuk idMenu: ' . $idMenu . ' dengan kuantitas: ' . $quantity);
+
+        // Temukan item berdasarkan idMenu
+        foreach ($this->cartItems as $index => &$item) {
             if ($item['menu']->id_menu === $idMenu) {
-                $item['quantity'] = max(0, (int)$quantity); // Validasi kuantitas tidak boleh kurang dari 0
+                if ($quantity === 0) {
+                    // Jika quantity 0, hapus item dari cart
+                    unset($this->cartItems[$index]);
+                    Log::info("Item dengan idMenu: $idMenu dihapus karena quantity = 0");
+                } else {
+                    // Update quantity
+                    $item['quantity'] = $quantity;
+                    // Perbarui harga jika promo berlaku
+                    $now = Carbon::now();
+                    $promo = $item['menu']->promo;
+                    if ($promo && $promo->status === 'Aktif' &&
+                        ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
+                        $now->between($promo->waktu_mulai, $promo->waktu_berakhir)) {
+                        $item['menu']['harga'] = $promo->harga_promo;
+                    }
+                    Log::info('Item diperbarui: ' . json_encode($item, JSON_PRETTY_PRINT));
+                }
                 break;
             }
         }
 
+        // Reset indeks array untuk memastikan urutannya benar setelah unset
+        $this->cartItems = array_values($this->cartItems);
+
         // Update session cart
         session()->put('cart', $this->cartItems);
 
-        // Hitung ulang total harga
+        Log::info("Session setelah update quantity: ".  json_encode($this->cartItems, JSON_PRETTY_PRINT));
+
+
+        //Cek apakah cart kosong atau tidak
+        $this->checkEmpty();
+
+        // Hitung ulang total
         $this->calculateTotal();
     }
 
     public function validateQuantity($idMenu, $quantity)
     {
+        Log::info('validateQuantity dipanggil untuk idMenu: ' . $idMenu . ' dengan kuantitas: ' . $quantity);
+
         // Pastikan kuantitas adalah angka valid >= 0
         $quantity = max(0, (int)$quantity);
 
@@ -99,6 +141,20 @@ class Checkout extends Component
         $index = array_search($idMenu, array_column($this->cartItems, 'menu.id_menu'));
 
         if ($index !== false) {
+            // Cek apakah promo masih berlaku
+            if (isset($menu['promo']) && $menu['promo']['status'] === 'Aktif') {
+                $currentTime = Carbon::now()->format('H:i:s');
+                $waktuMulai = $menu['promo']['waktu_mulai'];
+                $waktuBerakhir = $menu['promo']['waktu_berakhir'];
+
+                if ($currentTime >= $waktuMulai && $currentTime <= $waktuBerakhir) {
+                    // Gunakan harga promo
+                    $this->cartItems[$index]['menu']['harga'] = $menu['promo']['harga_promo'];
+                } else {
+                    // Promo sudah tidak berlaku
+                    $this->cartItems[$index]['menu']['harga'] = $menu['harga'];
+                }
+            }
             $this->cartItems[$index]['quantity'] = $quantity;
 
             // Hapus item jika kuantitas 0
@@ -109,6 +165,9 @@ class Checkout extends Component
             // Update session cart
             session()->put('cart', $this->cartItems);
 
+            //cek apakah cart kosong atau tidak 
+            $this->checkEmpty();
+            
             // Hitung ulang total harga
             $this->calculateTotal();
         }
@@ -116,6 +175,7 @@ class Checkout extends Component
 
     public function updateAddonQuantity($menuId, $addonId, $action)
     {
+        Log::info("Menu ID: $menuId, Addon ID: $addonId, Action: $action");
         // Cari menu dalam cart
         foreach ($this->cartItems as &$item) {
             if ($item['id_menu'] === $menuId) {
@@ -158,9 +218,9 @@ class Checkout extends Component
         }
     }
 
-
     public function createOrder()
     {
+        $this->checkEmpty();
         $today = Carbon::today();
 
         // Cari order terakhir berdasarkan tanggal yang sama
@@ -177,7 +237,7 @@ class Checkout extends Component
         // Membuat order baru
         $order = Order::create([
             'id_order' => 'ORD' . strrev(Carbon::now()->format('YmdHis')) . $antrian,
-            'id_user' => 'NOT PICK UP', // Kosongkan karena akan diisi oleh kasir nanti
+            'id_user' => '99999999', // Kosongkan karena akan diisi oleh kasir nanti
             'antrian' => $antrian,
             'customer' => session('nama_customer'),
             'meja' => session('meja'),
@@ -190,14 +250,16 @@ class Checkout extends Component
         // Menambahkan detail order untuk setiap item di cart
         Log::info('Isi item di CreateOrder ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         foreach ($this->cartItems as $item) {
-            Log::info('ID_Menu ' . json_encode($item['menu']['id_menu'], JSON_PRETTY_PRINT)); 
+            Log::info('Harga Menu ' . json_encode($item['menu']['promo'], JSON_PRETTY_PRINT)); 
 
             $detailOrder = DetailOrder::create([
                 'id_detailorder'=> 'DO' . Str::uuid(),
                 'id_order' => $order->id_order,
                 'id_menu' => $item['menu']['id_menu'],
                 'kuantitas' => $item['quantity'],
-                'harga_menu' => $item['menu']['harga'] * $item['quantity'],
+                'harga_menu' => (isset($item['menu']['promo']) && $item['menu']['promo']['status'] === 'Aktif' 
+                 ? $item['menu']['promo']['harga_promo'] 
+                 : $item['menu']['harga']) * $item['quantity'],  //Harga Final
                 'notes' => $item['notes'],  // Simpan notes
             ]);
 
@@ -229,6 +291,13 @@ class Checkout extends Component
                     'harga' => $addon['harga'] * $addon['quantity'], // Perhitungan harga
                 ]);
             }
+        }
+    }
+
+    private function checkEmpty()
+    {
+        if (empty($this->cartItems)) {
+            return redirect()->route('order.menu', ['nomorMeja' => session('meja')]);
         }
     }
 
