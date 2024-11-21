@@ -20,10 +20,6 @@ Route::get('/cashier/home', function () {
     return view('/cashier/menu');
 });
 
-Route::get('/cashier/add_ons', function(){
-    return view('/cashier/add_ons');
-});
-
 Route::get('/cashier/chart', function(){
     return view('/cashier/chart');
 });

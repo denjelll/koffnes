@@ -51,26 +51,13 @@
                         <span>Jumlah Produk</span>
                         <span>Total Harga per Produk</span>
                     </div>
-                    <div class="py-3 grid grid-cols-3 gap-4 text-base">
-                        <span>Nessy Coffee</span>
-                        <span class="text-center">2</span>
-                        <span class="text-right">Rp. 24.000,00</span>
-                    </div>
-                    <div class="py-3 grid grid-cols-3 gap-4 text-base">
-                        <span>Nasgor</span>
-                        <span class="text-center">1</span>
-                        <span class="text-right">Rp. 18.000,00</span>
-                    </div>
-                    <div class="py-3 grid grid-cols-3 gap-4 text-base">
-                        <span>Americano</span>
-                        <span class="text-center">1</span>
-                        <span class="text-right">Rp. 14.000,00</span>
-                    </div>
-                    <div class="py-3 grid grid-cols-3 gap-4 text-base">
-                        <span>Chicken Katsu</span>
-                        <span class="text-center">1</span>
-                        <span class="text-right">Rp. 25.000,00</span>
-                    </div>
+                    <x-checkout/>
+                    <x-checkout/>
+                    <x-checkout/>
+                    <x-checkout/>
+                    <x-checkout/>
+                    <x-checkout/>
+                    <x-checkout/>
                 </div>
 
                 <!-- Total Price section -->
