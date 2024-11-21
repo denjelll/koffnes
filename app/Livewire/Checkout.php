@@ -18,7 +18,7 @@ class Checkout extends Component
 {
     public $cartItems = [];
     public $totalHarga = 0;
-
+   
     public function mount()
     {
         // Mendapatkan data cart dari session
@@ -26,6 +26,8 @@ class Checkout extends Component
         if (empty($this->cartItems)) { 
             return redirect()->route('order.menu', ['nomorMeja' => session('meja')]); 
         }
+
+        $now = Carbon::now();
 
         // Ambil detail menu berdasarkan id_menu untuk setiap item di cart
         foreach ($this->cartItems as &$item) {
@@ -35,8 +37,15 @@ class Checkout extends Component
 
             // Ambil add-ons terkait menu
             if ($item['menu']) {
+                // Cek apakah menu memiliki promo yang masih valid
+                $promo = $item['menu']->promo;
+                if ($promo && $promo->status === 'Aktif' && 
+                    ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
+                    $now->between($promo->waktu_mulai, $promo->waktu_berakhir)) {
+                    $item['menu']['harga'] = $promo->harga_promo; // Gunakan harga promo
+                }
+
                 $addonsFromDb = $item['menu']->addOns()->get();
-    
                 // Sinkronisasi add-on dari database dan session
                 $item['addOn'] = $addonsFromDb->map(function ($addon) use ($item) {
                     $existingAddon = collect($item['addOn'] ?? [])->firstWhere('id_addon', $addon->id_addon);
@@ -53,7 +62,7 @@ class Checkout extends Component
         
         }
 
-        Log::info('Item after fetching add-ons: ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
+        Log::info('Item after fetch from cart: ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         // Hitung total harga awal
         $this->calculateTotal();
     }
@@ -91,6 +100,14 @@ class Checkout extends Component
                 } else {
                     // Update quantity
                     $item['quantity'] = $quantity;
+                    // Perbarui harga jika promo berlaku
+                    $now = Carbon::now();
+                    $promo = $item['menu']->promo;
+                    if ($promo && $promo->status === 'Aktif' &&
+                        ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
+                        $now->between($promo->waktu_mulai, $promo->waktu_berakhir)) {
+                        $item['menu']['harga'] = $promo->harga_promo;
+                    }
                     Log::info('Item diperbarui: ' . json_encode($item, JSON_PRETTY_PRINT));
                 }
                 break;
@@ -102,6 +119,9 @@ class Checkout extends Component
 
         // Update session cart
         session()->put('cart', $this->cartItems);
+
+        Log::info("Session setelah update quantity: ".  json_encode($this->cartItems, JSON_PRETTY_PRINT));
+
 
         //Cek apakah cart kosong atau tidak
         $this->checkEmpty();
@@ -121,6 +141,20 @@ class Checkout extends Component
         $index = array_search($idMenu, array_column($this->cartItems, 'menu.id_menu'));
 
         if ($index !== false) {
+            // Cek apakah promo masih berlaku
+            if (isset($menu['promo']) && $menu['promo']['status'] === 'Aktif') {
+                $currentTime = Carbon::now()->format('H:i:s');
+                $waktuMulai = $menu['promo']['waktu_mulai'];
+                $waktuBerakhir = $menu['promo']['waktu_berakhir'];
+
+                if ($currentTime >= $waktuMulai && $currentTime <= $waktuBerakhir) {
+                    // Gunakan harga promo
+                    $this->cartItems[$index]['menu']['harga'] = $menu['promo']['harga_promo'];
+                } else {
+                    // Promo sudah tidak berlaku
+                    $this->cartItems[$index]['menu']['harga'] = $menu['harga'];
+                }
+            }
             $this->cartItems[$index]['quantity'] = $quantity;
 
             // Hapus item jika kuantitas 0
@@ -216,14 +250,16 @@ class Checkout extends Component
         // Menambahkan detail order untuk setiap item di cart
         Log::info('Isi item di CreateOrder ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         foreach ($this->cartItems as $item) {
-            Log::info('ID_Menu ' . json_encode($item['menu']['id_menu'], JSON_PRETTY_PRINT)); 
+            Log::info('Harga Menu ' . json_encode($item['menu']['promo'], JSON_PRETTY_PRINT)); 
 
             $detailOrder = DetailOrder::create([
                 'id_detailorder'=> 'DO' . Str::uuid(),
                 'id_order' => $order->id_order,
                 'id_menu' => $item['menu']['id_menu'],
                 'kuantitas' => $item['quantity'],
-                'harga_menu' => $item['menu']['harga'] * $item['quantity'],
+                'harga_menu' => (isset($item['menu']['promo']) && $item['menu']['promo']['status'] === 'Aktif' 
+                 ? $item['menu']['promo']['harga_promo'] 
+                 : $item['menu']['harga']) * $item['quantity'],  //Harga Final
                 'notes' => $item['notes'],  // Simpan notes
             ]);
 
