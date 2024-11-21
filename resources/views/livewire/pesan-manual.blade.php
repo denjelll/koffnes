@@ -1,8 +1,9 @@
 <div>
     <h1 class="text-center font-bold text-4xl">Pesanan Manual</h1>
+    <h1 class="font-bold text-2xl m-5">Menu Utama</h1>
     <div class="border border-black m-5 p-3 grid grid-cols-3 gap-4">
         @foreach ($items as $item)
-        <!-- List Menu -->
+        <!-- List Menu Utama-->
             <div class="bg-green-300 m-2 p-5" wire:key="menu-{{ $item->id_menu }}">
                 <img loading="lazy" src="#" alt="foto di sini"/>
                 <p class="font-bold text-2xl">{{ $item->nama_menu }}</p>
@@ -10,9 +11,27 @@
 
                 <!-- Kuantitas -->
                 <div class="flex justify-center">
-                    <button class="m-2 text-xl px-5 bg-red-500" wire:click="kurang('{{ $item->id_menu }}')">-</button>
-                    <input type="number" class="text-center" min="0" wire:model.debounce.500ms="qty.{{ $item->id_menu }}"/>
-                    <button class="m-2 text-xl px-5 bg-green-500" wire:click="tambah('{{ $item->id_menu }}')">+</button>
+                    <button class="m-2 text-xl px-5 bg-red-500" wire:click="kurangMenu('{{ $item->id_menu }}')">-</button>
+                    <input type="number" class="text-center" min="0" wire:model.debounce.500ms="qtyMenu.{{ $item->id_menu }}"/>
+                    <button class="m-2 text-xl px-5 bg-green-500" wire:click="tambahMenu('{{ $item->id_menu }}')">+</button>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <h1 class="font-bold text-2xl m-5">Add Ons</h1>
+    <div class="border border-black m-5 p-3 grid grid-cols-3 gap-4">
+        @foreach ($addItems as $addItem)
+        <!-- List Add Ons-->
+            <div class="bg-green-300 m-2 p-5" wire:key="menu-{{ $addItem->id_addon }}">
+                <p class="font-bold text-2xl">{{ $addItem->nama_addon }}</p>
+                <p>Rp. {{ number_format($addItem->harga, 0, ',', '.') }}</p>
+
+                <!-- Kuantitas -->
+                <div class="flex justify-center">
+                    <button class="m-2 text-xl px-5 bg-red-500" wire:click="kurangAddon('{{ $item->id_menu }}')">-</button>
+                    <input type="number" class="text-center" min="0" wire:model.debounce.500ms="qtyAddOns.{{ $item->id_menu }}"/>
+                    <button class="m-2 text-xl px-5 bg-green-500" wire:click="tambahAddon('{{ $item->id_menu }}')">+</button>
                 </div>
             </div>
         @endforeach

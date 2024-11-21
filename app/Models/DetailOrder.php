@@ -15,7 +15,6 @@ class DetailOrder extends Model
     public $incrementing = false;
     public $timestamps = false;
     protected $keyType = 'string';
-    public $timestamps = false;
 
     protected $fillable = [
         'id_detailorder',

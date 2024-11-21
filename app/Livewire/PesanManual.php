@@ -1,6 +1,8 @@
 <?php
 namespace App\Livewire;
 
+use App\Models\AddOn;
+use App\Models\DetailAddon;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
@@ -10,7 +12,9 @@ use Illuminate\Support\Carbon;
 class PesanManual extends Component
 {
     public $items = [];
-    public $qty = [];
+    public $addItems = [];
+    public $qtyMenu = [];
+    public $qtyAddOns = [];
     public $customer, $tipeOrder, $meja;
     public $antrian;
     public $totalHarga = 0;
@@ -18,33 +22,60 @@ class PesanManual extends Component
     public function mount()
     {
         $this->items = Menu::all();
+        $this->addItems = Addon::all();
 
         // Inisialisasi qty untuk setiap item menu
         foreach ($this->items as $item) {
-            $this->qty[$item->id_menu] = 0;
+            $this->qtyMenu[$item->id_menu] = 0;
+        }
+
+        foreach ($this->addItems as $addItem) {
+            $this->qtyAddOns[$addItem->id_addon] = 0;
         }
 
         $this->updateTotal();
     }
 
-    // Fungsi untuk menambah kuantitas
-    public function tambah($id)
+    // Fungsi untuk menambah kuantitas Menu
+    public function tambahMenu($id)
     {
         // Cek apakah qty sudah terinisialisasi
-        if (isset($this->qty[$id])) {
-            $this->qty[$id]++;
+        if (isset($this->qtyMenu[$id])) {
+            $this->qtyMenu[$id]++;
         } else {
-            $this->qty[$id] = 1;
+            $this->qtyMenu[$id] = 1;
         }
         $this->updateTotal();
     }
 
-    // Fungsi untuk mengurangi kuantitas
-    public function kurang($id)
+    // Fungsi untuk mengurangi kuantitas Menu
+    public function kurangMenu($id)
     {
         // Pastikan qty lebih besar dari 0 sebelum dikurangi
-        if (isset($this->qty[$id]) && $this->qty[$id] > 0) {
-            $this->qty[$id]--;
+        if (isset($this->qtyMenu[$id]) && $this->qtyMenu[$id] > 0) {
+            $this->qtyMenu[$id]--;
+        }
+        $this->updateTotal();
+    }
+
+    // Fungsi untuk menambah kuantitas Add Ons
+    public function tambahAddon($id)
+    {
+        // Cek apakah qty sudah terinisialisasi
+        if (isset($this->qtyAddOns[$id])) {
+            $this->qtyAddOns[$id]++;
+        } else {
+            $this->qtyAddOns[$id] = 1;
+        }
+        $this->updateTotal();
+    }
+
+    // Fungsi untuk mengurangi kuantitas Add Ons
+    public function kurangAddon($id)
+    {
+        // Pastikan qty lebih besar dari 0 sebelum dikurangi
+        if (isset($this->qtyAddOns[$id]) && $this->qtyAddOns[$id] > 0) {
+            $this->qtyAddOns[$id]--;
         }
         $this->updateTotal();
     }
@@ -54,7 +85,11 @@ class PesanManual extends Component
     {
         $this->totalHarga = 0;
         foreach ($this->items as $item) {
-            $this->totalHarga += $this->qty[$item->id_menu] * $item->harga;
+            $this->totalHarga += $this->qtyMenu[$item->id_menu] * $item->harga;
+        }
+
+        foreach ($this->addItems as $addItem) {
+            $this->totalHarga += $this->qtyAddOns[$addItem->id_addon] * $addItem->harga;
         }
     }
 
@@ -77,7 +112,7 @@ class PesanManual extends Component
         // Menyimpan data pesanan ke dalam tabel orders
         $order = Order::create([
             'id_order' => $idOrder,
-            'id_user' => "NOT PICK UP", // Karena id_user adalah NOT PICK UP, bisa diatur ke null atau ID user lain
+            'id_user' => 99999999,
             'antrian' => $antrian,
             'customer' => $this->customer,
             'meja' => $this->tipeOrder == 'Dine In' ? $this->meja : 0, // Jika tipe order adalah Take Away, meja diisi null
@@ -89,14 +124,27 @@ class PesanManual extends Component
 
         // Simpan item menu yang dipesan ke tabel detail_orders
         foreach ($this->items as $item) {
-            if ($this->qty[$item->id_menu] > 0) {
+            if ($this->qtyMenu[$item->id_menu] > 0) {
                 DetailOrder::create([
                     'id_detailorder' => 'OD' . now()->format('Ymd') . '-' . str_pad($antrian, 3, '0', STR_PAD_LEFT),
                     'id_order' => $order->id_order,
                     'id_menu' => $item->id_menu,
-                    'kuantitas' => $this->qty[$item->id_menu],
+                    'kuantitas' => $this->qtyMenu[$item->id_menu],
                     'harga_menu' => $item->harga,
                     'notes' => ""
+                ]);
+            }
+        }
+
+        foreach ($this->addItems as $addItem) {
+            if ($this->qtyAddons[$addItem->id_addon] > 0) {
+                DetailAddon::create([
+                    'id_detailaddon' => 'AO' . now()->format('Ymd') . '-' . str_pad($antrian, 3, '0', STR_PAD_LEFT),
+                    'id_addon' => $order->id_addon,
+                    'id_menu' => $addItem->id_addon,
+                    'kuantitas' => $this->qtyAddons[$addItem->id_addon],
+                    'harga_menu' => $addItem->harga,
+                    'notes' => "",
                 ]);
             }
         }
