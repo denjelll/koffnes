@@ -1,5 +1,6 @@
 <div>
     <h1 class="text-center font-bold text-4xl">Pesanan Manual</h1>
+    <a href="cashier/dashboard" class="m-5 border border-black">Dashboard</a>
     <h1 class="font-bold text-2xl m-5">Menu Utama</h1>
     <div class="border border-black m-5 p-3 gap-4">
         @foreach ($items as $item)
