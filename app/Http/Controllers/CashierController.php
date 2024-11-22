@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Session;
 
 class CashierController extends Controller
 {
-    protected function cashier()
+    public function cashier()
     {
         return view('login');
     }
 
-    protected function verify(Request $request)
+    public function verify(Request $request)
     {
         $email = $request->input('email');
         $password = $request->input('password');
@@ -31,13 +31,13 @@ class CashierController extends Controller
         }
     }
 
-    protected function inputOrder(Request $request) {
-        if(Session::get('role') !== 'cashier') {
+    public function inputOrder(Request $request)
+    {
+        if (Session::get('role') !== 'cashier') {
             return redirect('/login');
         }
 
-        if($request->isMethod('post')) {
-            
+        if ($request->isMethod('post')) {
             $request->validate([
                 'meja' => 'nullable|integer|min:1|max:23',
                 'tipe_order' => 'required|in:Dine In,Take Away,Delivery',
@@ -52,8 +52,8 @@ class CashierController extends Controller
             $newQueue = $lastQueue ? $lastQueue + 1 : 1;
 
             $totalHarga = 0;
-            foreach($request->input('items') as $item) {
-                $menu = DB::table('menus')->where('id_menu', $item['id_menu']) -> first();
+            foreach ($request->input('items') as $item) {
+                $menu = DB::table('menus')->where('id_menu', $item['id_menu'])->first();
                 $totalHarga += $menu->harga * $item['quantity'];
             }
 
@@ -70,7 +70,7 @@ class CashierController extends Controller
                 'waktu_transaksi' => now(),
             ]);
 
-            foreach($request->input('items') as $item) {
+            foreach ($request->input('items') as $item) {
                 $menu = DB::table('menus')->where('id_menu', $item['id_menu'])->first();
                 DB::table('detail_orders')->insert([
                     'id_detailorder' => uniqid('DO-'),
@@ -81,14 +81,16 @@ class CashierController extends Controller
                 ]);
             }
         }
+
         return redirect('/cashier');
     }
 
-    protected function dashboard() {
-        if(Session::get('role') !== 'cashier') {
+    public function dashboard()
+    {
+        if (Session::get('role') !== 'cashier') {
             return redirect('/login');
         }
-        
+
         $orders = DB::table('orders')
             ->select('antrian', 'meja', 'tipe_order', 'status', 'total_harga', 'waktu_transaksi')
             ->whereDate('waktu_transaksi', now()->toDateString())
@@ -97,4 +99,70 @@ class CashierController extends Controller
 
         return view('cashier.dashboard', ['orders' => $orders]);
     }
+
+    public function printReceipt($id_order)
+    {
+        // Periksa role
+        if (Session::get('role') !== 'cashier') {
+            return redirect('/login');
+        }
+
+        // Ambil data order
+        $order = DB::table('orders')
+            ->where('id_order', $id_order)
+            ->first();
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+
+        // Ambil detail order
+        $details = DB::table('detail_orders')
+            ->join('menus', 'detail_orders.id_menu', '=', 'menus.id_menu')
+            ->where('detail_orders.id_order', $id_order)
+            ->select('menus.nama_menu', 'detail_orders.kuantitas', 'detail_orders.harga')
+            ->get();
+
+        // Total harga
+        $totalHarga = DB::table('detail_orders')
+            ->where('id_order', $id_order)
+            ->sum(DB::raw('kuantitas * harga'));
+
+        // Kirim data ke view untuk dicetak
+        return view('cashier.print', [
+            'order' => $order,
+            'details' => $details,
+            'totalHarga' => $totalHarga,
+        ]);
+    }
+
+    public function salesReport(Request $request) {
+    // Periksa role
+    if (Session::get('role') !== 'cashier') {
+        return redirect('/login');
+    }
+
+    // Ambil tanggal filter (default: hari ini)
+    $startDate = $request->input('start_date', now()->startOfDay());
+    $endDate = $request->input('end_date', now()->endOfDay());
+
+    // Ambil data penjualan dalam rentang waktu
+    $orders = DB::table('orders')
+        ->whereBetween('waktu_transaksi', [$startDate, $endDate])
+        ->select('id_order', 'antrian', 'customer', 'tipe_order', 'total_harga', 'waktu_transaksi', 'status')
+        ->orderBy('waktu_transaksi', 'asc')
+        ->get();
+
+    // Hitung total penjualan
+    $totalSales = $orders->sum('total_harga');
+
+    // Kirim data ke view
+    return view('cashier.closing', [
+        'orders' => $orders,
+        'totalSales' => $totalSales,
+        'startDate' => $startDate,
+        'endDate' => $endDate,
+    ]);
+}
+
 }
