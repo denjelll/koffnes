@@ -77,21 +77,38 @@
   </div>
     <!-- Content area -->
     <main class="flex-grow p-4">
-      
       <!-- Slideshow Container -->
       <div
-        class="w-100 h-60 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
+        class="w-100 h-52 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
       >
         <!-- Slides -->
-        <div class="slide active flex items-center justify-center h-full">
-          <h2 class="text-2xl text-gray-700">Slide 1</h2>
-        </div>
-        <div class="slide flex items-center justify-center h-full">
-          <h2 class="text-2xl text-gray-700">Slide 2</h2>
-        </div>
-        <div class="slide flex items-center justify-center h-full">
-          <h2 class="text-2xl text-gray-700">Slide 3</h2>
-        </div>
+        <div
+          class="slide active flex items-center justify-center h-full"
+          style="
+            background-image: url(https://png.pngtree.com/png-clipart/20210808/original/pngtree-wood-grain-creative-coffee-sale-banner-png-image_6617838.jpg);
+            background-size: contain; /* Atur ukuran */
+            background-repeat: no-repeat; /* Hindari pengulangan */
+            background-position: center; /* Posisikan di tengah */
+          "
+        ></div>
+        <div
+          class="slide active flex items-center justify-center h-full"
+          style="
+            background-image: url(https://png.pngtree.com/png-clipart/20210808/original/pngtree-wood-grain-creative-coffee-sale-banner-png-image_6617838.jpg);
+            background-size: contain; /* Atur ukuran */
+            background-repeat: no-repeat; /* Hindari pengulangan */
+            background-position: center; /* Posisikan di tengah */
+          "
+        ></div>
+        <div
+          class="slide active flex items-center justify-center h-full"
+          style="
+            background-image: url(https://img.freepik.com/premium-vector/realistic-vector-coffee-shop-menu-banner-template_313044-325.jpg);
+            background-size: contain; /* Atur ukuran */
+            background-repeat: no-repeat; /* Hindari pengulangan */
+            background-position: center; /* Posisikan di tengah */
+          "
+        ></div>
 
         <!-- Indicators -->
         <div
@@ -108,6 +125,7 @@
           ></span>
         </div>
       </div>
+
       <!-- Best Seller Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5" id="promo">Promo</h1>
       <div class="flex space-x-4">
@@ -125,26 +143,7 @@
         <x-customer_bundle_card />
       <!-- Coffee Card Content -->
       <h1 class="text-3xl font-bold mb-4 mt-5" id="kopi">Coffee</h1>
-      <div style="background-color: #fff2e2" class="rounded-lg  p-4 relative">
-            <img src="https://via.placeholder.com/150" alt="Americano" class="w-full h-32 object-cover rounded-lg" />
-            <div class="pt-4 pb-10">
-              <h3 class="text-lg font-semibold text-gray-800">Americano</h3>
-              <p class="text-green-800 text-lg">Rp 15.000</p>
-              <p class="text-sm text-gray-600 mt-1">Minuman andalan koffness. Seger bet.</p>
-              <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4" id="best-seller-controls">
-              <!-- Initial ADD TO CART button (responsive size) -->
-                <button class="bg-[#4f3222] text-white rounded-lg py-2 px-4 text-xs sm:text-sm w-full sm:w-auto">
-                    Add To Cart
-                </button>
-                <!-- Quantity controls (hidden initially) -->
-                <div class="hidden items-center space-x-1 qty-controls" id="controls-americano">
-                  <button class="bg-red-500 text-white py-1 px-2 rounded-full text-xs sm:text-sm">-</button>
-                  <span id="qty-americano" class="text-sm font-semibold">0</span>
-                  <button class="bg-green-500 text-white py-1 px-2 rounded-full text-xs sm:text-sm">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
+      
       
     </main>
 
