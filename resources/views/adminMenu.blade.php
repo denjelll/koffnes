@@ -4,223 +4,218 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koffnes Menu Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Force background color to white for body and .bg-base-100 */
+        body, .bg-base-100 {
+            background-color: white !important;
+        }
         body {
-            background-image: url("D:/File UMN/bg kopi.jpg"); /* Replace this with the path to the background image */
+            background-image: url("D:/File UMN/bg kopi.jpg"); /* Replace with the path to the background image */
             background-repeat: repeat;
             background-position: top left;
             background-size: 400px 400px;
         }
     </style>
 </head>
-<body class="font-sans">
+<body class="font-sans bg-base-200">
 
-    <!-- Navbar -->
-    <nav class="bg-[#412f26] text-white px-8 py-4 flex items-center justify-between fixed top-0 left-0 w-full z-50">
-        <div class="logo-container">
-            <a href="test.html"><img src="koffness2.png" alt="Koffnes Logo" style="width: 150px; height: auto;"></a>
-        </div>
-        <ul class="flex space-x-8 text-sm">
-            <li><a href="#" class="hover:text-gray-300">Menu Management</a></li>
-            <li><a href="#" class="hover:text-gray-300">Transaction</a></li>
-            <li><a href="#" class="hover:text-gray-300">Event Management</a></li>
-            <li><a href="#" class="hover:text-gray-300">Promotion</a></li>
-            <li><a href="#" class="hover:text-gray-300">Admin</a></li>
-        </ul>
-        <button class="bg-white text-[#412f26] px-4 py-2 rounded-md hover:bg-gray-200">Logout</button>
-    </nav>
-    
+<!-- Navbar -->
+<nav class="bg-[#412F26] text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg">
+    <!-- Logo -->
+    <div class="flex items-center justify-between w-full md:w-auto">
+        <img src="{{ asset('asset/Cashnes/8.png') }}" alt="Koffnes Logo" class="h-8 md:h-10">
+        <button id="burger-menu" class="md:hidden text-white focus:outline-none" aria-label="Toggle Navigation">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Menu -->
+    <div id="nav-links" class="hidden md:flex md:flex-row md:space-x-6 flex-col text-center mt-4 md:mt-0 w-full md:w-auto">
+        <a href="#" class="hover:underline">Menu Management</a>
+        <a href="#" class="hover:underline">Transaction</a>
+        <a href="#" class="hover:underline">Event Management</a>
+        <a href="#" class="hover:underline">Promotion</a>
+        <a href="#" class="hover:underline">Admin</a>
+        <a href="#" class="hover:underline text-[#CBB89D]">Logout</a>
+    </div>
+</nav>
 
     <!-- Main Content -->
     <div class="px-8 py-6 pb-[4rem]">
         <div class="text-2xl font-semibold text-[#412f26] mb-6">Menu Management</div>
+
+    <!-- Search and Filter Section -->
+    <div class="flex items-center gap-4 mb-8">
+        <!-- Add Event Button -->
+        <label 
+            for="add-menu-modal" 
+            class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#5a3e2f] cursor-pointer whitespace-nowrap"
+        >
+            Add Menu
+        </label>            
         
-        <!-- Search and Filter Section -->
-        <div class="flex items-center space-x-4 mb-8">
-            <button onclick="openModal()" class="bg-[#412f26] text-white px-6 py-2 rounded-lg">Add Menu</button>
-            <div class="flex-1 relative">
-                <input type="text" placeholder="Search Menu" id="searchInput" oninput="filterMenu()" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#b18968]">
-            </div>
-            <select id="categoryFilter" onchange="filterMenu()" class="bg-white border border-gray-300 text-[#412f26] rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#b18968]">
-                <option value="All">All Categories</option>
-                <option value="Food">Food</option>
-                <option value="Drink">Drink</option>
-                <option value="Snack">Snack</option>
-            </select>
-        </div>
-
-        <!-- Divider Line -->
-        <hr class="border-t border-[#b18968] mb-8">
-
-<!-- Food Section -->
-<section class="my-6">
-    <h2 class="text-2xl font-bold text-[#412f26] mb-4">Food</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <!-- Food Menu Item Card -->
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Nasi Lemak" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Nasi Lemak</h3>
-                <p class="text-[#b18968] text-center">Rp. 15.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <!-- Add more food items here -->
+        <!-- Search Bar -->
+        <input 
+            type="text" 
+            placeholder="Search Menu" 
+            id="searchInput" 
+            oninput="filterMenu()" 
+            class="input w-full bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+        />
+        <!-- Category Filter -->
+        <select 
+            id="categoryFilter" 
+            onchange="filterMenu()" 
+            class="select bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+        >
+            <option value="All">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Drink">Drink</option>
+            <option value="Snack">Snack</option>
+        </select>
     </div>
-</section>
+                
 
-<!-- Drinks Section -->
-<section class="my-6">
-    <h2 class="text-2xl font-bold text-[#412f26] mb-4">Drinks</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <!-- Drinks Menu Item Card -->
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Iced Tea</h3>
-                <p class="text-[#b18968] text-center">Rp. 10.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
+        <!-- Food Section -->
+        <section class="my-6">
+            <h2 class="text-2xl font-bold text-[#412f26] mb-4">Food</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div class="card w-60 bg-white shadow-md rounded-lg overflow-hidden">
+                    <!-- Image Placeholder -->
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <img
+                            src="https://via.placeholder.com/150"
+                            alt="Menu Image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <!-- Text Content -->
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-[#412f26]">Nasi Lemak</h3>
+                        <p class="text-gray-500 font-medium">Rp. 15.000</p>
+                    </div>
+                    <!-- Button -->
+                    <div class="p-4 pt-0">
+                        <button class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]">
+                            Edit
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Iced Tea</h3>
-                <p class="text-[#b18968] text-center">Rp. 10.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Iced Tea</h3>
-                <p class="text-[#b18968] text-center">Rp. 10.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Iced Tea</h3>
-                <p class="text-[#b18968] text-center">Rp. 10.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-        <!-- Add more drink items here -->
-    </div>
-</section>
+        </section>
 
-<!-- Snack Section -->
-<section class="my-6">
-    <h2 class="text-2xl font-bold text-[#412f26] mb-4">Snacks</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <!-- Snack Menu Item Card -->
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Chiki</h3>
-                <p class="text-[#b18968] text-center">Rp.  5.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
+        <!-- Drinks Section -->
+        <section class="my-6">
+            <h2 class="text-2xl font-bold text-[#412f26] mb-4">Drinks</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <!-- Drinks Menu Item Card -->
+                <div class="card w-60 bg-white shadow-md rounded-lg overflow-hidden">
+                    <!-- Image Placeholder -->
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <img
+                            src="https://via.placeholder.com/150"
+                            alt="Menu Image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <!-- Text Content -->
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-[#412f26]">Es Tehhhh</h3>
+                        <p class="text-gray-500 font-medium">Rp. 5.000</p>
+                    </div>
+                    <!-- Button -->
+                    <div class="p-4 pt-0">
+                        <button class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]">
+                            Edit
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Chiki</h3>
-                <p class="text-[#b18968] text-center">Rp.  5.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img src="https://via.placeholder.com/150" alt="Iced Tea" class="w-full h-32 object-cover">
-            <div class="p-4">
-                <h3 class="font-bold text-lg text-[#412f26] text-center">Chiki</h3>
-                <p class="text-[#b18968] text-center">Rp.  5.000</p>
-                <button onclick="openModal()" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-            </div>
-        </div>
-
-        <!-- Add more snack items here -->
-    </div>
-</section>
-
-
-    <!-- Modal for Add/Edit Menu -->
-    <div id="menuModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-[#f1e8d4] w-96 p-8 rounded-lg shadow-lg relative">
-            <button onclick="closeModal()" class="absolute top-2 right-2 text-[#412f26] font-bold text-lg">&times;</button>
-            <h2 class="text-2xl font-semibold text-[#412f26] mb-4 text-center">Add/Edit Menu</h2>
-            <div class="mb-4">
-                <input type="hidden" id="menuIndex">
-                <label class="block text-[#412f26] font-bold">Nama Menu:</label>
-                <input type="text" id="menuName" class="w-full p-2 border rounded-lg mb-2">
-                <label class="block text-[#412f26] font-bold">Harga:</label>
-                <input type="number" id="menuPrice" class="w-full p-2 border rounded-lg mb-2">
-                <label class="block text-[#412f26] font-bold">Kategori:</label>
-                <select id="menuCategory" class="w-full p-2 border rounded-lg mb-2">
-                    <option value="Food">Food</option>
-                    <option value="Drink">Drink</option>
-                    <option value="Snack">Snack</option>
-                </select>
-                <label class="block text-[#412f26] font-bold">Deskripsi:</label>
-                <textarea id="menuDescription" class="w-full p-2 border rounded-lg mb-2"></textarea>
-                <label class="block text-[#412f26] font-bold">Stok:</label>
-                <input type="number" id="menuStock" class="w-full p-2 border rounded-lg mb-4">
-                <button onclick="addOrUpdateMenu()" class="bg-[#412f26] text-white w-full py-2 rounded-lg">Add/Update</button>
-            </div>
-        </div>
+        </section>
     </div>
 
+    <!-- Modal -->
+    <input type="checkbox" id="add-menu-modal" class="modal-toggle" />
+    <div class="modal">
+        <div class="modal-box bg-[#f1e8d4] text-[#412f26] max-w-xl">
+            <!-- Modal Header -->
+            <h3 class="font-bold text-lg mb-4">Add Menu</h3>
+            <form>
+                <!-- Menu Name -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-name">Nama Menu:</label>
+                    <input id="menu-name" type="text" placeholder="Enter menu name" 
+                        class="input input-bordered w-full bg-[#ffffff] text-[#412f26] placeholder-gray-400" />
+                </div>
+
+                <!-- Harga -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-price">Harga:</label>
+                    <input id="menu-price" type="text" placeholder="Enter menu price" 
+                        class="input input-bordered w-full bg-[#ffffff] text-[#412f26] placeholder-gray-400" />
+                </div>
+
+                <!-- Kategori -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-category">Kategori:</label>
+                    <select id="menu-category" 
+                        class="select select-bordered w-full bg-[#ffffff] text-[#412f26] placeholder-gray-400">
+                        <option disabled selected>Pilih Kategori</option>
+                        <option value="food">Food</option>
+                        <option value="drink">Drink</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+
+    
+                <!-- Description -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-description">Deskripsi:</label>
+                    <textarea id="menu-description" placeholder="Enter menu description"
+                        class="textarea textarea-bordered w-full bg-[#ffffff] text-[#412f26] placeholder-gray-400"></textarea>
+                </div>
+    
+                <!-- Stock -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-stock">Stock:</label>
+                    <input id="menu-menu" type="text" placeholder="Enter menu stock" 
+                        class="input input-bordered w-full bg-[#ffffff] text-[#412f26] placeholder-gray-400" />
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-4">
+                    <label class="block mb-1" for="menu-image">Gambar:</label>
+                    <!-- Custom File Input -->
+                    <div class="relative">
+                        <label for="menu-image" 
+                               class="cursor-pointer bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#5a3e2f] inline-block">
+                            Choose File
+                        </label>
+                        <input id="menu-image" type="file" accept="image/*" 
+                               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                        <span id="file-name" class="ml-3 text-[#412f26]">No file chosen</span>
+                    </div>
+                </div>
+    
+                <!-- Modal Actions -->
+                <div class="modal-action">
+                    <label for="add-menu-modal" 
+                           class="btn bg-[#412f26] text-white hover:bg-[#5a3e2f]">
+                        Cancel
+                    </label>
+                    <button type="submit" 
+                            class="btn bg-[#412f26] text-white hover:bg-[#5a3e2f]">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <footer
     class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
     style="background-color: #412f26; height: 64px;">
@@ -230,89 +225,7 @@
         class="h-7 md:h-7 mb-2"
         style="max-width: 180px;">
     <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
-</footer>
-    <!-- JavaScript -->
-    <script>
-        let menuData = [
-            { name: 'Nasi Lemak', price: 15000, category: 'Food', description: 'Delicious rice dish', stock: 20 },
-            { name: 'Iced Coffee', price: 10000, category: 'Drink', description: 'Refreshing iced coffee', stock: 30 },
-            { name: 'Potato Chips', price: 5000, category: 'Snack', description: 'Crispy and salty', stock: 50 },
-        ];
-
-        function openModal(index = null) {
-            document.getElementById('menuModal').classList.remove('hidden');
-            if (index !== null) {
-                document.getElementById('menuIndex').value = index;
-                const menu = menuData[index];
-                document.getElementById('menuName').value = menu.name;
-                document.getElementById('menuPrice').value = menu.price;
-                document.getElementById('menuCategory').value = menu.category;
-                document.getElementById('menuDescription').value = menu.description;
-                document.getElementById('menuStock').value = menu.stock;
-            } else {
-                document.getElementById('menuIndex').value = '';
-                document.getElementById('menuName').value = '';
-                document.getElementById('menuPrice').value = '';
-                document.getElementById('menuCategory').value = 'Food';
-                document.getElementById('menuDescription').value = '';
-                document.getElementById('menuStock').value = '';
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('menuModal').classList.add('hidden');
-        }
-
-        function addOrUpdateMenu() {
-            const index = document.getElementById('menuIndex').value;
-            const menu = {
-                name: document.getElementById('menuName').value,
-                price: document.getElementById('menuPrice').value,
-                category: document.getElementById('menuCategory').value,
-                description: document.getElementById('menuDescription').value,
-                stock: document.getElementById('menuStock').value
-            };
-
-            if (index) {
-                menuData[index] = menu;
-            } else {
-                menuData.push(menu);
-            }
-            closeModal();
-            filterMenu();
-        }
-
-        function renderMenuItems(filteredData = menuData) {
-            const menuGrid = document.getElementById('menuGrid');
-            menuGrid.innerHTML = '';
-            filteredData.forEach((menu, index) => {
-                const card = document.createElement('div');
-                card.className = 'bg-white shadow-lg rounded-lg overflow-hidden';
-                card.innerHTML = `
-                    <img src="https://via.placeholder.com/150" alt="${menu.name}" class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg text-[#412f26] text-center">${menu.name}</h3>
-                        <p class="text-[#b18968] text-center">Rp. ${menu.price}</p>
-                        <button onclick="openModal(${index})" class="mt-3 w-full bg-[#412f26] text-white py-2 rounded-lg">EDIT</button>
-                    </div>
-                `;
-                menuGrid.appendChild(card);
-            });
-        }
-
-        function filterMenu() {
-            const searchValue = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const filteredData = menuData.filter(menu => 
-                (menu.name.toLowerCase().includes(searchValue) || menu.description.toLowerCase().includes(searchValue)) &&
-                (categoryFilter === 'All' || menu.category === categoryFilter)
-            );
-            renderMenuItems(filteredData);
-        }
-
-        // Initial render
-        renderMenuItems();
-    </script>
+    </footer>
 
 </body>
 </html>
