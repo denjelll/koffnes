@@ -124,38 +124,111 @@
         <!-- Modal for Payment Confirmation -->
         <div
             id="paymentModal"
-            class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-20">
-            <div class="bg-[#e8d2b7] p-8 rounded-lg w-80 relative">
-                <!-- Close icon in the top-right corner -->
+            class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+            <div
+                class="p-6 w-96 rounded-lg shadow-md bg-gradient-to-br from-[#f0e6d6] to-[#d9cab3] flex flex-col relative">
+                <!-- Tombol Tutup -->
                 <button
                     onclick="toggleModal()"
-                    class="absolute top-2 right-2 text-2xl text-[#412f26]">
+                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#412f26] hover:scale-110 transition-transform flex items-center justify-center shadow-md">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewbox="0 0 24 24"
                         stroke="currentColor"
-                        class="w-6 h-6">
+                        class="w-5 h-5 text-[#e8d2b7]">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"></path>
+                            d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
 
-                <h2 class="text-2xl font-bold mb-4">Choose Payment</h2>
-                <p class="mb-4">Silakan pilih metode pembayaran:</p>
-                <div class="space-y-5">
-                    <button class="w-full py-2 bg-[#412f26] text-white rounded-[10px]">EDC</button>
-                    <button class="w-full py-2 bg-[#412f26] text-white rounded-[10px]">Cash</button>
-                    <button class="w-full py-2 bg-[#412f26] text-white rounded-[10px]">Card</button>
-                </div>
-                <div class="mt-4 text-center">
-                    <button onclick="toggleModal()" class="py-2 px-6 bg-gray-300 rounded-full">Close</button>
+                <!-- Judul Modal -->
+                <h2 class="text-2xl font-bold mb-4 text-[#412f26] text-center drop-shadow-lg">
+                    Payment Method
+                </h2>
+                <p class="text-sm text-[#7d6c5b] mb-6 text-center">
+                    Please select your preferred method of payment:
+                </p>
+
+                <!-- Pilihan Metode Pembayaran -->
+                <div class="space-y-4">
+                    <label
+                        class="group flex items-center gap-3 py-3 px-4 rounded-md shadow-sm cursor-pointer bg-[#f7ead6] hover:scale-105 transition-transform">
+                        <div
+                            class="p-2 bg-white rounded-md shadow-md group-hover:bg-[#ffba66] transition-all"></div>
+                        <span class="text-[#412f26] text-sm font-medium">EDC</span>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="EDC"
+                            class="hidden"
+                            onchange="handlePayment('EDC')"/>
+                    </label>
+
+                    <label
+                        class="group flex items-center gap-3 py-3 px-4 rounded-md shadow-sm cursor-pointer bg-[#f7ead6] hover:scale-105 transition-transform">
+                        <div
+                            class="p-2 bg-white rounded-md shadow-md group-hover:bg-[#ffba66] transition-all"></div>
+                        <span class="text-[#412f26] text-sm font-medium">Debit</span>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="Debit"
+                            class="hidden"
+                            onchange="handlePayment('Debit')"/>
+                    </label>
+
+                    <label
+                        class="group flex items-center gap-3 py-3 px-4 rounded-md shadow-sm cursor-pointer bg-[#f7ead6] hover:scale-105 transition-transform">
+                        <div
+                            class="p-2 bg-white rounded-md shadow-md group-hover:bg-[#ffba66] transition-all"></div>
+                        <span class="text-[#412f26] text-sm font-medium">Cash</span>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="Cash"
+                            class="hidden"
+                            onchange="handlePayment('Cash')"/>
+                    </label>
                 </div>
             </div>
         </div>
+
+        <!-- Modal "Terima Kasih Telah Berkunjung" -->
+        <div
+            id="thankYouModal"
+            class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+            <div
+                class="p-6 w-96 rounded-lg shadow-md bg-gradient-to-br from-[#f7ead6] to-[#d9cab3] flex flex-col items-center">
+                <h2 class="text-2xl font-bold text-[#412f26] mb-4 text-center">
+                    Terima Kasih Telah Berkunjung!
+                </h2>
+                <p class="text-sm text-[#7d6c5b] text-center">
+                    Kami senang melayani Anda. Sampai jumpa lagi!
+                </p>
+            </div>
+        </div>
+
+        <script>
+            function handlePayment(paymentMethod) {
+                // Tampilkan modal "Terima Kasih"
+                const thankYouModal = document.getElementById('thankYouModal');
+                thankYouModal
+                    .classList
+                    .remove('hidden');
+
+                // Sembunyikan modal setelah 2 detik dan arahkan ke menu.php
+                setTimeout(() => {
+                    thankYouModal
+                        .classList
+                        .add('hidden');
+                    window.location.href = 'menu.php';
+                }, 1000);
+            }
+        </script>
 
     </body>
 </html>
