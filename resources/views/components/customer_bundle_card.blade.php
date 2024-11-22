@@ -1,4 +1,4 @@
-<div style="background-color: #fff2e2" class="rounded-lg mt-4 p-4 relative">
+<div style="background-color: #fff2e2" class="rounded-lg mt-4 p-4 relative" style="">
   <img src="https://via.placeholder.com/150" alt="Americano" class="w-full h-32 object-cover rounded-lg" />
   <div class="pt-4 pb-10">
     <h3 class="text-lg font-semibold text-gray-800">Americano</h3>
