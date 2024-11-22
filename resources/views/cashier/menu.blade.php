@@ -18,7 +18,11 @@
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
             style="background-color: #412f26;">
-            <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
+            <img
+                src="{{ asset('storage/uploads/7.png') }}"
+                alt="Logo"
+                class="h-8 w-auto"
+                style="max-width: 96px;">
             <!-- Mobile Menu Toggle Button -->
             <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
                 <svg
@@ -45,20 +49,30 @@
                 class="text-white w-55 p-7 fixed top-16 h-full z-20 hidden bg-[#76634c] md:block"
                 style="transition: transform 0.3s ease-in-out;">
                 <ul class="space-y-4">
-                <li>
-                        <a href="{{ url('/cashier/home') }}" class="hover:bg-opacity-50 p-2 block rounded">Home</a>
+                    <li>
+                        <a
+                            href="{{ url('/cashier/home') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Home</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/order') }}" class="hover:bg-opacity-50 p-2 block rounded">Order</a>
+                        <a
+                            href="{{ url('/cashier/order') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Order</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/history') }}" class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
+                        <a
+                            href="{{ url('/cashier/history') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/inventory') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                        <a
+                            href="{{ url('/cashier/inventory') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                     </li>
                     <li>
-                        <a href="{{ url('cashier/table') }}" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
+                        <a
+                            href="{{ url('cashier/table') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Table</a>
                     </li>
                 </ul>
             </nav>
@@ -117,12 +131,16 @@
                     <x-card/>
                     <x-card/>
                     <x-card/>
-                    <a href="{{ url('/cashier/chart') }}"><div
-                        class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
-                        <span>Total: Rp. 0,00-</span>
-                        <img src="{{ asset('storage/uploads/Cashnes.png') }}" alt="Chart Icon" class="ml-auto h-5 w-5">
-                    </div></a>
-                    
+
+                    <!-- Total Section -->
+                    <a href="{{ url('/cashier/chart') }}">
+                        <div
+                            class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3"
+                            id="total-section">
+                            <span id="total-price">Total: Rp. 0,00-</span>
+                            <img src="{{ asset('storage/uploads/Cashnes.png') }}" alt="Chart Icon" class="ml-auto h-5 w-5">
+                        </div>
+                    </a>
 
                 </div>
 
@@ -142,13 +160,22 @@
 
             <!-- JavaScript to Toggle Mobile Menu -->
             <script>
-                const menuToggle = document.getElementById('menu-toggle');
-                const mobileNav = document.getElementById('mobile-nav');
+                // Get all menu cards and total price element
+                const menuCards = document.querySelectorAll('.menu-card');
+                const totalPriceElement = document.getElementById('total-price');
 
-                menuToggle.addEventListener('click', () => {
-                    mobileNav
-                        .classList
-                        .toggle('hidden');
+                // Initialize total price
+                let totalPrice = 0;
+
+                // Add event listener to each menu card
+                menuCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const price = parseInt(card.getAttribute('data-price')); // Get price from data attribute
+                        totalPrice += price; // Add to total price
+
+                        // Update total price display
+                        totalPriceElement.textContent = `Total: Rp. ${totalPrice.toLocaleString()}-`;
+                    });
                 });
             </script>
 
