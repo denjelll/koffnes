@@ -1,21 +1,32 @@
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-semibold mb-4">Selamat Datang, {{ $customer }}</h1>
-    <h2 class="text-xl font-semibold mb-4">Nomor Meja: {{ $nomorMeja }}</h2>
+<div class="flex flex-col min-h-screen bg-[#EDE1D2]">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 flex items-center justify-between bg-[#412F26] text-white h-14 px-4 z-50 shadow-lg">
+        <div class="flex items-center gap-2">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('storage/asset/gambar/koffnes_putih.png') }}" alt="Koffnes Logo" class="h-6" />
+            </a>            
+            <input 
+                type="text" 
+                placeholder="Search Menu..." 
+                class="input input-bordered input-sm bg-white text-black rounded-lg focus:outline-none"
+            />
+        </div>
+    </nav>
 
-    <!-- Sidebar Kategori dan Daftar Menu -->
-    <div class="flex">
-        <!-- Sidebar Kategori -->
-        <aside class="w-1/4 border-r pr-4">
+    <!-- Sidebar dan Konten -->
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside class="fixed top-14 left-0 w-1/4 bg-[#6A6F4C] text-white h-[calc(100vh-3.5rem)] p-4 space-y-4 overflow-y-auto">
             <h3 class="text-lg font-semibold mb-2">Kategori</h3>
-            <ul>
+            <ul class="space-y-2">
                 <li>
-                    <button wire:click="filterByCategory(null)" class="text-blue-500">
+                    <button wire:click="filterByCategory(null)" class="text-white hover:underline">
                         Semua
                     </button>
                 </li>
                 @foreach ($categories as $category)
                     <li>
-                        <button wire:click="filterByCategory({{ $category->id_kategori }})" class="text-blue-500">
+                        <button wire:click="filterByCategory({{ $category->id_kategori }})" class="text-white hover:underline">
                             {{ $category->nama_kategori }}
                         </button>
                     </li>
@@ -23,67 +34,70 @@
             </ul>
         </aside>
 
-        <div class="w-3/4 pl-4">
-            {{-- Daftar menu yang sedang promo --}}
+        <!-- Konten -->
+        <main class="w-full md:w-3/4 ml-auto bg-[#EDE1D2] p-4 overflow-y-auto" style="margin-left: 25%;">
             @if (is_null($selectedCategory))
-                <div>
-                    <h2 class="text-xl font-bold mb-4">Promo Hari Ini</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach ($promoMenus as $menu)
-                            <div class="border p-4 rounded-lg shadow">
-                                <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-32 object-cover mb-4 rounded-lg">
-                                <h3 class="text-lg font-bold">{{ $menu->nama_menu }}</h3>
-                                <p class="text-gray-600">
-                                    <span class="text-red-500 font-bold">Rp {{ number_format($menu->promo->harga_promo, 0, ',', '.') }}</span>
-                                </p>
-                                
-                                <div class="flex items-center mt-2">
-                                    <button wire:click="decrement({{ $menu->id_menu }})" class="bg-red-500 text-white px-2 py-1 rounded">-</button>
-                                    <span class="mx-2">{{ $cart[$menu->id_menu]['quantity'] ?? 0 }}</span>
-                                    <button wire:click="increment({{ $menu->id_menu }})" class="bg-green-500 text-white px-2 py-1 rounded">+</button>
+                <h2 class="text-2xl font-bold mb-6">Promo</h2>
+                <!-- Grid Promo -->
+                <div class="grid grid-cols-1 gap-4 mb-8">
+                    @foreach ($promoMenus as $promo)
+                        <div class="bg-[#FFF2E2] rounded-lg shadow-lg p-4 flex flex-col space-y-4">
+                            <div class="flex items-center gap-4">
+                                <img src="{{ $promo->gambar }}" alt="{{ $promo->nama_menu }}" class="w-16 h-16 object-cover rounded-full" />
+                                <div>
+                                    <h3 class="font-bold text-lg text-[#412F26]">{{ $promo->nama_menu }}</h3>
+                                    <p class="text-sm text-[#806044]">{{ $promo->deskripsi }}</p>
+                                    <p class="text-[#412F26] font-bold">Rp. {{ number_format($promo->harga, 0, ',', '.') }}</p>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
+                            <button 
+                                wire:click="addToCart({{ $promo->id_menu }})" 
+                                class="btn btn-primary bg-[#6A6F4C] text-white hover:bg-[#412F26]"
+                            >
+                                ADD TO CART
+                            </button>
+                        </div>
+                    @endforeach
                 </div>
             @endif
 
-            <!-- Daftar Menu -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <h2 class="text-2xl font-bold mb-6">Menu</h2>
+            <!-- Grid Horizontal Menu -->
+            <div class="flex flex-wrap gap-4">
                 @foreach ($menus as $menu)
-                    <div class="border p-4 rounded-lg shadow">
-                        <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-32 object-cover mb-4 rounded-lg">
-                        <h3 class="text-lg font-bold">{{ $menu->nama_menu }}</h3>
-                        <p class="text-gray-600">
-                            @if ($menu->promo && $menu->promo->status === 'Aktif' &&
-                                 (now()->format('l') === $menu->promo->hari || $menu->promo->hari === 'AllDay') &&
-                                 now()->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir))
-                                <span class="text-red-500 font-bold">Rp {{ number_format($menu->promo->harga_promo, 0, ',', '.') }}</span>
-                            @else
-                                Rp {{ number_format($menu->harga, 0, ',', '.') }}
-                            @endif
-                        </p>
-                        
-                        <div class="flex items-center mt-2">
-                            <button wire:click="decrement({{ $menu->id_menu }})" class="bg-red-500 text-white px-2 py-1 rounded">-</button>
-                            <span class="mx-2">{{ $cart[$menu->id_menu]['quantity'] ?? 0 }}</span>
-                            <button wire:click="increment({{ $menu->id_menu }})" class="bg-green-500 text-white px-2 py-1 rounded">+</button>
+                    <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg p-4 flex items-center space-x-4 w-full md:w-[250px]">
+                        <div class="w-16 h-16 rounded-full bg-[#CBB89D] flex items-center justify-center">
+                            <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-12 h-12 object-cover rounded-full" />
+                        </div>
+                        <div class="flex flex-col">
+                            <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menu->nama_menu }}</h3>
+                            <p class="text-xs md:text-sm text-[#806044]">{{ $menu->deskripsi }}</p>
+                            <p class="text-[#412F26] font-bold">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
+                        </div>
+                        <!-- Tombol Quantity -->
+                        <div class="flex gap-2">
+                            <button wire:click="decrement({{ $menu->id_menu }})" class="btn btn-circle bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] w-8 h-8 md:w-10 md:h-10">
+                                -
+                            </button>
+                            <span class="font-bold text-[#412F26]">
+                                {{ $menu->quantity ?? 0 }}
+                            </span>
+                            <button wire:click="increment({{ $menu->id_menu }})" class="btn btn-circle bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] w-8 h-8 md:w-10 md:h-10">
+                                +
+                            </button>
                         </div>
                     </div>
                 @endforeach
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Total Harga -->
-    <div class="mt-4">
+    <!-- Footer -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-[#412F26] text-white p-4 text-center shadow-lg">
         <h3 class="text-lg font-semibold">Total Harga: Rp{{ number_format($totalHarga, 0, ',', '.') }}</h3>
-    </div>
-
-    <!-- Tombol Checkout -->
-    <form method="GET" action="{{ route('checkout', ['nomorMeja' => $nomorMeja]) }}">
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">
-            Checkout
-        </button>
-    </form>
+        <form method="GET" action="{{ route('checkout', ['nomorMeja' => $nomorMeja]) }}">
+            <button type="submit" class="btn btn-primary mt-2">Checkout</button>
+        </form>
+    </footer>
 </div>
