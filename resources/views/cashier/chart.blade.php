@@ -25,7 +25,7 @@
                         d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span>
-                    <a href="menu.php">Keranjang</a>
+                    <a href="{{ url('/cashier/home') }}">Keranjang</a>
                 </spa>
             </button>
         </nav>
@@ -90,13 +90,13 @@
             <!-- Open Bill Button -->
 
             <div class="mt-4 flex flex-wrap justify-center gap-4">
-                <a href="order.php">
+                <a href="{{ url('/cashier/order') }}">
                     <button
                         class="p-3 bg-[#412f26] text-white rounded-full font-semibold text-center hover:bg-[#5f3c21] w-40 sm:w-60 md:w-72 lg:w-80">
                         Open Bill
                     </button>
                 </a>
-                <a href="checkout.php">
+                <a href="{{ url('/cashier/checkout') }}">
                     <button
                         class="p-3 bg-[#412f26] text-white rounded-full font-semibold text-center hover:bg-[#5f3c21] w-40 sm:w-60 md:w-72 lg:w-80">
                         Check Out

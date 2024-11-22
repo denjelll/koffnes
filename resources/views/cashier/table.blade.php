@@ -12,7 +12,7 @@
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
             style="background-color: #412f26;">
-            <img src="../img/7.png" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
+            <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
 
             <!-- Mobile Menu Toggle Button -->
             <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
@@ -40,31 +40,39 @@
                 class="text-white w-55 p-7 fixed top-16 h-full z-20 hidden bg-[#76634c] md:block"
                 style="transition: transform 0.3s ease-in-out;">
                 <ul class="space-y-4">
-                <li>
-                        <a href="{{ url('/cashier/home') }}" class="hover:bg-opacity-50 p-2 block rounded">Home</a>
+                    <li>
+                        <a
+                            href="{{ url('/cashier/home') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Home</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/order') }}" class="hover:bg-opacity-50 p-2 block rounded">Order</a>
+                        <a
+                            href="{{ url('/cashier/order') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Order</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/history') }}" class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
+                        <a
+                            href="{{ url('/cashier/history') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
                     </li>
                     <li>
-                        <a href="{{ url('/cashier/inventory') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                        <a
+                            href="{{ url('/cashier/inventory') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                     </li>
                     <li>
-                        <a href="{{ url('cashier/table') }}" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
+                        <a
+                            href="{{ url('cashier/table') }}"
+                            class="hover:bg-opacity-50 p-2 block rounded">Table</a>
                     </li>
                 </ul>
             </nav>
 
             <!-- Content Area -->
-            <div class="ml-40 p-4">
-                <h2 class="text-3xl font-bold mb-4">Welcome to the Page</h2>
-                <p class="text-gray-700">
-                    This layout includes a full-width top navbar and a left-side navbar with custom
-                    colors, created with Tailwind CSS.
-                </p>
+            <div class="ml-0 md:ml-40 w-full p-4">
+                <h1 class=" text-3xl font-bold mb-4">Daftar Meja</h1>
+                <x-card_table/>
+                <x-card_table/>
             </div>
 
         </div>
@@ -74,7 +82,7 @@
             class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
             style="background-color: #412f26;">
             <img
-                src="../img/8.png"
+                src="{{ asset('storage/uploads/8.png') }}"
                 alt="Footer Logo"
                 class="h-7 md:h-7 mb-2"
                 style="max-width: 180px;">

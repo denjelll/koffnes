@@ -12,7 +12,7 @@
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
             style="background-color: #412f26;">
-            <img src="../img/7.png" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
+            <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
             <!-- Mobile Menu Toggle Button -->
             <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
                 <svg
@@ -100,7 +100,7 @@
             class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
             style="background-color: #412f26;">
             <img
-                src="../img/8.png"
+                src="{{ asset('storage/uploads/8.png') }}"
                 alt="Footer Logo"
                 class="h-7 md:h-7 mb-2"
                 style="max-width: 180px;">

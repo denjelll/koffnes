@@ -8,7 +8,7 @@
         <button
             class=" flex items-center justify-center bg-[#4b3621] text-white rounded-full">
             <h2 class="text-xl w-8 h-8 font-bold">
-                <a href="chart.php">+</a>
+                <a href="{{ url('/cashier/chart') }}">+</a>
             </h2>
         </button>
     </div>

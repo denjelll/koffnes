@@ -34,7 +34,7 @@
                         d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span>
-                    <a href="chart.php">Checkout</a>
+                    <a href="{{ url('/cashier/chart') }}">Checkout</a>
                 </span>
             </button>
         </nav>
@@ -113,7 +113,7 @@
                     class="p-3 bg-[#412f26] text-white rounded-full font-semibold text-center hover:bg-[#5f3c21] w-40 sm:w-60 md:w-72 lg:w-80">
                     Checkout
                 </button>
-                <a href="menu.php">
+                <a href="{{ url('/cashier/home') }}">
                     <button
                         class="p-3 bg-[#412f26] text-white rounded-full font-semibold text-center hover:bg-[#5f3c21] w-40 sm:w-60 md:w-72 lg:w-80">
                         Add more
@@ -225,7 +225,7 @@
                     thankYouModal
                         .classList
                         .add('hidden');
-                    window.location.href = 'menu.php';
+                    window.location.href = "{{ url('/cashier/home') }}";
                 }, 1000);
             }
         </script>
