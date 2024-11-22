@@ -40,19 +40,19 @@
                 style="transition: transform 0.3s ease-in-out;">
                 <ul class="space-y-4">
                     <li>
-                        <a href="menu.php" class="hover:bg-opacity-50 p-2 block rounded">Home</a>
+                        <a href="{{ url('/cashier/home') }}" class="hover:bg-opacity-50 p-2 block rounded">Home</a>
                     </li>
                     <li>
-                        <a href="order.php" class="hover:bg-opacity-50 p-2 block rounded">Order</a>
+                        <a href="{{ url('/cashier/order') }}" class="hover:bg-opacity-50 p-2 block rounded">Order</a>
                     </li>
                     <li>
-                        <a href="history.php" class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
+                        <a href="{{ url('/cashier/history') }}" class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
                     </li>
                     <li>
-                        <a href="inventory.php" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                        <a href="{{ url('/cashier/inventory') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                     </li>
                     <li>
-                        <a href="table.php" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
+                        <a href="{{ url('cashier/table') }}" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
                     </li>
                 </ul>
             </nav>

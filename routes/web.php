@@ -40,7 +40,7 @@ Route::get('/cashier/inventory', function(){
     return view('/cashier/inventory');
 });
 
-Route::get('/cashier/Table', function(){
+Route::get('/cashier/table', function(){
     return view('/cashier/table');
 });
 
