@@ -6,6 +6,7 @@ use App\Livewire\PesanManual;
 use App\Livewire\OrderMenu;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 
@@ -65,7 +66,6 @@ Route::controller(OrderController::class)->group(function() {
 
     Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
 });
-
 
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
