@@ -45,4 +45,9 @@ class DetailOrder extends Model
     {
         return $this->hasMany(DetailAddon::class, 'id_detailorder');
     }
+
+    public function addOns()
+    {
+        return $this->hasMany(DetailAddon::class, 'id_detailorder');
+    }
 }

@@ -6,10 +6,8 @@ use App\Livewire\OrderMenu;
 use App\Livewire\PesanManual;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CashierController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\CashierController;
 use App\Http\Controllers\DailyReportController;
 
 

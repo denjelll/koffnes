@@ -83,84 +83,46 @@
     
 
     <!-- Pop Up -->
-    @if($isModalOpen)
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-        <div class="bg-white p-6 rounded-lg w-1/2">
-            <h2 class="text-xl font-bold mb-4">Edit Order</h2>
-    
-            <!-- Menampilkan menu yang dipesan -->
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold">Menu:</h4>
-                @foreach ($menuItems as $detail)
-                    <div class="flex justify-between items-center my-2">
-                        <label>{{ $detail->menu->nama_menu }}</label>
-                        <div class="flex items-center space-x-2">
-                            <!-- Tombol Kurangi Kuantitas -->
-                            <button 
-                                wire:click="decreaseQuantity('{{ $detail->id_menu }}')" 
-                                class="px-2 py-1 bg-red-500 text-white rounded">
-                                -
-                            </button>
-                    
-                            <!-- Input Kuantitas -->
-                            <input 
-                                type="number" 
-                                wire:model="quantities.{{ $detail->id_menu }}" 
-                                value="{{ $detail->kuantitas }}" 
-                                min="1" 
-                                class="border border-gray-300 rounded px-2 py-1 text-center w-16" 
-                                readonly />
-                    
-                            <!-- Tombol Tambah Kuantitas -->
-                            <button 
-                                wire:click="increaseQuantity('{{ $detail->id_menu }}')" 
-                                class="px-2 py-1 bg-green-500 text-white rounded">
-                                +
-                            </button>
-                        </div>
+    <div>
+        @if ($isModalOpen)
+            <div class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50">
+                <div class="bg-white rounded-lg shadow-lg max-w-2xl mx-auto p-4">
+                    <h2 class="text-lg font-bold mb-4">Edit Pesanan</h2>
+                    <h3 class="font-semibold">Menu Utama</h3>
+                    <div>
+                        @foreach ($menuItems as $menu)
+                            <div class="flex items-center justify-between">
+                                <span>{{ $menu->menu->nama_menu }}</span>
+                                <div>
+                                    <button wire:click="decreaseQuantity('{{ $menu->id_detailorder }}')" class="bg-gray-300 px-2">-</button>
+                                    <input type="text" wire:model="quantities.{{ $menu->id_detailorder }}" class="w-12 text-center border">
+                                    <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-gray-300 px-2">+</button>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
     
-                    <!-- Menampilkan add-on untuk setiap menu -->
-                    <h5 class="mt-2 text-md font-semibold">Add-Ons:</h5>
-                    @foreach ($detail->detailAddon as $addonDetail)
-                        <div class="flex justify-between items-center my-2">
-                            <label>{{ $addonDetail->addon->nama_addon }}</label>
-                            <div class="flex items-center space-x-2">
-                                <!-- Tombol Kurangi Kuantitas -->
-                                <button 
-                                    wire:click="decreaseQuantity('{{ $addonDetail->id_addon }}')" 
-                                    class="px-2 py-1 bg-red-500 text-white rounded">
-                                    -
-                                </button>
-                        
-                                <!-- Input Kuantitas -->
-                                <input 
-                                    type="number" 
-                                    wire:model="quantities.{{ $addonDetail->id_addon }}" 
-                                    value="{{ $addonDetail->kuantitas }}" 
-                                    min="1" 
-                                    class="border border-gray-300 rounded px-2 py-1 text-center w-16" 
-                                    readonly />
-                        
-                                <!-- Tombol Tambah Kuantitas -->
-                                <button 
-                                    wire:click="increaseQuantity('{{ $addonDetail->id_addon }}')" 
-                                    class="px-2 py-1 bg-green-500 text-white rounded">
-                                    +
-                                </button>
+                    <h3 class="font-semibold mt-4">Add-Ons</h3>
+                    <div>
+                        @foreach ($addOns as $addon)
+                            <div class="flex items-center justify-between">
+                                <span>{{ $addon->addon->nama_addon }}</span>
+                                <div>
+                                    <button wire:click="decreaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-gray-300 px-2">-</button>
+                                    <input type="text" wire:model="addonQuantities.{{ $addon->id_detailaddon }}" class="w-12 text-center border">
+                                    <button wire:click="increaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-gray-300 px-2">+</button>
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                @endforeach
-            </div>
+                        @endforeach
+                    </div>
     
-            <!-- Tombol Save dan Close -->
-            <div class="mt-4 flex justify-end">
-                <button wire:click="saveOrder" class="px-4 py-2 bg-green-500 text-white rounded">Save Changes</button>
-                <button wire:click="$set('isModalOpen', false)" class="ml-2 px-4 py-2 bg-gray-500 text-white rounded">Close</button>
+                    <div class="mt-4">
+                        <button wire:click="saveOrder" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+                        <button wire:click="$set('isModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                    </div>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
-    @endif
     
 </div>

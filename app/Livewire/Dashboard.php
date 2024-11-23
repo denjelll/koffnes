@@ -8,12 +8,24 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $currentTab = 'Open Bill';
+
+    //Data Pesanan
     public $orders = [];
-    public $isModalOpen = false;
+    public $selectedOrder;
+
+    //Data Menu Utama
     public $menuItems = [];
     public $quantities = [];
-    public $totalPrices = []; // Menyimpan total harga per menu item
-    public $selectedOrder;
+    public $totalPrices = [];
+
+    //Data Add-Ons
+    public $addOns = [];
+    public $addonQuantities = [];
+
+    //Pop Up Variable
+    public $isModalOpen = false;
+    
+
     public function mount()
     {
         $this->updateOrders();
@@ -36,20 +48,25 @@ class Dashboard extends Component
 
     public function editOrder($orderId)
     {
-        $order = Order::with('detailOrders.menu')->find($orderId);
+        $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($orderId);
 
         if ($order) {
-            $this->menuItems = $order->detailOrders;
-
-            // Menyimpan kuantitas dan harga berdasarkan detail order
+            // Ambil detail order dan addons
+            $this->menuItems = $order->detailOrders; // Menu utama
             foreach ($this->menuItems as $item) {
-                $this->quantities[$item->id_menu] = $item->kuantitas;
-                $this->totalPrices[$item->id_menu] = $item->harga_menu * $item->kuantitas; // Menghitung total harga
+                $this->quantities[$item->id_detailorder] = $item->kuantitas;
+                $this->totalPrices[$item->id_detailorder] = $item->harga_menu * $item->kuantitas;
+            }
+
+            $this->addOns = $order->detailOrders->flatMap(function ($detailOrder) {
+                return $detailOrder->addOns;
+            });
+
+            foreach ($this->addOns as $addon) {
+                $this->addonQuantities[$addon->id_detailaddon] = $addon->kuantitas;
             }
 
             $this->selectedOrder = $order;
-
-            // Menampilkan modal untuk edit order
             $this->isModalOpen = true;
         }
     }
@@ -66,52 +83,101 @@ class Dashboard extends Component
 
     public function saveOrder()
     {
-        // Hitung total harga seluruh item di order ini
         $totalHarga = 0;
 
-        // Update kuantitas dan harga setiap menu
-        foreach ($this->menuItems as $item) {
-            $item->update([
-                'kuantitas' => $this->quantities[$item->id_menu] ?? $item->kuantitas,
-                'harga_menu' => $item->harga_menu * ($this->quantities[$item->id_menu] ?? 1), // Update harga_menu
-            ]);
+        // Update menu utama
+        foreach ($this->menuItems as $menu) {
+            $detailOrder = $menu->find($menu->id_detailorder);
+            if ($detailOrder) {
+                $kuantitas = $this->quantities[$menu->id_detailorder] ?? $menu->kuantitas;
+                $hargaMenu = $menu->menu->harga;
 
-            // Menambahkan harga per item ke total harga
-            $totalHarga += $item->harga_menu * $item->kuantitas;
+                $detailOrder->update([
+                    'kuantitas' => $kuantitas,
+                    'harga_menu' => $hargaMenu,
+                ]);
+
+                $totalHarga += $hargaMenu * $kuantitas;
+            }
         }
 
-        // Update total_harga di tabel orders
+        // Update addons
+        foreach ($this->addOns as $addon) {
+            $detailAddon = $addon->find($addon->id_detailaddon);
+            if ($detailAddon) {
+                $kuantitas = $this->addonQuantities[$addon->id_detailaddon] ?? $addon->kuantitas;
+                $hargaAddon = $addon->addon->harga;
+
+                $detailAddon->update([
+                    'kuantitas' => $kuantitas,
+                    'harga' => $hargaAddon,
+                ]);
+
+                $totalHarga += $hargaAddon * $kuantitas;
+            }
+        }
+
+        // Update total harga di tabel orders
         $this->selectedOrder->update([
-            'total_harga' => $totalHarga
+            'total_harga' => $totalHarga,
         ]);
 
         $this->isModalOpen = false;
+        $this->updateOrders();
     }
 
-    public function increaseQuantity($id_menu)
+    public function increaseQuantity($id_detailorder)
     {
-        if (isset($this->quantities[$id_menu])) {
-            $this->quantities[$id_menu]++;
-            $this->updatePrice($id_menu); // Update harga saat kuantitas bertambah
+        
+        if (isset($this->quantities[$id_detailorder])) {
+            $this->quantities[$id_detailorder]++;
+            $this->updatePrice($id_detailorder); // Update harga saat kuantitas bertambah
             $this->updateOrderTotal(); // Update total harga order
         }
     }
 
-    public function decreaseQuantity($id_menu)
+    public function decreaseQuantity($id_detailorder)
     {
-        if (isset($this->quantities[$id_menu]) && $this->quantities[$id_menu] > 1) {
-            $this->quantities[$id_menu]--;
-            $this->updatePrice($id_menu); // Update harga saat kuantitas berkurang
+        if (isset($this->quantities[$id_detailorder]) && $this->quantities[$id_detailorder] > 1) {
+            $this->quantities[$id_detailorder]--;
+            $this->updatePrice($id_detailorder); // Update harga saat kuantitas berkurang
             $this->updateOrderTotal(); // Update total harga order
         }
     }
+
+    public function increaseAddonQuantity($id_addon)
+    {
+        if (isset($this->addonQuantities[$id_addon])) {
+            $this->addonQuantities[$id_addon]++;
+            $this->updateAddonPrice($id_addon); // Update harga saat kuantitas bertambah
+            $this->updateOrderTotal(); // Update total harga order
+        }
+    }
+
+    public function decreaseAddonQuantity($id_addon)
+    {
+        if (isset($this->addonQuantities[$id_addon]) && $this->addonQuantities[$id_addon] > 1) {
+            $this->addonQuantities[$id_addon]--;
+            $this->updateAddonPrice($id_addon); // Update harga saat kuantitas berkurang
+            $this->updateOrderTotal(); // Update total harga order
+        }
+    }
+
+    private function updateAddonPrice($id_addon)
+    {
+        $addon = $this->addOns->firstWhere('id_detailaddon', $id_addon); // ID tetap berupa string
+        if ($addon) {
+            $this->totalPrices[$id_addon] = $addon->addon->harga * $this->addonQuantities[$id_addon];
+        }
+    }
+
 
     // Fungsi untuk menghitung ulang harga berdasarkan kuantitas
-    private function updatePrice($id_menu)
+    private function updatePrice($id_detailorder)
     {
-        $item = $this->menuItems->firstWhere('id_menu', $id_menu);
+        $item = $this->menuItems->firstWhere('id_detailorder', $id_detailorder);
         if ($item) {
-            $this->totalPrices[$id_menu] = $item->harga_menu * $this->quantities[$id_menu];
+            $this->totalPrices[$id_detailorder] = $item->harga_menu * $this->quantities[$id_detailorder];
         }
     }
 
@@ -120,13 +186,20 @@ class Dashboard extends Component
     {
         $totalHarga = 0;
         foreach ($this->menuItems as $item) {
-            $totalHarga += $item->harga_menu * $this->quantities[$item->id_menu];
+            $totalHarga += $item->harga_menu * $this->quantities[$item->id_detailorder];
+        }
+
+        // Hitung total harga dari add-ons
+        foreach ($this->addOns as $addon) {
+            $totalHarga += $addon->addon->harga * $this->addonQuantities[$addon->id_detailaddon];
         }
 
         // Update total harga pada order
-        $this->selectedOrder->update([
-            'total_harga' => $totalHarga
-        ]);
+        if ($this->selectedOrder) {
+            $this->selectedOrder->update([
+                'total_harga' => $totalHarga,
+            ]);
+        }
     }
 
     private function updateOrders()
