@@ -61,6 +61,9 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('admin/event/delete/{event:nama_event}', 'deleteEvent')->name('admin.delete_event');
     Route::post('admin/event/update', 'updateEvent')->name('admin.update_event');
     Route::post('/admin/promo/update-status/{id}', [AdminController::class, 'updatePromoStatus'])->name('admin.promo.update-status');
+    Route::get('/admin/transaction', 'transaction')->name('admin.transaction');
+    Route::get('/admin/transaction/date/{date}', 'transactionDate')->name('admin.transaction.date');
+    Route::get('/admin/transaction/detail/{order:id_order}', 'transactionDetail')->name('admin.detail_transaction');
 });
 
 Route::controller(OrderController::class)->group(function() {

@@ -53,6 +53,7 @@
         <a href="{{ route('admin.menu') }}" class="hover:underline">Menu Management</a>
         <a href="{{ route('admin.kategori') }}" class="hover:underline">Kategori</a>
         <a href="{{ route('admin.promo') }}" class="hover:underline">Promotion</a>
+        <a href="{{ route('admin.transaction') }}" class="hover:underline">Transaction Recap</a>
         <a href="{{ route('admin.user') }}" class="hover:underline">User Management</a>
         <a href="{{ route('admin.event') }}" class="hover:underline">Event Management</a>
         <a href="{{ route('admin.logout') }}" class="hover:underline text-[#CBB89D]">Logout</a>

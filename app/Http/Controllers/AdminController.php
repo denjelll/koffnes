@@ -11,6 +11,7 @@ use App\Models\Kategori;
 use App\Models\Isi_kategori;
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -47,7 +48,8 @@ class AdminController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
         $image = $request->file('gambar');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $now = date('jmYHis');
+        $imageName = $now . '_' . $image->getClientOriginalName();
 
         if(isset($request->harga_promo)){
             $promo = new Promo();
@@ -170,8 +172,9 @@ class AdminController extends Controller
         $menu = Menu::find($request->id_menu);
 
     if ($request->hasFile('gambar')) {
+        $now = date('jmYHis');
         $image = $request->file('gambar');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $imageName = $now . '_' . $image->getClientOriginalName();
         $image->move(public_path('menu'), $imageName);
 
         // Hapus gambar lama setelah gambar baru disimpan
@@ -339,7 +342,8 @@ class AdminController extends Controller
             'deskripsi_event' => 'required'
         ]);
         $image = $request->file('banner_event');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $now = date('jmYHis');
+        $imageName = $now . '_' . $image->getClientOriginalName();
         $event = new Event();
         $event->nama_event = $request->nama_event;
         $event->tanggal_event = $request->tanggal_event;
@@ -370,7 +374,8 @@ class AdminController extends Controller
         $event->deskripsi_event = $request->deskripsi_event;
         if ($request->hasFile('banner_event')) {
             $image = $request->file('banner_event');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $now = date('jmYHis');
+            $imageName = $now . '_' . $image->getClientOriginalName();
             $image->move(public_path('event'), $imageName);
     
             // Hapus gambar lama setelah gambar baru disimpan
@@ -401,4 +406,18 @@ class AdminController extends Controller
 
     return response()->json(['success' => false]);
 }
+    public function transaction(){
+        $orders = Order::all();
+        $orders = Order::selectRaw('DATE(waktu_transaksi) as date, SUM(total_harga) as total_harga')
+            ->groupBy('date')
+            ->get();
+        return view('admin.transaction', compact('orders'));
+    }
+    public function transactionDate($date){
+        $orders = Order::whereDate('waktu_transaksi', $date)->get();
+        return view('admin.transaction_date', compact('orders'));
+    }
+    public function transactionDetail(Order $order){
+        return view('admin.detail_transaksi', compact('order'));
+    }
 }

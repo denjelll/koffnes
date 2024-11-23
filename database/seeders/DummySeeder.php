@@ -11,6 +11,17 @@ class DummySeeder extends Seeder
 {
     public function run()
     {
+        DB::table('users')->insert([
+            'id_user' => '12345678',
+            'nama_depan' => 'Admin',
+            'nama_belakang' => 'Rokbar',
+            'no_telepon' => '0812345678',
+            'email' => 'qwe@gmail.com',
+            'password' => bcrypt('123'),
+            'role' => 'Admin',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
         // Menambahkan data kategori
         DB::table('kategoris')->insert([
             ['id_kategori' => 1, 'nama_kategori' => 'Breakfast', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
