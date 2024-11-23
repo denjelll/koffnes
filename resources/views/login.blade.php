@@ -43,6 +43,11 @@
         <div class="text-center mb-4">
             <h2 class="text-2xl font-semibold text-gray-800">Login</h2>
         </div>
+        @if (session('error'))
+            <div class="bg-red-500 text-white p-3 rounded-lg text-center mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
         <form action="{{ route('login.verify') }}" method="POST">
             @csrf
             <div class="mb-4">
