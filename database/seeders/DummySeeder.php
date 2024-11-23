@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class DummySeeder extends Seeder
@@ -82,34 +83,6 @@ class DummySeeder extends Seeder
             ['id_addon' => 4, 'nama_addon' => 'Kecap Manis', 'harga' => 1500, 'id_menu' => 2],
         ]);
 
-        // Menambahkan data untuk relasi kategori dan menu
-        $isiKategoriData = [];
-        $categories = [1, 2, 3]; // Sesuaikan kategori yang ada, kecuali kategori bundling
-
-        // Mengelompokkan 20 menu ke dalam beberapa kategori secara acak
-        for ($i = 1; $i <= 20; $i++) {
-            $isiKategoriData[] = [
-                'id_isi_kategori' => $i,
-                'id_kategori' => $categories[array_rand($categories)],
-                'id_menu' => $i,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ];
-        }
-
-        // Menambahkan kategori bundling ke menu dengan id_menu 21-25
-        for ($i = 21; $i <= 25; $i++) {
-            $isiKategoriData[] = [
-                'id_isi_kategori' => $i + 20, // Sesuaikan agar id_isi_kategori tetap unik
-                'id_kategori' => 4, // Kategori bundling
-                'id_menu' => $i,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ];
-        }
-
-        DB::table('isi_kategoris')->insert($isiKategoriData);
-
         // Menambahkan data user dengan id_user 'NOT_PICK_UP'
         DB::table('users')->insert([
             'id_user' => '99999999',
@@ -122,5 +95,54 @@ class DummySeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        // Menambahkan data order
+        for ($i = 1; $i <= 10; $i++) {
+            $id_order = 'ORD' . Str::random(10) . $i;
+            DB::table('orders')->insert([
+                'id_order' => $id_order,
+                'id_user' => '99999999',
+                'antrian' => $i,
+                'customer' => 'Customer ' . $i,
+                'meja' => rand(1, 21),
+                'tipe_order' => 'Dine In',
+                'status' => ['Paid', 'Open Bill', 'Cancelled'][array_rand(['Paid', 'Open Bill', 'Cancelled'])],
+                'total_harga' => rand(100000, 500000),
+                'waktu_transaksi' => Carbon::now(),
+                'updated_on' => Carbon::now(),
+                'deleted_at' => null,
+            ]);
+
+            // Menambahkan data detail order
+            for ($j = 1; $j <= 2; $j++) { // Misal setiap order punya 2 detail order
+                $id_detailorder = 'DORD' . Str::random(10) . $j;
+                DB::table('detail_orders')->insert([
+                    'id_detailorder' => $id_detailorder,
+                    'id_order' => $id_order,
+                    'id_menu' => rand(1, 20),
+                    'kuantitas' => rand(1, 5),
+                    'harga_menu' => rand(15000, 100000),
+                    'notes' => 'Notes for menu ' . $i . '-' . $j,
+                    'waktu_transaksi' => Carbon::now(),
+                    'updated_on' => Carbon::now(),
+                    'deleted_at' => null,
+                ]);
+
+                // Menambahkan data detail addon
+                for ($k = 1; $k <= 2; $k++) { // Misal setiap detail order punya 2 detail addon
+                    $id_detailaddon = 'DADD' . Str::random(3) . $k;
+                    DB::table('detail_addons')->insert([
+                        'id_detailaddon' => $id_detailaddon,
+                        'id_addon' => rand(1, 4),
+                        'id_detailorder' => $id_detailorder,
+                        'kuantitas' => rand(1, 5),
+                        'harga' => rand(2000, 7000),
+                        'waktu_transaksi' => Carbon::now(),
+                        'updated_on' => Carbon::now(),
+                        'deleted_at' => null,
+                    ]);
+                }
+            }
+        }
     }
 }

@@ -76,6 +76,12 @@
         </table>
     </div>
 
+    <form action="{{ route('daily.report') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary">Daily Report</button>
+    </form>
+    
+
     <!-- Pop Up -->
     @if($isModalOpen)
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">

@@ -38,6 +38,11 @@ class Order extends Model
         return $this->hasMany(DetailOrder::class);
     }
     
+    public function cashier()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
     public function detailOrders()
     {
         return $this->hasMany(DetailOrder::class, 'id_order');

@@ -2,13 +2,14 @@
 
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
-use App\Livewire\PesanManual;
 use App\Livewire\OrderMenu;
+use App\Livewire\PesanManual;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CashierController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CashierController;
+use App\Http\Controllers\DailyReportController;
 
 
 
@@ -71,3 +72,6 @@ Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu')
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 Route::get('cashier', PesanManual::class)->name('pesan-manual');
 Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
+
+
+Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
