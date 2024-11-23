@@ -76,14 +76,14 @@
                             <p class="text-[#412F26] font-bold">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
                         </div>
                         <!-- Tombol Quantity -->
-                        <div class="flex gap-2">
-                            <button wire:click="decrement({{ $menu->id_menu }})" class="btn btn-circle bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] w-8 h-8 md:w-10 md:h-10">
+                        <div class="flex gap-2" style="margin-top: 5rem;">
+                            <button wire:click="decrement({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-8 w-8">
                                 -
                             </button>
                             <span class="font-bold text-[#412F26]">
                                 {{ $menu->quantity ?? 0 }}
                             </span>
-                            <button wire:click="increment({{ $menu->id_menu }})" class="btn btn-circle bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] w-8 h-8 md:w-10 md:h-10">
+                            <button wire:click="increment({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-8 w-8">
                                 +
                             </button>
                         </div>
@@ -95,9 +95,14 @@
 
     <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 bg-[#412F26] text-white p-4 text-center shadow-lg">
-        <h3 class="text-lg font-semibold">Total Harga: Rp{{ number_format($totalHarga, 0, ',', '.') }}</h3>
+    <div class="container mx-auto flex flex-col items-center">
+        <h3 class="text-lg font-semibold mb-2">Total Harga: Rp{{ number_format($totalHarga, 0, ',', '.') }}</h3>
         <form method="GET" action="{{ route('checkout', ['nomorMeja' => $nomorMeja]) }}">
-            <button type="submit" class="btn btn-primary mt-2">Checkout</button>
+            <button type="submit" class="btn btn-primary mt-2 px-6 py-2 rounded-full text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 bg-[#6A6F4C] hover:bg-[#412F26] border-none shadow-lg">
+                Checkout
+            </button>
         </form>
-    </footer>
+    </div>
+</footer>
+
 </div>
