@@ -21,7 +21,7 @@ Route::controller( LoginController::class)->group(function(){
 });
 
 Route::controller(AdminController::class)->group(function(){
-    Route::get('/admin', 'index')->name('admin.index');
+    Route::get('/admin', 'menu')->name('admin');
     Route::get('/admin/logout', 'logout')->name('admin.logout');
     Route::get('/admin/menu', 'menu')->name('admin.menu');
     Route::get('/admin/menu/add', 'showAddMenuForm')->name('admin.menu.add');

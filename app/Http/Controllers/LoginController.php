@@ -27,7 +27,7 @@ class LoginController extends Controller
             Session::put('nama', $user->nama);
             Session::put('role', $user->role);
             if ($user->role == 'Admin') {
-                return redirect('/admin');
+                return redirect('/admin/menu');
             } else if ($user->role == 'Kasir') {
                 return redirect('/kasir');
             }
