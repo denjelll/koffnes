@@ -30,7 +30,9 @@ return new class extends Migration
 
             $table->integer('kuantitas');
             $table->integer('harga');
-
+            $table->timestamp('waktu_transaksi')->useCurrent();
+            $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 
