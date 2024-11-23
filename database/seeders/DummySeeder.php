@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class DummySeeder extends Seeder
 {
@@ -98,7 +98,7 @@ class DummySeeder extends Seeder
 
         // Menambahkan data order
         for ($i = 1; $i <= 10; $i++) {
-            $id_order = 'ORD' . Str::random(10) . $i;
+            $id_order = 'ORD' . Carbon::now()->format('YmdHis') . $i;
             DB::table('orders')->insert([
                 'id_order' => $id_order,
                 'id_user' => '99999999',
@@ -115,7 +115,7 @@ class DummySeeder extends Seeder
 
             // Menambahkan data detail order
             for ($j = 1; $j <= 2; $j++) { // Misal setiap order punya 2 detail order
-                $id_detailorder = 'DORD' . Str::random(10) . $j;
+                $id_detailorder = 'DORD' . Str::random(10) .  $j;
                 DB::table('detail_orders')->insert([
                     'id_detailorder' => $id_detailorder,
                     'id_order' => $id_order,
@@ -143,6 +143,18 @@ class DummySeeder extends Seeder
                     ]);
                 }
             }
+        }
+
+        // Menambahkan data untuk relasi kategori dan menu (isi_kategoris)
+        for ($i = 1; $i <= 25; $i++) {
+            $id_kategori = ($i >= 21 && $i <= 25) ? 4 : rand(1, 3);
+            DB::table('isi_kategoris')->insert([
+                'id_isi_kategori' => $i,
+                'id_kategori' => $id_kategori,
+                'id_menu' => $i,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         }
     }
 }

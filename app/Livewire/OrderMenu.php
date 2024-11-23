@@ -17,6 +17,7 @@ class OrderMenu extends Component
     public $nomorMeja;
     public $menus = [];
     public $promoMenus = [];
+    public $bundlingMenu = null;
     public $categories = [];
     public $selectedCategory = null;
     public $cart = [];
@@ -57,6 +58,7 @@ class OrderMenu extends Component
                     ->whereTime('waktu_mulai', '<=', $now->format('H:i'))
                     ->whereTime('waktu_berakhir', '>=', $now->format('H:i'));
             }])
+            ->where('stock', '>', 0) // Hanya menu dengan stock > 0
             ->get();
 
             // Filter menu yang memiliki promo untuk bagian Promo Hari Ini
@@ -72,6 +74,7 @@ class OrderMenu extends Component
 
             $this->menus = Menu::with('promo')
                 ->whereIn('id_menu', $menuIds)
+                ->where('stock', '>', 0) // Hanya menu dengan stock > 0
                 ->get();
         }
 
@@ -82,14 +85,18 @@ class OrderMenu extends Component
                 ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
                 $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir)) {
                 $menu->harga = $menu->promo->harga_promo;
-
-                Log::info('Harga diterapkan:', ['menu' => json_encode($menu, JSON_PRETTY_PRINT)]);
             }
             return $menu;
         });
-    
-    }
 
+        //Ambil bundling menu
+        $this->bundlingMenu = Isi_kategori::where('id_kategori', 4) // Filter kategori id_kategori = 4
+        ->whereHas('menu', function ($query) {
+            $query->where('stock', '>', 0); // Filter menu dengan stok > 0
+        })
+        ->inRandomOrder() // Pilih secara acak
+        ->first()?->menu; // Ambil menu terkait (null-safe operator untuk mencegah error)
+    }
 
     public function filterByCategory($categoryId)
     {
