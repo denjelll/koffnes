@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-[#EDE1D2]">
+<div class="flex flex-col min-h-screen bg-[#EDE1D2] pb-32">
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 flex items-center justify-between bg-[#412F26] text-white h-14 px-4 z-50 shadow-lg">
         <div class="flex items-center gap-2">
@@ -66,30 +66,33 @@
             <!-- Grid Horizontal Menu -->
             <div class="flex flex-wrap gap-4">
                 @foreach ($menus as $menu)
-                    <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg p-4 flex items-center space-x-4 w-full md:w-[250px]">
-                        <div class="w-16 h-16 rounded-full bg-[#CBB89D] flex items-center justify-center">
+                    <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg flex items-center space-x-4 h-24 w-full md:w-[250px]">
+                        <!-- Gambar Menu -->
+                        <div class="w-28 h-full bg-[#CBB89D] flex items-center justify-center">
                             <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-12 h-12 object-cover rounded-full" />
                         </div>
-                        <div class="flex flex-col">
+                        <!-- Deskripsi dan Harga Menu -->
+                        <div class="flex flex-col flex-1">
                             <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menu->nama_menu }}</h3>
-                            <p class="text-xs md:text-sm text-[#806044]">{{ $menu->deskripsi }}</p>
-                            <p class="text-[#412F26] font-bold">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
+                            <p class="text-xs md:text-sm text-[#806044] whitespace-nowrap overflow-hidden text-ellipsis" title="{{ $menu->deskripsi }}">{{ $menu->deskripsi }}</p>
+                            <p class="text-[#412F26] font-bold whitespace-nowrap">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
                         </div>
                         <!-- Tombol Quantity -->
-                        <div class="flex gap-2" style="margin-top: 5rem;">
-                            <button wire:click="decrement({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-8 w-8">
+                        <div class="flex gap-2" style="margin-right: 5px">
+                            <button wire:click="decrement({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
                                 -
                             </button>
                             <span class="font-bold text-[#412F26]">
                                 {{ $menu->quantity ?? 0 }}
                             </span>
-                            <button wire:click="increment({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-8 w-8">
+                            <button wire:click="increment({{ $menu->id_menu }})" class="rounded-full bg-[#6A6F4C] text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
                                 +
                             </button>
                         </div>
                     </div>
                 @endforeach
             </div>
+
         </main>
     </div>
 
