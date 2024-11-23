@@ -6,5 +6,5 @@
     <h1>Welcome to Admin Panel</h1>
     <p>This is the admin panel</p>
     <!-- welcome, nama user -->
-    <p>Welcome, {{ session('role')}}</p>
+    <p>Welcome, {{ session('nama')}}</p>
 @endsection

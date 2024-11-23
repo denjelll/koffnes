@@ -105,15 +105,17 @@ class AdminController extends Controller
     }
 
     public function promo(){
-        $menus = Menu::whereNotNull('id_promo')->get();
-        return view('admin.promo', compact('menus'));
+        $promos = Promo::all();
+        return view('admin.promo', compact('promos'));
     }
 
     public function showAddPromoForm(){
         $menus = Menu::where('id_promo', null)->get();
         return view('admin.add_promo', compact('menus'));
     }
-
+    public function showEditPromoForm(Promo $promo){
+        return view('admin.edit_promo', compact('promo'));
+    }
     public function storePromo(Request $request){
         $request->validate([
             'judul_promo' => 'required',
@@ -139,7 +141,23 @@ class AdminController extends Controller
 
         return redirect('/admin/promo');
     }
-
+    public function updatePromo(Request $request){
+        $request->validate([
+            'judul_promo' => 'required',
+            'harga_promo' => 'required|numeric',
+            'hari'=> 'required',
+            'waktu_mulai' => 'required',
+            'waktu_berakhir' => 'required'
+        ]);
+        $promo = Promo::find($request->id_promo);
+        $promo->judul_promo = $request->judul_promo;
+        $promo->harga_promo = $request->harga_promo;
+        $promo->hari = $request->hari;
+        $promo->waktu_mulai = $request->waktu_mulai;
+        $promo->waktu_berakhir = $request->waktu_berakhir;
+        $promo->save();
+        return redirect('/admin/promo');
+    }
     public function deletePromo(Promo $promo){
         $promo->delete();
         return redirect('/admin/promo');
@@ -338,21 +356,49 @@ class AdminController extends Controller
     }
     public function updateEvent(Request $request){
         $request->validate([
-            'judul_event' => 'required',
-            'tanggal' => 'required',
-            'waktu' => 'required',
-            'deskripsi' => 'required'
+            'nama_event' => 'required',
+            'tanggal_event' => 'required',
+            'jam_event' => 'required',
+            'hadiah' => 'required',
+            'deskripsi_event' => 'required'
         ]);
         $event = Event::find($request->id_event);
-        $event->judul_event = $request->judul_event;
-        $event->tanggal = $request->tanggal;
-        $event->waktu = $request->waktu;
-        $event->deskripsi = $request->deskripsi;
+        $event->nama_event = $request->nama_event;
+        $event->tanggal_event = $request->tanggal_event;
+        $event->jam_event = $request->jam_event;
+        $event->hadiah_event = $request->hadiah;
+        $event->deskripsi_event = $request->deskripsi_event;
+        if ($request->hasFile('banner_event')) {
+            $image = $request->file('banner_event');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('event'), $imageName);
+    
+            // Hapus gambar lama setelah gambar baru disimpan
+            if ($event->banner_event && file_exists(public_path('event/' . $event->banner_event))) {
+                unlink(public_path('event/' . $event->banner_event));
+            }
+    
+            // Perbarui kolom gambar di database
+            $event->banner_event = $imageName;
+        }
         $event->save();
         return redirect('/admin/event')->with('success', 'Event updated successfully');
     }
     public function deleteEvent(Event $event){
         $event->delete();
+        unlink(public_path('event/'.$event->banner_event));
         return redirect('/admin/event');
     }
+    public function updatePromoStatus(Request $request, $id)
+{
+    $promo = Promo::find($id);
+    if ($promo) {
+        $promo->status = $request->status;
+        $promo->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false]);
+}
 }

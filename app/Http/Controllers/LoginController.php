@@ -24,6 +24,7 @@ class LoginController extends Controller
         
         if ($user && Hash::check($password, $user->password)) {
             Session::put('id_user', $user->id_user);
+            Session::put('nama', $user->nama);
             Session::put('role', $user->role);
             if ($user->role == 'Admin') {
                 return redirect('/admin');

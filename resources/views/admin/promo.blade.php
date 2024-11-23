@@ -1,24 +1,52 @@
 @extends('layout.admin_navbar')
 @section('title')
     Promo
-
 @endsection
 @section('content')
 <a href="{{route('admin.promo.add')}}">Add Promo</a>
-@if ($menus->count() == 0)
+@if ($promos->count() == 0)
     <p>No promo available</p>
+@else
+            @foreach ($promos as $promo)
+                <div>
+                <h2>{{ $promo->judul_promo }}</h2>
+                    <p>{{ $promo->menu->nama_menu }}</p>
+                    <img src="{{ asset('menu/' . $promo->menu->gambar) }}" alt="{{ $promo->menu->nama_menu }}" style="width: 100px; height: 100px;">
+                        <input type="checkbox" class="toggle toggle-sm bg-[#593c2e]" data-id="{{ $promo->id_promo }}" {{ $promo->status == 'Aktif' ? 'checked' : '' }} />
+                        <a href="{{ route('admin.promo.edit', $promo->judul_promo) }}">Edit</a>
+    <a href="{{ route('admin.promo.delete', $promo->judul_promo) }}">Delete</a>
+                </div>
+            @endforeach
 @endif
-@foreach ($menus as $menu)
-<div>
-    <h1>{{ $menu->promo->judul_promo }}</h1>
-    <img src="{{ asset('menu/' . $menu->gambar) }}" alt="">
-    <p>{{ $menu->nama_menu }}</p>
-    <p>{{ $menu->promo->harga_promo }}</p>
-    <p>Setiap hari : {{ $menu->promo->hari }}</p>
-    
-    <p>{{ $menu->promo->waktu_mulai }} - {{ $menu->promo->waktu_berakhir }}</p>
-    <a href="{{ route('admin.promo.edit', $menu->promo->judul_promo) }}">Edit</a>
-    <a href="{{ route('admin.promo.delete', $menu->promo->judul_promo) }}">Delete</a>
-</div>
-@endforeach
+   
+
+    <script>
+        document.querySelectorAll('.toggle').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const promoId = this.getAttribute('data-id');
+                const status = this.checked ? 'Aktif' : 'Tidak Aktif';
+
+                fetch(`/admin/promo/update-status/${promoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ status: status })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        
+                    } else {
+                        
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    
+                });
+            });
+        });
+    </script>
 @endsection

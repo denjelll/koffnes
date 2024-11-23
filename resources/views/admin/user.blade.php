@@ -16,7 +16,8 @@
             <th>Action</th>
         </tr>
         @foreach ($users as $user)
-            <tr>
+        @if ($user->id_user != 99999999)
+        <tr>
                 <td>{{$user->nama}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->no_telepon}}</td>
@@ -26,6 +27,8 @@
                     <a href="{{ route('admin.delete_user', $user->nama_depan) }}">Delete</a>
                 </td>
             </tr>
+        @endif
+            
         @endforeach
     </table>
 
