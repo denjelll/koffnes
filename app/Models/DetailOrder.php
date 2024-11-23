@@ -13,8 +13,10 @@ class DetailOrder extends Model
     protected $table = 'detail_orders';
     protected $primaryKey = 'id_detailorder';
     public $incrementing = false;
-    public $timestamps = false;
     protected $keyType = 'string';
+
+    const CREATED_AT = 'waktu_transaksi';
+    const UPDATED_AT = 'updated_on';
 
     protected $fillable = [
         'id_detailorder',
@@ -23,9 +25,11 @@ class DetailOrder extends Model
         'kuantitas',
         'harga_menu',
         'notes',
-        'waktu_transaksi'
-
+        'waktu_transaksi',
+        'updated_on'
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function order()
     {
@@ -34,7 +38,7 @@ class DetailOrder extends Model
 
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'id_menu');
+        return $this->belongsTo(Menu::class, 'id_menu'); // Perbaiki nama kolom di sini
     }
     
     public function detailAddon()

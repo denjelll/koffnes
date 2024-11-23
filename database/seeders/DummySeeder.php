@@ -15,6 +15,7 @@ class DummySeeder extends Seeder
             ['id_kategori' => 1, 'nama_kategori' => 'Breakfast', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_kategori' => 2, 'nama_kategori' => 'Minuman', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_kategori' => 3, 'nama_kategori' => 'Rokbar Series', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_kategori' => 4, 'nama_kategori' => 'Bundling', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
 
         // Menambahkan data promo
@@ -43,37 +44,11 @@ class DummySeeder extends Seeder
             ],
         ]);
 
-       //Masukin promo ke menu 1 dan 2
-        DB::table('menus')->insert([
-            [
-                'id_menu' => 1,
-                'id_promo' => 1,
-                'nama_menu' => 'Menu 1',
-                'stock' => rand(10, 50),
-                'harga' => rand(15000, 100000),
-                'deskripsi' => 'Deskripsi menu ke-1',
-                'gambar' => 'menu1.jpg',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id_menu' => 2,
-                'id_promo' => 2,
-                'nama_menu' => 'Menu 2',
-                'stock' => rand(10, 50),
-                'harga' => rand(15000, 100000),
-                'deskripsi' => 'Deskripsi menu ke-2',
-                'gambar' => 'menu2.jpg',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
-
-         // Menambahkan data menu dengan id_menu auto increment
-        for ($i = 3; $i <= 20; $i++) {
+        // Menambahkan data menu dengan id_menu auto increment
+        for ($i = 1; $i <= 20; $i++) {
             DB::table('menus')->insert([
                 'id_menu' => $i,
-                'id_promo' => null,
+                'id_promo' => ($i <= 2 ? $i : null),
                 'nama_menu' => 'Menu ' . $i,
                 'stock' => rand(10, 50),
                 'harga' => rand(15000, 100000),
@@ -84,6 +59,20 @@ class DummySeeder extends Seeder
             ]);
         }
 
+        // Menambahkan menu bundling ke menu
+        for ($i = 21; $i <= 25; $i++) {
+            DB::table('menus')->insert([
+                'id_menu' => $i,
+                'id_promo' => null,
+                'nama_menu' => 'Menu Bundling ' . $i,
+                'stock' => rand(10, 50),
+                'harga' => rand(15000, 100000),
+                'deskripsi' => 'Deskripsi menu bundling ke-' . $i,
+                'gambar' => 'menu' . $i . '.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
 
         // Menambahkan data addon
         DB::table('add_ons')->insert([
@@ -95,7 +84,7 @@ class DummySeeder extends Seeder
 
         // Menambahkan data untuk relasi kategori dan menu
         $isiKategoriData = [];
-        $categories = [1, 2, 3]; // Sesuaikan kategori yang ada
+        $categories = [1, 2, 3]; // Sesuaikan kategori yang ada, kecuali kategori bundling
 
         // Mengelompokkan 20 menu ke dalam beberapa kategori secara acak
         for ($i = 1; $i <= 20; $i++) {
@@ -107,8 +96,19 @@ class DummySeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ];
         }
-        DB::table('isi_kategoris')->insert($isiKategoriData);
 
+        // Menambahkan kategori bundling ke menu dengan id_menu 21-25
+        for ($i = 21; $i <= 25; $i++) {
+            $isiKategoriData[] = [
+                'id_isi_kategori' => $i + 20, // Sesuaikan agar id_isi_kategori tetap unik
+                'id_kategori' => 4, // Kategori bundling
+                'id_menu' => $i,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
+        DB::table('isi_kategoris')->insert($isiKategoriData);
 
         // Menambahkan data user dengan id_user 'NOT_PICK_UP'
         DB::table('users')->insert([

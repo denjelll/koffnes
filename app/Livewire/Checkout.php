@@ -244,7 +244,7 @@ class Checkout extends Component
             'tipe_order' => 'Dine In',
             'status' => 'Open Bill',
             'total_harga' => $this->totalHarga,
-            'waktu_transaksi' => now(), // Menggunakan waktu saat ini
+            'waktu_transaksi' => Carbon::now(), // Menggunakan waktu saat ini
         ]);
 
         // Menambahkan detail order untuk setiap item di cart
