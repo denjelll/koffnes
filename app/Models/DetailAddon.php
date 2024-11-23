@@ -15,14 +15,20 @@ class DetailAddon extends Model
     public $timestamps = false;
     protected $keyType = 'string';
 
+    const CREATED_AT = 'waktu_transaksi';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
         'id_detailaddon',
         'id_addon',
         'id_detailorder',
         'kuantitas',
         'harga',
-        'waktu_transaksi'
+        'waktu_transaksi',
+        'updated_on'
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function addon()
     {

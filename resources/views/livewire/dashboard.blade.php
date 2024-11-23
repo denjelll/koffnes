@@ -76,8 +76,15 @@
         </table>
     </div>
 
+    <form action="{{ route('daily.report') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary">Daily Report</button>
+    </form>
+    
+
     <!-- Pop Up -->
-    <div x-show="isModalOpen" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+    @if($isModalOpen)
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
         <div class="bg-white p-6 rounded-lg w-1/2">
             <h2 class="text-xl font-bold mb-4">Edit Order</h2>
     
@@ -154,5 +161,6 @@
             </div>
         </div>
     </div>
+    @endif
     
 </div>

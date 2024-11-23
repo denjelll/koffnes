@@ -28,6 +28,8 @@ return new class extends Migration
             $table->enum('status', ['Paid', 'Open Bill', 'Cancelled']);
             $table->integer('total_harga')->unsigned();
             $table->timestamp('waktu_transaksi')->useCurrent();
+            $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 

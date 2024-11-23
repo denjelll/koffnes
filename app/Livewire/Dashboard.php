@@ -59,6 +59,7 @@ class Dashboard extends Component
         $order = Order::find($id);
         if($order && $order->status === 'Open Bill') {
             $order->update(['status' => 'Cancelled']);
+            $order->delete(); // Melakukan soft delete
             $this->updateOrders();
         }
     }
