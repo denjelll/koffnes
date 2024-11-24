@@ -8,6 +8,8 @@ use App\Models\Order;
 use Livewire\Component;
 use App\Models\DetailOrder;
 use Illuminate\Support\Carbon;
+use Livewire\Attributes\Title;
+
 
 class PesanManual extends Component
 {
@@ -199,6 +201,7 @@ class PesanManual extends Component
 
     public function render()
     {
-        return view('livewire.pesan-manual');
+        return view('livewire.pesan-manual')
+              ->title('Manual Order');
     }
 }
