@@ -104,35 +104,34 @@ class PesanManual extends Component
             }
         }
 
-        // Ambil tanggal transaksi dan antrian (auto increment)
-        $tanggalTransaksi = Carbon::now()->format('Ymd');
-        $lastOrder = Order::whereDate('waktu_transaksi', '=', $tanggalTransaksi)  
+        // Ambil tanggal transaksi saat ini
+        $tanggalTransaksi = Carbon::now()->toDateString(); // Format: YYYY-MM-DD
+
+        // Cari antrean terbesar pada tanggal yang sama, termasuk pesanan yang dibatalkan (soft delete)
+        $lastOrder = Order::withTrashed() // Sertakan pesanan yang di-soft delete
+            ->whereDate('waktu_transaksi', $tanggalTransaksi)
             ->orderBy('antrian', 'desc')
             ->first();
-            
-        if ($lastOrder) {
-            // Jika $lastOrder tidak null dan tanggalnya sama dengan hari ini
-            $antrian = $lastOrder->antrian + 1;
-        } else {
-            // Jika tidak ada orderan sebelumnya untuk hari ini, antrian dimulai dari 1
-            $antrian = 1;
-        }
 
-        // Membuat id_order berdasarkan format yang diinginkan
-        $idOrder = "ORD" . $tanggalTransaksi . "-" . $antrian;
+        // Jika ada antrean pada tanggal tersebut, tambahkan 1 ke antrean terbesar
+        $antrian = $lastOrder ? $lastOrder->antrian + 1 : 1;
 
-        // Menyimpan data pesanan ke dalam tabel orders
+        // Buat id_order berdasarkan format yang diinginkan
+        $idOrder = "ORD" . Carbon::now()->format('Ymd') . "-" . $antrian;
+
+        // Simpan data pesanan ke tabel orders
         $order = Order::create([
             'id_order' => $idOrder,
             'id_user' => 99999999,
             'antrian' => $antrian,
             'customer' => $this->customer,
-            'meja' => $this->tipeOrder == 'Dine In' ? $this->meja : 0, // Jika tipe order adalah Take Away, meja diisi null
+            'meja' => $this->tipeOrder == 'Dine In' ? $this->meja : 0, // Jika tipe order adalah Take Away, meja diisi 0
             'tipe_order' => $this->tipeOrder,
             'status' => 'Open Bill',
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => Carbon::now(),
         ]);
+
 
         // Simpan item menu yang dipesan ke tabel detail_orders
         foreach ($this->items as $item) {
