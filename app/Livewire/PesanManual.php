@@ -91,10 +91,30 @@ class PesanManual extends Component
             return;
         }
 
+        // Periksa stok menu sebelum membuat pesanan
+        foreach ($this->items as $item) {
+            if ($this->qtyMenu[$item->id_menu] > 0) {
+                // Cek apakah stok mencukupi
+                if ($item->stock < $this->qtyMenu[$item->id_menu]) {
+                    session()->flash('error', "Stok untuk {$item->nama_menu} tidak mencukupi!");
+                    return;
+                }
+            }
+        }
+
         // Ambil tanggal transaksi dan antrian (auto increment)
         $tanggalTransaksi = Carbon::now()->format('Ymd');
-        $lastOrder = Order::where('antrian', '>', 0)->orderBy('antrian', 'desc')->first(); // Ambil antrian terakhir
-        $antrian = $lastOrder ? $lastOrder->antrian + 1 : 1; // Antrian dimulai dari 1
+        $lastOrder = Order::whereDate('waktu_transaksi', '=', $tanggalTransaksi)  
+            ->orderBy('antrian', 'desc')
+            ->first();
+            
+        if ($lastOrder) {
+            // Jika $lastOrder tidak null dan tanggalnya sama dengan hari ini
+            $antrian = $lastOrder->antrian + 1;
+        } else {
+            // Jika tidak ada orderan sebelumnya untuk hari ini, antrian dimulai dari 1
+            $antrian = 1;
+        }
 
         // Membuat id_order berdasarkan format yang diinginkan
         $idOrder = "ORD" . $tanggalTransaksi . "-" . $antrian;
@@ -126,6 +146,10 @@ class PesanManual extends Component
                     'harga_menu' => $item->harga,
                     'notes' => ""
                 ]);
+
+                // Kurangi stok menu
+                $item->stock -= $this->qtyMenu[$item->id_menu];
+                $item->save(); // Simpan perubahan stok ke database
 
                 // Simpan add-ons yang terkait dengan menu ini ke tabel detail_addons
                 foreach ($this->addItems as $addItem) {

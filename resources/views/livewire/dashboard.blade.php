@@ -24,7 +24,7 @@
     <div class="border border-black p-3 m-5">
         <h1 class="text-xl font-bold">{{ $currentTab }}</h1>
         <table class="border border-collapse w-full">
-            <tr>
+            <tr class="text-left">
                 <th>Order ID</th>
                 <th>No Antrian</th>
                 <th>Nama Customer</th>
@@ -37,7 +37,7 @@
             
             @forelse ($orders as $order)
                 <tr>
-                    <td>'{{ $order->id_order }}'</td>
+                    <td>{{ $order->id_order }}</td>
                     <td>{{ $order->antrian }}</td>
                     <td>{{ $order->customer }}</td>
                     <td>{{ $order->meja }}</td>
