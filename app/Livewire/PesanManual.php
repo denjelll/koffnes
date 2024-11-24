@@ -115,7 +115,7 @@ class PesanManual extends Component
         // Simpan item menu yang dipesan ke tabel detail_orders
         foreach ($this->items as $item) {
             if ($this->qtyMenu[$item->id_menu] > 0) {
-                $idDetailOrder = 'OD' . uniqid() . '-' . mt_rand(1000, 9999);
+                $idDetailOrder = 'OD' . uniqid();
 
                 // Buat record di tabel detail_orders
                 $detailOrder = DetailOrder::create([
