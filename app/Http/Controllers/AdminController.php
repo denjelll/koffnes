@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Promo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\AddOn;
+use App\Models\Event;
+use App\Models\Promo;
 use App\Models\Kategori;
 use App\Models\Isi_kategori;
-use App\Models\User;
-use App\Models\Event;
+use Illuminate\Http\Request;
+use App\Models\KoffnesStatus;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -21,6 +23,25 @@ class AdminController extends Controller
         } else {
             return redirect('/login');
         }
+    }
+
+    public function status()
+    {
+        $status = KoffnesStatus::first();
+
+        return view('admin.koffnes_status', compact('status'));
+    }
+
+    public function toggleStatus()
+    {
+        $status = KoffnesStatus::first();
+        $newStatus = $status->status_koffnes === 'open' ? 'close' : 'open';
+
+        $status->update(['status_koffnes' => $newStatus]);
+
+        // Perbarui cache
+        Cache::forget('koffnes_status');
+        return back()->with('success', 'Status updated successfully!');
     }
 
     public function logout()

@@ -21,7 +21,13 @@ class OrderMenu extends Component
     public $categories = [];
     public $selectedCategory = null;
     public $cart = [];
+    public $search = '';
     public $totalHarga = 0;
+
+    protected $listeners = [
+        'updatedSearch',
+    ];
+    
 
     public function mount($nomorMeja)
     {
@@ -104,6 +110,45 @@ class OrderMenu extends Component
 
     }
 
+    public function updatedSearch($value)
+    {
+        $this->searchMenu($value);
+    }
+
+
+    public function searchMenu($keyword)
+    {
+        $now = Carbon::now();
+ 
+        // Query untuk pencarian menu berdasarkan nama_menu
+        $this->menus = Menu::with(['promo' => function ($query) use ($now) {
+            $query->where('status', 'Aktif')
+                ->where(function ($subQuery) use ($now) {
+                    $subQuery->where('hari', 'AllDay')
+                            ->orWhere('hari', $now->format('l'));
+                })
+                ->whereTime('waktu_mulai', '<=', $now->format('H:i'))
+                ->whereTime('waktu_berakhir', '>=', $now->format('H:i'));
+        }])
+        ->where('stock', '>', 0) // Hanya menu dengan stock > 0
+        ->where('nama_menu', 'like', '%' . $keyword . '%') // Filter berdasarkan keyword
+        ->get();
+
+        // Terapkan harga promo pada hasil pencarian
+        $this->menus->transform(function ($menu) use ($now) {
+            if ($menu->promo &&
+                $menu->promo->status === 'Aktif' &&
+                ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
+                $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir)) {
+                $menu->harga = $menu->promo->harga_promo;
+            }
+            return $menu;
+        });
+
+        Log::info('Search Results:', [json_encode($this->menus, JSON_PRETTY_PRINT)]);
+    }
+
+
     public function filterByCategory($categoryId)
     {
         $this->selectedCategory = $categoryId;
@@ -183,7 +228,15 @@ class OrderMenu extends Component
 
     public function render()
     {
-        return view('livewire.order-menu')
+        if ($this->search) {
+            $this->searchMenu($this->search);
+        } else {
+            $this->fetchMenus();
+        }
+
+        return view('livewire.order-menu',[
+            'menus' => $this->menus
+        ])
             ->title('Order Menu');
     }
 }

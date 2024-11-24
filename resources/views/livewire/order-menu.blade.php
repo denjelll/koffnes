@@ -42,7 +42,8 @@
                     <img src="{{ asset('storage/asset/gambar/koffnes_putih.png') }}" alt="Koffnes Logo" class="h-6" />
                 </a>            
                 <input 
-                    type="text" 
+                    type="text"
+                    wire:model.debounce.300ms="search" 
                     placeholder="Search Menu..." 
                     class="input input-bordered input-sm bg-white text-black rounded-lg focus:outline-none"
                 />
