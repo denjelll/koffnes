@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
 
@@ -73,13 +74,45 @@ class Dashboard extends Component
 
     public function cancelOrder($id)
     {
-        $order = Order::find($id);
+        // Load order along with related detailOrders and their detailAddon
+        $order = Order::with('detailOrders.detailAddon')->find($id);
+
         if($order && $order->status === 'Open Bill') {
             $order->update(['status' => 'Cancelled']);
-            $order->delete(); // Melakukan soft delete
+            $order->delete(); // Melakukan soft delete pada order
+
+            foreach ($order->detailOrders as $detailOrder) {
+                // Update stok menu
+                $menu = Menu::find($detailOrder->id_menu);
+                if ($menu) {
+                    $menu->increment('stock', $detailOrder->kuantitas);
+                }
+
+                // Set kuantitas detailOrder to 0 before soft delete
+                $detailOrder->kuantitas = 0;
+                $detailOrder->save();
+
+                // Soft delete detail order
+                $detailOrder->delete(); 
+
+                // Soft delete detail addons jika ada
+                $detailAddons = $detailOrder->detailAddon; // Ensure we get all related detailAddon
+                if ($detailAddons) {
+                    foreach ($detailAddons as $detailAddon) {
+                        // Set kuantitas detailAddon to 0 before soft delete
+                        $detailAddon->kuantitas = 0;
+                        $detailAddon->save();
+
+                        // Soft delete detail addon
+                        $detailAddon->delete(); 
+                    }
+                }
+            }
+
             $this->updateOrders();
         }
     }
+
 
     public function saveOrder()
     {
