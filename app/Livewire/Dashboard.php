@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
+use Livewire\Attributes\Title;
+
 
 class Dashboard extends Component
 {
@@ -122,15 +124,28 @@ class Dashboard extends Component
         foreach ($this->menuItems as $menu) {
             $detailOrder = $menu->find($menu->id_detailorder);
             if ($detailOrder) {
-                $kuantitas = $this->quantities[$menu->id_detailorder] ?? $menu->kuantitas;
+                $kuantitasBaru = $this->quantities[$menu->id_detailorder] ?? $menu->kuantitas;
+                $kuantitasLama = $menu->kuantitas;
                 $hargaMenu = $menu->menu->harga;
 
+                $perubahan = $kuantitasBaru - $kuantitasLama;
+
+                // Cek stok mencukupi
+                if ($perubahan > 0 && $menu->menu->stock < $perubahan) {
+                    session()->flash('error', "Stok untuk {$menu->menu->nama_menu} tidak mencukupi!");
+                    return;
+                }
+
                 $detailOrder->update([
-                    'kuantitas' => $kuantitas,
+                    'kuantitas' => $kuantitasBaru,
                     'harga_menu' => $hargaMenu,
                 ]);
 
-                $totalHarga += $hargaMenu * $kuantitas;
+                // Update stok menu
+                $menu->menu->stock -= $perubahan;
+                $menu->menu->save();
+
+                $totalHarga += $hargaMenu * $kuantitasBaru;
             }
         }
 
@@ -245,6 +260,6 @@ class Dashboard extends Component
         return view('livewire.dashboard', [
             'currentTab' => $this->currentTab,
             'orders' => $this->orders
-        ]);
+        ]) ->title('Cashier Dashboard');
     }
 }
