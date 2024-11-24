@@ -67,6 +67,9 @@ class OrderMenu extends Component
                     ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
                     $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir);
             });
+
+            Log::info('Promo Menus:', [json_encode($this->promoMenus, JSON_PRETTY_PRINT)]);
+
         } else {
             // Jika kategori dipilih
             $menuIds = Isi_kategori::where('id_kategori', $this->selectedCategory)
@@ -96,6 +99,9 @@ class OrderMenu extends Component
         })
         ->inRandomOrder() // Pilih secara acak
         ->first()?->menu; // Ambil menu terkait (null-safe operator untuk mencegah error)
+
+        Log::info('Bundling Menu:', [json_encode($this->bundlingMenu, JSON_PRETTY_PRINT)]);
+
     }
 
     public function filterByCategory($categoryId)

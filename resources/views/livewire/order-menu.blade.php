@@ -73,40 +73,42 @@
             <!-- Konten -->
             <main class="w-full md:w-3/4 ml-auto p-4 overflow-y-auto" style="margin-left: 25%;">
                 @if (is_null($selectedCategory))
-                    <h2 class="text-2xl font-bold mb-6">Promo</h2>
-                    <!-- Grid Promo -->
-                    <div class="grid grid-cols-1 gap-4 mb-8">
-                        @foreach ($promoMenus as $menuPromo)
-                            <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg flex items-center space-x-4 h-36 w-full md:w-[250px]">
-                                <!-- Gambar Menu -->
-                                <div class="w-28 h-full bg-[#CBB89D] flex items-center justify-center rounded-l-lg">
-                                    <img src="{{ $menuPromo->gambar }}" alt="{{ $menuPromo->nama_menu }}" class="w-full h-full rounded-l-lg " />
+                <!-- Menu Promo -->
+                    @if(!$promoMenus->isEmpty())
+                        <h2 class="text-2xl font-bold mb-6">Promo</h2>
+                        <div class="grid grid-cols-1 gap-4 mb-8">
+                            @foreach ($promoMenus as $menuPromo)
+                                <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg flex items-center space-x-4 h-36 w-full md:w-[250px]">
+                                    <!-- Gambar Menu -->
+                                    <div class="w-28 h-full bg-[#CBB89D] flex items-center justify-center rounded-l-lg">
+                                        <img src="{{ $menuPromo->gambar }}" alt="{{ $menuPromo->nama_menu }}" class="w-full h-full rounded-l-lg " />
+                                    </div>
+                                    <!-- Deskripsi dan Harga Menu -->
+                                    <div class="flex flex-col flex-1">
+                                        <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menuPromo->nama_menu }}</h3>
+                                        <p class="text-red-500 font-semibold whitespace-nowrap">Rp. {{ number_format($menuPromo->promo->harga_promo, 0, ',', '.') }}</p>
+                                    </div>
+                                    <!-- Tombol Quantity -->
+                                    <div class="flex gap-2" style="margin-right: 12px">
+                                        <button wire:click="decrement({{ $menuPromo->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
+                                            -
+                                        </button>
+                                        <span class="font-bold text-[#412F26]">
+                                            {{ $cart[$menuPromo->id_menu]['quantity'] ?? 0 }}
+                                        </span>
+                                        <button wire:click="increment({{ $menuPromo->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
-                                <!-- Deskripsi dan Harga Menu -->
-                                <div class="flex flex-col flex-1">
-                                    <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menuPromo->nama_menu }}</h3>
-                                    <p class="text-red-500 font-semibold whitespace-nowrap">Rp. {{ number_format($menuPromo->promo->harga_promo, 0, ',', '.') }}</p>
-                                </div>
-                                <!-- Tombol Quantity -->
-                                <div class="flex gap-2" style="margin-right: 12px">
-                                    <button wire:click="decrement({{ $menuPromo->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
-                                        -
-                                    </button>
-                                    <span class="font-bold text-[#412F26]">
-                                        {{ $menuPromo->quantity ?? 0 }}
-                                    </span>
-                                    <button wire:click="increment({{ $menuPromo->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
+                    @endif
 
                     
-                    {{-- Grid Bundling --}}
-                    <h2 class="text-2xl font-bold mb-6">Bundling</h2>
+                    {{-- Card Bundling --}}
                     @if ($bundlingMenu)
+                        <h2 class="text-2xl font-bold mb-6">Bundling</h2>
                         <div class="rounded-2xl mt-4 bg-[#FFF2E2] shadow-lg relative">
                             <!-- Gambar Menu -->
                             <img
@@ -139,37 +141,57 @@
                 @endif
     
     
-                <h2 class="text-2xl font-bold mb-6">Menu</h2>
-                <!-- Grid Horizontal Menu -->
+                <h2 class="text-2xl font-bold mb-6">{{ $categories[$selectedCategory - 1]->nama_kategori ?? 'Menu' }}</h2>
+                <!-- Menu -->
                 <div class="flex flex-wrap gap-4">
                     @foreach ($menus as $menu)
-                        <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg flex items-center space-x-4 h-36 w-full md:w-[250px]">
-                            <!-- Gambar Menu -->
-                            <div class="w-28 h-full bg-[#CBB89D] flex items-center justify-center rounded-l-lg">
-                                <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-full rounded-l-lg " />
+                        {{-- Jika Kategori Bundling, maka tampilkan card khusus bundling --}}
+                        @if ($selectedCategory === 4 && !empty($bundlingMenu)) 
+                            <div class="rounded-2xl mt-4 bg-[#FFF2E2] shadow-lg relative w-full md:w-[250px]">
+                                <!-- Gambar Menu -->
+                                <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-48 rounded-t-xl object-cover" />
+                                <!-- Deskripsi Menu -->
+                                <div class="pt-4 pb-6 p-4">
+                                    <h3 class="text-lg md:text-xl font-semibold text-[#412F26]">{{ $menu->nama_menu }}</h3>
+                                    <p class="text-cocoa text-lg md:text-xl font-bold">Rp {{ number_format($menu->harga, 0, ',', '.') }}</p>
+                                    <p class="text-sm md:text-base text-[#806044] mt-1">{{ $menu->deskripsi }}</p>
+                                    <!-- Tombol Add To Cart -->
+                                    <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4">
+                                        <button wire:click="increment({{ $menu->id_menu }})" class="bg-[#6A6F4C] text-white rounded-lg py-2 px-4 text-xs sm:text-sm w-full sm:w-auto hover:bg-[#412F26]">
+                                            Add To Cart
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- Deskripsi dan Harga Menu -->
-                            <div class="flex flex-col flex-1">
-                                <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menu->nama_menu }}</h3>
-                                @if ($menu->promo && $menu->promo->status === 'Aktif' && (now()->format('l') === $menu->promo->hari || $menu->promo->hari === 'AllDay') && now()->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir))
-                                    <p class="text-red-500 font-semibold whitespace-nowrap">Rp. {{ number_format($menu->promo->harga_promo, 0, ',', '.') }}</p>
-                                @else
-                                    <p class="text-[#412F26] font-semibold whitespace-nowrap">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
-                                @endif
+                        @else 
+                            <div class="flex-shrink-0 bg-[#FFF2E2] rounded-lg shadow-lg flex items-center space-x-4 h-36 w-full md:w-[250px]">
+                                <!-- Gambar Menu -->
+                                <div class="w-28 h-full bg-[#CBB89D] flex items-center justify-center rounded-l-lg">
+                                    <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-full rounded-l-lg " />
+                                </div>
+                                <!-- Deskripsi dan Harga Menu -->
+                                <div class="flex flex-col flex-1">
+                                    <h3 class="font-bold text-base md:text-lg text-[#412F26]">{{ $menu->nama_menu }}</h3>
+                                    @if ($menu->promo && $menu->promo->status === 'Aktif' && (now()->format('l') === $menu->promo->hari || $menu->promo->hari === 'AllDay') && now()->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir))
+                                        <p class="text-red-500 font-semibold whitespace-nowrap">Rp. {{ number_format($menu->promo->harga_promo, 0, ',', '.') }}</p>
+                                    @else
+                                        <p class="text-[#412F26] font-semibold whitespace-nowrap">Rp. {{ number_format($menu->harga, 0, ',', '.') }}</p>
+                                    @endif
+                                </div>
+                                <!-- Tombol Quantity -->
+                                <div class="flex gap-2" style="margin-right: 12px">
+                                    <button wire:click="decrement({{ $menu->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
+                                        -
+                                    </button>
+                                    <span class="font-bold text-[#412F26]">
+                                        {{ $cart[$menu->id_menu]['quantity'] ?? 0 }}
+                                    </span>
+                                    <button wire:click="increment({{ $menu->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
+                                        +
+                                    </button>
+                                </div>
                             </div>
-                            <!-- Tombol Quantity -->
-                            <div class="flex gap-2" style="margin-right: 12px">
-                                <button wire:click="decrement({{ $menu->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
-                                    -
-                                </button>
-                                <span class="font-bold text-[#412F26]">
-                                    {{ $menu->quantity ?? 0 }}
-                                </span>
-                                <button wire:click="increment({{ $menu->id_menu }})" class="flex items-center justify-center rounded-full bg-cocoa text-white text-sm md:text-lg hover:bg-[#412F26] h-6 w-6">
-                                    +
-                                </button>
-                            </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
     
