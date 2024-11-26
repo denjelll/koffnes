@@ -19,11 +19,11 @@
     <title>Form Meja</title>
 </head>
 <body class="flex items-center justify-center min-h-screen flex-col">
-    <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Koffnes Logo" class="h-14 mb-10"/>
+    <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Koffnes Logo" class="mb-2" style="width: 250px; height: auto;"/>
 
     <div class="bg-white p-6 shadow-lg w-80 mb-10" style="background-color: #fff2e2; border: solid 5px #412f26; border-radius: 10px;">
       <h2 class="text-2xl font-semibold text-center">
-        Masukan Nama anda
+        Masukan Nama Kamu
       </h2>
         
         <form action="{{ route('order.saveCustomer', ['nomorMeja' => $nomorMeja]) }}" method="POST">
@@ -36,6 +36,7 @@
                 id="nama" 
                 name="nama_customer" 
                 required 
+                autocomplete="off"
                 class="w-full p-2 mt-1 border border-gray-300 rounded-md"
                 placeholder="Ketikan Namamu">
             </div>
@@ -53,11 +54,11 @@
             </div>
 
             <!-- Tombol Confirm -->
-            <div class="flex justify-center mt-5">
+            <div class="flex justify-center mt-6">
                 <button
                   type="submit"
                   class="text-white w-50 px-4 font-bold py-2 focus:outline-none focus:ring-2" style="background-color: #412f26; font-family: helvetica; border-radius: 10px; font-size: 135%;">
-                 Lanjutkan
+                 Gasss!!
                 </button>
               </div>
         </form>

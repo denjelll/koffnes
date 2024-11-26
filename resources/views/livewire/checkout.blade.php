@@ -110,12 +110,17 @@
                             :disabled="{{ $item['quantity'] <= 0 ? 'true' : 'false' }}">
                             <h2 class="text-xl w-8 h-8 font-bold"><a>-</a></h2>
                         </button>
-                        <input 
+                        
+                        <!-- <input 
                             type="number"
                             wire:change="updateMenuQuantity({{ $item['menu']->id_menu }}, $event.target.value)"
                             value="{{ $item['quantity'] }}"
                             class="flex justify-center font-semibold input input-bordered w-12 text-center"
-                            min="0" />
+                            min="0" /> -->
+
+                        <span class="font-bold text-[#412F26] mx-2 text-sm sm:text-base"  wire:change="updateMenuQuantity({{ $item['menu']->id_menu }}, $event.target.value)">
+                                                    {{ $item['quantity'] }}
+                        </span>
                         <button 
                             wire:click="updateMenuQuantity({{ $item['menu']->id_menu }}, {{ $item['quantity'] + 1 }})"
                             class="text-white bg-cocoa w-8 h-8 flex items-center justify-center rounded-full ml-2">
