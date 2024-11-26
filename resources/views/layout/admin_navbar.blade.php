@@ -6,6 +6,21 @@
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Force background color to white for body and .bg-base-100 */
+      body,
+      .bg-base-100 {
+        background-color: white !important;
+      }
+      body {
+        background-image: url("{{asset('asset/motif.png')}}"); /* Replace with the path to the background image */
+        background-repeat: repeat;
+        background-position: top left;
+        background-size: 400px 400px;
+        padding-bottom: 220px;
+        margin: 0;
+      }
+    </style>
 </head>
 <body>
     @if (session('role')!='Admin' || session('role')==null)
@@ -62,4 +77,16 @@
     
     @yield('content')
 </body>
+<footer
+  class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
+  style="background-color: #412f26; height: 64px"
+>
+  <img
+    src="{{asset('asset/koffnes_putih.png')}}"
+    alt="Footer Logo"
+    class="h-9 md:h-4 mb-2"
+    style="max-width: 180px"
+  />
+  <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
+</footer>
 </html>

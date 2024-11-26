@@ -12,6 +12,9 @@ use App\Models\Isi_kategori;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Order;
+use App\Exports\TransactionExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TransactionExportByID;
 
 class AdminController extends Controller
 {
@@ -32,7 +35,8 @@ class AdminController extends Controller
 
     public function menu(){
         $menus = Menu::all();
-        return view('admin.menu', compact('menus'));
+        $kategoris = Kategori::all();
+        return view('admin.menu', compact('menus','kategoris'));
     }
 
     public function showAddMenuForm(){
@@ -211,8 +215,7 @@ class AdminController extends Controller
 
     public function kategori(){
         $kategoris = Kategori::all();
-        $isi_kategoris = Isi_kategori::groupBy('id_kategori')->count();
-        return view('admin.kategori',compact('kategoris','isi_kategoris'));
+        return view('admin.kategori',compact('kategoris'));
     }
     public function showAddKategoriForm(){
         $menus = Menu::all();
@@ -281,8 +284,12 @@ class AdminController extends Controller
         if($request->password != $request->password_confirmation){
             return redirect()->back()->with('error', 'Password confirmation does not match');
         }
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            return redirect()->back()->with('error', 'Email already exists');
+        }
+
         $user = new User();
-        
         $user->nama_depan = $request->nama_depan;
         $user->nama_belakang = $request->nama_belakang;
         $user->no_telepon = $request->no_telepon;
@@ -419,5 +426,11 @@ class AdminController extends Controller
     }
     public function transactionDetail(Order $order){
         return view('admin.detail_transaksi', compact('order'));
+    }
+    public function downloadExcelTransaction($date){
+        return Excel::download(new TransactionExport($date), 'transaction_'.$date.'.xlsx');
+    }
+    public function downloadExcelTransactionByID($id_order){
+        return Excel::download(new TransactionExportByID($id_order), 'transaction'.$id_order.'.xlsx');
     }
 }

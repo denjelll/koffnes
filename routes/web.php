@@ -64,6 +64,8 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/transaction', 'transaction')->name('admin.transaction');
     Route::get('/admin/transaction/date/{date}', 'transactionDate')->name('admin.transaction.date');
     Route::get('/admin/transaction/detail/{order:id_order}', 'transactionDetail')->name('admin.detail_transaction');
+    Route::get('/admin/transaction/export/{date}', 'downloadExcelTransaction')->name('admin.transaction.export');
+    Route::get('/admin/transaction/export/byID/{id_order}', 'downloadExcelTransactionByID')->name('admin.transaction.export.id_order');
 });
 
 Route::controller(OrderController::class)->group(function() {
