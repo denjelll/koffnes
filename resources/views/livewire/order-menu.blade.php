@@ -118,7 +118,7 @@
 
                 <!-- Menu -->
                 <h2 class="text-2xl font-bold mb-6 mt-6">{{ $selectedCategory ? $categories[$selectedCategory - 1]->nama_kategori : 'Menu' }}</h2>
-                <div class="flex flex-wrap gap-2">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     @if($menus)
                         @foreach ($menus as $menu)
                             {{-- Jika Kategori Bundling, maka tampilkan card khusus bundling --}}
@@ -142,7 +142,7 @@
                                 </div>
                             @else
                                 <!-- Card Menu Normal -->
-                                <div class="p-2 menu-card bg-[#FFF2E2] shadow-md rounded-lg overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto" style="width: 47%;">
+                                <div class="p-2 menu-card bg-[#FFF2E2] shadow-md rounded-lg overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto" style="width: 100%;">
                                     <!-- Gambar Menu -->
                                     <img class="w-full h-28 sm:h-44 object-cover rounded-t-lg" src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}">
 
