@@ -125,7 +125,7 @@
                             @if ($selectedCategory == 4) 
                                 <div class="rounded-2xl mt-4 bg-[#FFF2E2] shadow-lg relative w-full md:w-[230px]">
                                     <!-- Gambar Menu -->
-                                    <img src="https://www.luxcafeclub.com/cdn/shop/articles/Americano_Coffee_1200x1200.png?v=1713411608" alt="{{ $menu->nama_menu }}" class="w-full h-44 rounded-t-xl object-cover" />
+                                    <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-44 rounded-t-xl object-cover" />
                                     
                                     <!-- Nama, deskripsi, dan Harga Menu -->
                                     <div class="pt-4 pb-6 p-4">
