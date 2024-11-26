@@ -52,6 +52,10 @@ Route::get('/cashier/table', function(){
 });
 
 //bagian lain
+Route::get('/closed', function () {
+    return view('closed');
+})->name('closed.page');
+
 
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
@@ -91,13 +95,18 @@ Route::controller(AdminController::class)->group(function(){
     Route::post('admin/event/store', 'storeEvent')->name('admin.store_event');
     Route::get('admin/event/edit/{event:nama_event}', 'showEditEventForm')->name('admin.edit_event');
     Route::get('admin/event/delete/{event:nama_event}', 'deleteEvent')->name('admin.delete_event');
+    Route::get('admin/status', 'status')->name('admin.koffnesstatus');
+    Route::post('admin/status', 'toggleStatus')->name('admin.toggleStatus');
+
 });
 
-Route::controller(OrderController::class)->group(function() {
-    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
-    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
+Route::middleware(['check_koffnes'])->group(function () {
+    Route::controller(OrderController::class)->group(function() {
+        Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
+        Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
-    Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
+        Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
+    });
 });
 
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');

@@ -64,6 +64,11 @@
                                 class="px-2 py-1 bg-red-500 text-white rounded">
                                 Cancel
                             </button>
+                            <button
+                                wire:click="printReceipt('{{ $order->id_order }}')"
+                                class="px-2 py-1 bg-cocoa text-white rounded">
+                                Print Receipt
+                            </button>
                         </td>
                     @endif
 

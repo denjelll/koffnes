@@ -267,6 +267,14 @@ class Checkout extends Component
            if (!empty($item['addOn'])) { // Perbaikan key
             $this->createDetailAddon($detailOrder['id_detailorder'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
             }
+
+            // **Pengurangan Stok**
+            $menu = Menu::find($item['menu']['id_menu']); // Cari menu berdasarkan ID
+            if ($menu && $menu->stock >= $item['quantity']) {
+                $menu->decrement('stock', $item['quantity']); // Kurangi stok
+            } else {
+                throw new \Exception('Stok tidak mencukupi untuk menu ' . $item['menu']['nama_menu']);
+            }
         
         }
 

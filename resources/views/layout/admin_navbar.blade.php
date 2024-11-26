@@ -18,6 +18,7 @@
         <a href="{{ route('admin.promo') }}">Promotion</a>
         <a href="{{ route('admin.user') }}">User Management</a>
         <a href="{{ route('admin.event') }}">Event Management</a>
+        <a href="{{ route('admin.koffnesstatus') }}">Status Koffnes</a>
     </nav>
     @yield('content')
 </body>
