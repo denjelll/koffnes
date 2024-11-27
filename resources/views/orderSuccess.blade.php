@@ -36,7 +36,7 @@
                                                 <li>
                                                     {{ $itemAddon->addon->nama_addon }}
                                                     (x{{ $itemAddon->kuantitas }})
-                                                    - Rp {{ number_format($itemAddon->price, 0, ',', '.') }}
+                                                    - Rp {{ number_format($itemAddon->harga, 0, ',', '.') }}
                                                 </li>
                                             @endforeach
                                         </ul>

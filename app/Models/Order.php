@@ -26,6 +26,7 @@ class Order extends Model
         'customer',
         'meja',
         'tipe_order',
+        'metode_pembayaran',
         'status',
         'total_harga',
         'waktu_transaksi',

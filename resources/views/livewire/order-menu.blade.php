@@ -68,17 +68,22 @@
                     </select>
                     <input
                                 type="text"
-                                wire:model="search" 
-                                wire:keydown.enter="fetchMenus"
+                                wire:model.live.debounce.300ms="search"
                                 placeholder="Search menu"
                                 class="p-2 w-full mt-2 md:w-1/3 bg-white rounded-lg"
                                 
                     >
                 </div>
 
+                <h2 class="text-2xl font-bold mb-6 mt-6"> 
+                    @if(!empty($search)) 
+                        Hasil pencarian menu '{{ $search }}' 
+                    @else 
+                    @endif 
+                </h2>
                 
                 <!-- Menu Promo -->
-                @if(!$promoMenus->isEmpty())
+                @if($promoMenus->isNotEmpty())
                     <h2 class="text-2xl font-bold mb-6 mt-6">Promo</h2>
                     <div class="flex flex-wrap gap-4">
                         @foreach ($promoMenus as $menuPromo)
@@ -119,7 +124,7 @@
                 <!-- Menu -->
                 <h2 class="text-2xl font-bold mb-6 mt-6">{{ $selectedCategory ? $categories[$selectedCategory - 1]->nama_kategori : 'Menu' }}</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                    @if($menus)
+                    @if($menus->isNotEmpty())
                         @foreach ($menus as $menu)
                             {{-- Jika Kategori Bundling, maka tampilkan card khusus bundling --}}
                             @if ($selectedCategory == 4) 
@@ -178,7 +183,7 @@
                             @endif
                         @endforeach
                     @else
-                        <p class="text-gray-500 mt-4">Menu tidak ditemukan. Coba lihat menu yang lain.</p>
+                        <h2 class="text-cocoa text-2xl mt-4">Menu tidak ditemukan. Coba lihat menu yang lain.</h2>
                     @endif
                 </div>
             </main>
