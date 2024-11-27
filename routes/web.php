@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\CashierController;
 use App\Http\Controllers\DailyReportController;
+
 
 
 
@@ -20,6 +20,11 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 });
+
+Route::get('/closed', function () {
+    return view('closed');
+})->name('closed.page');
+
 
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
@@ -66,13 +71,18 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('/admin/transaction/detail/{order:id_order}', 'transactionDetail')->name('admin.detail_transaction');
     Route::get('/admin/transaction/export/{date}', 'downloadExcelTransaction')->name('admin.transaction.export');
     Route::get('/admin/transaction/export/byID/{id_order}', 'downloadExcelTransactionByID')->name('admin.transaction.export.id_order');
+    Route::get('admin/status', 'status')->name('admin.koffnesstatus');
+    Route::post('admin/status', 'toggleStatus')->name('admin.toggleStatus');
+
 });
 
-Route::controller(OrderController::class)->group(function() {
-    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
-    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
+Route::middleware(['check_koffnes'])->group(function () {
+    Route::controller(OrderController::class)->group(function() {
+        Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
+        Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
 
-    Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
+        Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
+    });
 });
 
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');

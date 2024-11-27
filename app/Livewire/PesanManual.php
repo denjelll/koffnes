@@ -8,6 +8,8 @@ use App\Models\Order;
 use Livewire\Component;
 use App\Models\DetailOrder;
 use Illuminate\Support\Carbon;
+use Livewire\Attributes\Title;
+
 
 class PesanManual extends Component
 {
@@ -91,31 +93,50 @@ class PesanManual extends Component
             return;
         }
 
-        // Ambil tanggal transaksi dan antrian (auto increment)
-        $tanggalTransaksi = Carbon::now()->format('Ymd');
-        $lastOrder = Order::where('antrian', '>', 0)->orderBy('antrian', 'desc')->first(); // Ambil antrian terakhir
-        $antrian = $lastOrder ? $lastOrder->antrian + 1 : 1; // Antrian dimulai dari 1
+        // Periksa stok menu sebelum membuat pesanan
+        foreach ($this->items as $item) {
+            if ($this->qtyMenu[$item->id_menu] > 0) {
+                // Cek apakah stok mencukupi
+                if ($item->stock < $this->qtyMenu[$item->id_menu]) {
+                    session()->flash('error', "Stok untuk {$item->nama_menu} tidak mencukupi!");
+                    return;
+                }
+            }
+        }
 
-        // Membuat id_order berdasarkan format yang diinginkan
-        $idOrder = "ORD" . $tanggalTransaksi . "-" . $antrian;
+        // Ambil tanggal transaksi saat ini
+        $tanggalTransaksi = Carbon::now()->toDateString(); // Format: YYYY-MM-DD
 
-        // Menyimpan data pesanan ke dalam tabel orders
+        // Cari antrean terbesar pada tanggal yang sama, termasuk pesanan yang dibatalkan (soft delete)
+        $lastOrder = Order::withTrashed() // Sertakan pesanan yang di-soft delete
+            ->whereDate('waktu_transaksi', $tanggalTransaksi)
+            ->orderBy('antrian', 'desc')
+            ->first();
+
+        // Jika ada antrean pada tanggal tersebut, tambahkan 1 ke antrean terbesar
+        $antrian = $lastOrder ? $lastOrder->antrian + 1 : 1;
+
+        // Buat id_order berdasarkan format yang diinginkan
+        $idOrder = "ORD" . Carbon::now()->format('Ymd') . "-" . $antrian;
+
+        // Simpan data pesanan ke tabel orders
         $order = Order::create([
             'id_order' => $idOrder,
             'id_user' => 99999999,
             'antrian' => $antrian,
             'customer' => $this->customer,
-            'meja' => $this->tipeOrder == 'Dine In' ? $this->meja : 0, // Jika tipe order adalah Take Away, meja diisi null
+            'meja' => $this->tipeOrder == 'Dine In' ? $this->meja : 0, // Jika tipe order adalah Take Away, meja diisi 0
             'tipe_order' => $this->tipeOrder,
             'status' => 'Open Bill',
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => Carbon::now(),
         ]);
 
+
         // Simpan item menu yang dipesan ke tabel detail_orders
         foreach ($this->items as $item) {
             if ($this->qtyMenu[$item->id_menu] > 0) {
-                $idDetailOrder = 'OD' . uniqid() . '-' . mt_rand(1000, 9999);
+                $idDetailOrder = 'OD' . uniqid();
 
                 // Buat record di tabel detail_orders
                 $detailOrder = DetailOrder::create([
@@ -126,6 +147,10 @@ class PesanManual extends Component
                     'harga_menu' => $item->harga,
                     'notes' => ""
                 ]);
+
+                // Kurangi stok menu
+                $item->stock -= $this->qtyMenu[$item->id_menu];
+                $item->save(); // Simpan perubahan stok ke database
 
                 // Simpan add-ons yang terkait dengan menu ini ke tabel detail_addons
                 foreach ($this->addItems as $addItem) {
@@ -175,6 +200,7 @@ class PesanManual extends Component
 
     public function render()
     {
-        return view('livewire.pesan-manual');
+        return view('livewire.pesan-manual')
+              ->title('Manual Order');
     }
 }

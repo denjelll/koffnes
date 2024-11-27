@@ -20,6 +20,7 @@ class OrderMenu extends Component
     public $categories = [];
     public $selectedCategory = null;
     public $cart = [];
+    public $search = '';
     public $totalHarga = 0;
 
     public function mount($nomorMeja)
@@ -46,57 +47,75 @@ class OrderMenu extends Component
     {
         $now = Carbon::now();
 
-        // Jika tidak ada kategori yang dipilih
-        if (is_null($this->selectedCategory)) {
-            $this->menus = Menu::with(['promo' => function ($query) use ($now) {
-                $query->where('status', 'Aktif')
-                    ->where(function ($subQuery) use ($now) {
-                        $subQuery->where('hari', 'AllDay')
-                                ->orWhere('hari', $now->format('l'));
-                    })
-                    ->whereTime('waktu_mulai', '<=', $now->format('H:i'))
-                    ->whereTime('waktu_berakhir', '>=', $now->format('H:i'));
-            }])
-            ->get();
+        // Log nilai selectedCategory dan search
+        Log::info('Kategori yang dipilih:', [$this->selectedCategory]);
+        Log::info('Menu yang dicari:', [json_encode($this->search, JSON_PRETTY_PRINT)]);
 
-            // Filter menu yang memiliki promo untuk bagian Promo Hari Ini
-            $this->promoMenus = $this->menus->filter(function ($menu) use ($now) {
-                return $menu->promo && 
-                    ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
-                    $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir);
-            });
-        } else {
-            // Jika kategori dipilih
-            $menuIds = Isi_kategori::where('id_kategori', $this->selectedCategory)
-                ->pluck('id_menu');
-
-            $this->menus = Menu::with('promo')
-                ->whereIn('id_menu', $menuIds)
-                ->get();
+        // Reset nilai search setiap kali kategori berubah
+        if (!empty($this->selectedCategory) && empty($this->search)) {
+            $this->search = ''; // Reset nilai search hanya jika selectedCategory diisi dan search kosong
         }
 
-        // Terapkan harga promo langsung pada data menu
-        $this->menus->transform(function ($menu) use ($now) {
-            if ($menu->promo &&
-                $menu->promo->status === 'Aktif' &&
-                ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
-                $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir)) {
-                $menu->harga = $menu->promo->harga_promo;
+        // Query awal untuk menu dengan stock > 0
+        $query = Menu::with(['promo' => function ($query) use ($now) {
+            $query->where('status', 'Aktif')
+                ->where(function ($subQuery) use ($now) {
+                    $subQuery->where('hari', 'AllDay')
+                            ->orWhere('hari', $now->format('l'));
+                })
+                ->whereTime('waktu_mulai', '<=', $now->format('H:i'))
+                ->whereTime('waktu_berakhir', '>=', $now->format('H:i'));
+        }])
+        ->where('stock', '>', 0); // Filter menu dengan stock > 0
 
-                Log::info('Harga diterapkan:', ['menu' => json_encode($menu, JSON_PRETTY_PRINT)]);
+        // Filter berdasarkan pencarian jika ada
+        if (!empty($this->search)) {
+            $this->selectedCategory = null; // Pastikan kategori di-reset
+            Log::info('Menu yang dicari:', [json_encode($this->search, JSON_PRETTY_PRINT)]);
+            $query->where('nama_menu', 'like', '%' . $this->search . '%');
+            $this->search = '';
+        }
+
+
+        // Reset kategori jika semua dipilih (null)
+        if (is_null($this->selectedCategory)) {
+            $this->menus = $query->get();
+        } else {
+            // Filter berdasarkan kategori yang dipilih
+            if ($this->selectedCategory == 4) {
+                // Khusus bundling
+                $this->menus = Isi_kategori::where('id_kategori', 4)
+                    ->whereHas('menu', function ($query) {
+                        $query->where('stock', '>', 0);
+                    })
+                    ->with('menu')
+                    ->get()
+                    ->pluck('menu')
+                    ->flatten();
+
+                Log::info('Menu Bundling:', [json_encode($this->menus, JSON_PRETTY_PRINT)]);
+            } else {
+                $query->whereHas('isi_kategori', function ($q) {
+                    $q->where('id_kategori', $this->selectedCategory);
+                });
+
+                // Eksekusi query berdasarkan kategori
+                $this->menus = $query->get();
             }
-            return $menu;
+        }
+
+        // Filter menu promo untuk bagian Promo Hari Ini
+        $this->promoMenus = $this->menus->filter(function ($menu) use ($now) {
+            return $menu->promo && 
+                ($menu->promo->hari === 'AllDay' || $menu->promo->hari === $now->format('l')) &&
+                $now->between($menu->promo->waktu_mulai, $menu->promo->waktu_berakhir);
         });
+
+        Log::info('Promo Menus:', [json_encode($this->promoMenus, JSON_PRETTY_PRINT)]);
+    }
+
+
     
-    }
-
-
-    public function filterByCategory($categoryId)
-    {
-        $this->selectedCategory = $categoryId;
-        $this->fetchMenus();
-    }
-
     public function increment($menuId)
     {
         if (!isset($this->cart[$menuId])) {

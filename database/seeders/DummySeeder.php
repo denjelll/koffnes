@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class DummySeeder extends Seeder
 {
@@ -22,6 +22,12 @@ class DummySeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+         // Insert waktu buka/tutup
+        DB::table('koffnes_statuses')->insert([
+            'status_koffnes' => 'close',
+        ]);
+
+
         // Menambahkan data kategori
         DB::table('kategoris')->insert([
             ['id_kategori' => 1, 'nama_kategori' => 'Breakfast', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
@@ -96,20 +102,34 @@ class DummySeeder extends Seeder
 
         // Menambahkan data user dengan id_user 'NOT_PICK_UP'
         DB::table('users')->insert([
-            'id_user' => '99999999',
-            'nama_depan' => 'Not',
-            'nama_belakang' => 'Pick Up',
-            'no_telepon' => '0000000000',
-            'email' => 'notpickup@example.com',
-            'password' => bcrypt('password'),
-            'role' => 'Kasir',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            [
+                'id_user' => 99999999,
+                'nama_depan' => 'Not',
+                'nama_belakang' => 'Pick Up',
+                'no_telepon' => '0000000000',
+                'email' => 'notpickup@example.com',
+                'password' => bcrypt('password'),
+                'role' => 'Kasir',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_user' => 1,
+                'nama_depan' => 'Admin',
+                'nama_belakang' => '1',
+                'no_telepon' => '1',
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('123'),
+                'role' => 'Admin',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]
         ]);
+        
 
         // Menambahkan data order
         for ($i = 1; $i <= 10; $i++) {
-            $id_order = 'ORD' . Str::random(10) . $i;
+            $id_order = 'ORD' . Carbon::now()->format('YmdHis') . $i;
             DB::table('orders')->insert([
                 'id_order' => $id_order,
                 'id_user' => '99999999',
@@ -126,7 +146,7 @@ class DummySeeder extends Seeder
 
             // Menambahkan data detail order
             for ($j = 1; $j <= 2; $j++) { // Misal setiap order punya 2 detail order
-                $id_detailorder = 'DORD' . Str::random(10) . $j;
+                $id_detailorder = 'DORD' . Str::random(10) .  $j;
                 DB::table('detail_orders')->insert([
                     'id_detailorder' => $id_detailorder,
                     'id_order' => $id_order,
@@ -154,6 +174,18 @@ class DummySeeder extends Seeder
                     ]);
                 }
             }
+        }
+
+        // Menambahkan data untuk relasi kategori dan menu (isi_kategoris)
+        for ($i = 1; $i <= 25; $i++) {
+            $id_kategori = ($i >= 21 && $i <= 25) ? 4 : rand(1, 3);
+            DB::table('isi_kategoris')->insert([
+                'id_isi_kategori' => $i,
+                'id_kategori' => $id_kategori,
+                'id_menu' => $i,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         }
     }
 }

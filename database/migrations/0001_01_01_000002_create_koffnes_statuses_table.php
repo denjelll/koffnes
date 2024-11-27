@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::create('kategoris', function (Blueprint $table) {
-            $table->id('id_kategori')->autoIncrement();
-            $table->string('nama_kategori', 50);
-            $table->timestamps();
+        Schema::create('koffnes_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->enum('status_koffnes', ['open', 'close'])->default('close'); 
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategoris');
+        Schema::dropIfExists('koffnes_statuses');
     }
 };
