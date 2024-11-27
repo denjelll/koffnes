@@ -3,6 +3,7 @@
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
 use App\Livewire\OrderMenu;
+use App\Livewire\CartPesanan;
 use App\Livewire\PesanManual;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
@@ -111,7 +112,9 @@ Route::middleware(['check_koffnes'])->group(function () {
 
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
+
 Route::get('cashier', PesanManual::class)->name('pesan-manual');
+Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
 Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
 
 

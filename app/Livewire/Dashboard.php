@@ -333,7 +333,9 @@ class Dashboard extends Component
 
     private function updateOrders()
     {
-        $this->orders = Order::where('status', $this->currentTab)->get();
+        $this->orders = Order::where('status', $this->currentTab)
+        ->orderBy('antrian', 'asc')
+        ->get();
     }
 
     public function render()
