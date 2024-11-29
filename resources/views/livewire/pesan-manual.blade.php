@@ -55,11 +55,6 @@
                         href="{{ url('cashier/stock') }}"
                         class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                 </li>
-                <li>
-                    <a
-                        href="#"
-                        class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                </li>
             </ul>
         </nav>
 

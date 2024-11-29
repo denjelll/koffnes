@@ -43,9 +43,6 @@
                 <li>
                     <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                 </li>
-                <li>
-                    <a href="#" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                </li>
             </ul>
         </nav>
     
@@ -94,8 +91,18 @@
             
                 <!-- Results Section -->
                 <div class="mt-6">
-                    <h2 class="text-xl font-bold text-[#412f26] mb-3">Transaction Results</h2>
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-bold text-[#412f26] mb-3">Transaction Results</h2>
+                        <form action="{{ route('daily.report') }}" method="POST">
+                            <button type="submit" class="bg-[#412f26] text-white py-1 px-3 rounded-lg text-sm hover:bg-[#5a4533]">
+                                Daily Report
+                            </button>
+                        </form>
+                    </div>
                     <ul class="space-y-4">
+                        <h2 class="text-lg font-bold text-[#412f26]">Total Transaction:
+                            <span>Rp. {{ number_format($totalTransaction, 0, ',', '.') }}</span>
+                        </h2>
                         @forelse ($orders as $order)
                             <li class="bg-white p-4 rounded-lg shadow-md">
                                 <p class="text-[#412f26] font-semibold">Customer: {{ $order->customer }}</p>

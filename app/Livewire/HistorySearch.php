@@ -11,6 +11,7 @@ class HistorySearch extends Component
     public $endDate;
     public $customerName;
     public $orders = [];
+    public $totalTransaction = 0;
 
     public function search()
     {
@@ -39,6 +40,8 @@ class HistorySearch extends Component
         $query->orderBy('waktu_transaksi', 'asc');
 
         $this->orders = $query->get();
+
+        $this->totalTransaction = $this->orders->sum('total_harga');
     }
 
     public function render()
