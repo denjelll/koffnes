@@ -77,75 +77,8 @@
             </ul>
         </nav>
 
-<<<<<<< HEAD
         <!-- Content Area -->
         <div class=" md:ml-40 p-7 w-full overflow-auto relative">
-=======
-            <!-- Content Area -->
-            <div class=" md:ml-40 p-7 w-full overflow-auto relative">
-
-                <!-- Form for Customer Info and Table Selection -->
-                <form action="#" class="space-y-3">
-                    <div class="flex flex-col md:flex-row items-center gap-4">
-                        <input
-                            type="text"
-                            placeholder="Customer Name"
-                            class="p-2 w-full md:w-[80rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
-                            style="background-color: #cbb89d; color: white;">
-                        <select
-                            name="Dine_in"
-                            id="type_order"
-                            class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
-                            style="background-color: #cbb89d; color: white;">
-                            <option value="Dine_in">Dine in</option>
-                            <option value="Take_away">Take away</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col md:flex-row items-center gap-4">
-                        <select
-                            name="Table"
-                            id="no_table"
-                            class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
-                            style="background-color: #cbb89d; color: white;">
-                            <option value="#" disabled="disabled" selected="selected">Choose Table</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col md:flex-row items-center gap-4">
-                        <input
-                            type="text"
-                            placeholder="Search menu"
-                            class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
-                            style="background-color: #cbb89d; color: white;">
-                    </div>
-                </form>
-
-                <!-- Menu Cards Grid -->
-                <div
-                    class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
-                    <!-- Card Template -->
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-                    <x-card/>
-
-                    <!-- Total Section -->
-                    <a href="{{ url('/cashier/chart') }}">
-                        <div
-                            class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3"
-                            id="total-section">
-                            <span id="total-price">Total: Rp. 0,00-</span>
-                            <img src="{{ asset('storage/uploads/Cashnes.png') }}" alt="Chart Icon" class="ml-auto h-5 w-5">
-                        </div>
-                    </a>
->>>>>>> parent of 1fbf9f0 (Reapply "amang aja")
 
             <!-- Form for Customer Info and Table Selection -->
             <form action="#" class="space-y-3">
@@ -216,7 +149,6 @@
 
         </div>
 
-<<<<<<< HEAD
         <!-- Footer -->
         <footer
             class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
@@ -261,13 +193,6 @@
     </body>
 </html>
 
-=======
-            <!-- JavaScript to Toggle Mobile Menu -->
-            <script>
-                // Get all menu cards and total price element
-                const menuCards = document.querySelectorAll('.menu-card');
-                const totalPriceElement = document.getElementById('total-price');
->>>>>>> parent of 1fbf9f0 (Reapply "amang aja")
 
 
 
