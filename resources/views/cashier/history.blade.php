@@ -105,15 +105,25 @@
         </form>
     </div>
 
-    <!-- History Section -->
     <div class="w-[500px] mx-auto bg-[#d8c2aa] p-4 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold text-[#412f26] mb-3">Transaction Results</h2>
-        <ul id="results" class="space-y-4">
-            <!-- Search results will appear here -->
-            <li class="text-sm text-gray-500">No results found. Please use the search bar above.</li>
-        </ul>
+    <div class="flex justify-between items-center mb-3">
+        <h2 class="text-xl font-bold text-[#412f26]">Transaction Results</h2>
+        <a
+            href="/cashier/history/download"
+            class="bg-[#412f26] text-white py-1 px-3 rounded-lg text-sm hover:bg-[#5a4533]">
+            Download
+        </a>
     </div>
+    <div id="totalTransaction" class="text-lg font-bold text-[#412f26] mb-4 hidden">
+        Total Transaction: <span id="totalAmount">Rp0</span>
+    </div>
+    <ul id="results" class="space-y-4">
+        <!-- Search results will be injected here -->
+        <li class="text-sm text-gray-500">No results found. Please use the search bar above.</li>
+    </ul>
 </div>
+
+
 
             <footer
                 class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
@@ -127,62 +137,54 @@
             </footer>
             <!-- JavaScript to Toggle Mobile Menu -->
             <script>
-                const menuToggle = document.getElementById('menu-toggle');
-                const mobileNav = document.getElementById('mobile-nav');
+    const resultsContainer = document.getElementById("results");
+    const totalTransaction = document.getElementById("totalTransaction");
+    const totalAmount = document.getElementById("totalAmount");
 
-<<<<<<< HEAD
-                        if (data.length === 0) {
-                            resultsContainer.innerHTML = `<li class="text-sm text-gray-500">No results found. Please use the search bar above.</li>`;
-                            totalTransaction
-                                .classList
-                                .add("hidden");
-                            return;
-                        }
+    const mockResults = [
+        { customer: "Brian", date: "2024-11-28 19:27:51", total: 42214 },
+        { customer: "Kirby", date: "2024-11-28 20:27:51", total: 50214 },
+    ];
 
-                        let totalSum = 0;
+    function displayResults(data) {
+        // Clear current results
+        resultsContainer.innerHTML = "";
 
-                        data.forEach((item) => {
-                            totalSum += item.total;
+        let totalSum = 0;
 
-                            // Create a card for each transaction
-                            const card = document.createElement("li");
-                            card
-                                .classList
-                                .add("bg-white", "p-4", "rounded-lg", "shadow", "text-gray-800");
-                            card.innerHTML = `
-                <p><strong>Customer:</strong> ${item
-                                .customer}</p>
-                <p><strong>Date:</strong> ${item
-                                .date}</p>
-                <p><strong>Total:</strong> Rp${item
-                                .total
-                                .toLocaleString()}</p>
+        if (data.length === 0) {
+            resultsContainer.innerHTML = `<li class="text-sm text-gray-500">No results found. Please use the search bar above.</li>`;
+            totalTransaction.classList.add("hidden");
+            return;
+        }
+
+        // Calculate total and show it first
+        data.forEach((item) => {
+            totalSum += item.total;
+        });
+
+        totalAmount.textContent = `Rp${totalSum.toLocaleString()}`;
+        totalTransaction.classList.remove("hidden");
+
+        // Render cards for each transaction
+        data.forEach((item) => {
+            const card = document.createElement("li");
+            card.classList.add("bg-white", "p-4", "rounded-lg", "shadow", "text-gray-800");
+            card.innerHTML = `
+                <p><strong>Customer:</strong> ${item.customer}</p>
+                <p><strong>Date:</strong> ${item.date}</p>
+                <p><strong>Total:</strong> Rp${item.total.toLocaleString()}</p>
             `;
-                            resultsContainer.appendChild(card);
-                        });
+            resultsContainer.appendChild(card);
+        });
+    }
 
-                        // Update total transaction amount
-                        totalAmount.textContent = `Rp${totalSum.toLocaleString()}`;
-                        totalTransaction
-                            .classList
-                            .remove("hidden");
-                    }
+    // Mock data loading on page load
+    document.addEventListener("DOMContentLoaded", () => {
+        displayResults(mockResults);
+    });
+</script>
 
-                    // Mock data loading on page load
-                    document.addEventListener("DOMContentLoaded", () => {
-                        displayResults(mockResults);
-                    });
-                </script>
 
             </body>
         </html>
-=======
-                menuToggle.addEventListener('click', () => {
-                    mobileNav
-                        .classList
-                        .toggle('hidden');
-                });
-            </script>
-        </body>
-    </html>
->>>>>>> parent of 99ef5e9 (push)
