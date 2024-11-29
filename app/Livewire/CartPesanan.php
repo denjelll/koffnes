@@ -55,10 +55,15 @@ class CartPesanan extends Component
     // Tambah kuantitas pesanan
     public function tambahQty($id_menu)
     {
+        $menu = Menu::find($id_menu);
         foreach ($this->pesanan as &$item) {
             if ($item['id_menu'] == $id_menu) {
-                $item['kuantitas']++;
-                $item['total'] = $item['kuantitas'] * $item['harga'];
+                if ($item['kuantitas'] < $menu->stock){
+                    $item['kuantitas']++;
+                    $item['total'] = $item['kuantitas'] * $item['harga'];
+                } else {
+                    session()->flash('error', 'Stok tidak mencukupi untuk menambah kuantitas.');
+                }
             }
         }
 
@@ -157,7 +162,7 @@ class CartPesanan extends Component
         $currentAntrian = $lastAntrian + 1;
 
         // Generate ID Order unik
-        $id_order = 'ORD-' . strtoupper(Str::random(8));
+        $id_order = 'ORD-' . strtoupper(Str::random(5));
 
         // Simpan ke tabel orders
         $order = Order::create([
@@ -174,6 +179,16 @@ class CartPesanan extends Component
 
         // Simpan detail order ke detail_orders
         foreach ($this->pesanan as $menu) {
+            $menuDb = Menu::find($menu['id_menu']);
+            if ($menuDb) {
+                $menuDb->stock -= $menu['kuantitas'];
+                if ($menuDb->stock < 0) {
+                    session()->flash('error', 'Stok tidak mencukupi untuk menyimpan pesanan.');
+                    return;
+                }
+                $menuDb->save();
+            }
+
             $id_detailorder = 'DO-' . strtoupper(Str::random(5));
             $detailOrder = DetailOrder::create([
                 'id_detailorder' => $id_detailorder,
@@ -211,8 +226,36 @@ class CartPesanan extends Component
 
         session()->flash('success', 'Pesanan berhasil disimpan.');
         $this->updateTotalHarga(); // Reset total harga
-        return redirect()->route('pesan-manual');
+        return redirect()->route('dashboard');
     }
+
+    public function payment()
+    {
+        // Kirim pesanan dan add-on ke halaman payment
+        $pesananAddOn = [];
+
+        foreach ($this->pesanan as $menu) {
+            if (isset($this->addOns[$menu['id_menu']])) {
+                foreach ($this->addOns[$menu['id_menu']] as $addon) {
+                    if ($this->addOnQty[$addon->id_addon] > 0) {
+                        $pesananAddOn[] = [
+                            'nama_addon' => $addon->nama_addon,
+                            'harga' => $addon->harga,
+                            'kuantitas' => $this->addOnQty[$addon->id_addon],
+                            'total' => $this->addOnQty[$addon->id_addon] * $addon->harga,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('payment')->with([
+            'pesanan' => $this->pesanan,
+            'pesananAddOn' => $pesananAddOn,
+            'totalHarga' => $this->totalHarga,
+        ]);
+    }
+
 
     public function render()
     {

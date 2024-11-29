@@ -2,17 +2,16 @@
 
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
+use App\Livewire\Inventory;
 use App\Livewire\OrderMenu;
 use App\Livewire\CartPesanan;
 use App\Livewire\PesanManual;
+use App\Livewire\HistorySearch;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DailyReportController;
-
-
-
 
 Route::get('/', function () {
     return view('home');
@@ -135,4 +134,5 @@ Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout'
 Route::get('cashier', PesanManual::class)->name('pesan-manual');
 Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
 Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
-
+Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
+Route::get('cashier/stock', Inventory::class)->name('inventory');

@@ -17,14 +17,29 @@ class PesanManual extends Component
         'tipe_order' => 'Dine In',
         'meja' => ''
     ];
+    public $search = '';
 
     public function mount()
     {
+        $this->customer = Session::get('customer', [
+            'nama' => '',
+            'tipe_order' => 'Dine In',
+            'meja' => ''
+        ]);
+
         $this->items = Menu::all();
+        $existingPesanan = Session::get('pesanan', []);
 
         // Inisialisasi kuantitas menu
         foreach ($this->items as $item) {
             $this->qtyMenu[$item->id_menu] = 0;
+        }
+
+        // Jika ada pesanan, isi qtyMenu sesuai dengan data di session
+        foreach ($existingPesanan as $pesanan) {
+            if (isset($this->qtyMenu[$pesanan['id_menu']])) {
+                $this->qtyMenu[$pesanan['id_menu']] = $pesanan['kuantitas'];
+            }
         }
 
         $this->updateTotal();
@@ -92,9 +107,16 @@ class PesanManual extends Component
         return redirect()->route('cart-pesanan');
     }
 
+    public function searchMenu()
+    {
+        $this->items = Menu::where('nama_menu', 'like', '%' . $this->search . '%')->get();
+    }
+
     public function render()
     {
-        return view('livewire.pesan-manual')
+        return view('livewire.pesan-manual', [
+            'items' => $this->items
+        ])
             ->title('Pesan Manual');
     }
 }

@@ -154,61 +154,7 @@ function openBill() {
 
 
 
-<!-- Card Makanan -->
-@foreach ($pesanan as $item)
-    <div class="rounded-lg shadow-lg bg-coconut p-4 mt-4" style="margin-right: 20px; margin-left: 20px">
-        <!-- Menu Utama -->
-        <div class="flex items-center mb-4">
-            <img src="{{ $item['gambar'] }}" alt="Foto {{ $item['nama_menu'] }}" class="w-12 h-12 rounded-full">
-            <div class="ml-4">
-                <h2 class="font-semibold text-lg text-gray-800">{{ $item['nama_menu'] }}</h2>
-                <p class="text-gray-600">Rp. <span>{{ number_format($item['harga'], 0, ',', '.') }}</span></p>
-            </div>
-        </div>
 
-        <!-- Addons -->
-        <div class="mb-4">
-            @if (isset($addOns[$item['id_menu']]) && $addOns[$item['id_menu']]->isNotEmpty())
-                <h3 class="font-semibold text-gray-700">Tambahan</h3>
-                <p class="text-sm" style="color:#6a6f4c;">*Pilih sesuai selera</p>
-                <div class="space-y-2 mt-2">
-                    @foreach ($addOns[$item['id_menu']] as $addon)
-                            
-                        <div class="flex items-center justify-between">
-                            <p class="text-gray-600">{{ $addon->nama_addon }}</p>
-                            <div class="flex items-center">
-                                <span class="text-gray-500 text-sm mr-2">Rp. {{ number_format($addon->harga, 0, ',', '.') }}</span>
-                                <button class="w-6 h-6 flex items-center justify-center rounded-full mr-2" style="background: #6a6f4c; color:white;" wire:click="kurangAddOnQty({{ $addon->id_addon }})">
-                                -
-                                </button>
-                                <span class="mx-2 bg-gray-200 text-gray-800 w-6 h-6 flex items-center justify-center rounded-full">
-                                {{ $addOnQty[$addon->id_addon] }}
-                                </span>
-                                <button class="bg-cocoa w-6 h-6 flex items-center justify-center rounded-full ml-2" style="background: #6a6f4c; color:white;" wire:click="tambahAddOnQty({{ $addon->id_addon }})">
-                                +
-                                </button>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-
-        <!-- Total Harga Makanan -->
-        <div class="flex items-center justify-between mt-4">
-            <p class="font-semibold text-lg text-gray-800">Total: Rp. <span id="totalPriceIndomie">{{ number_format($item['total'], 0, ',', '.') }}</span></p>
-            <div class="flex items-center">
-                <button class="bg-cocoa w-8 h-8 flex items-center justify-center rounded-full mr-2" style="color:white;"  wire:click="kurangQty({{ $item['id_menu'] }})">
-                    -
-                </button>
-                <span class="mx-4 text-gray-800 font-semibold">{{ $item['kuantitas'] }}</span>
-                <button class="bg-cocoa w-8 h-8 flex items-center justify-center rounded-full ml-2" style="color:white;" wire:click="tambahQty({{ $item['id_menu'] }})">
-                    +
-                </button>
-            </div>
-        </div>
-    </div>
-@endforeach
 
 
 
