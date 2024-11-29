@@ -1,51 +1,48 @@
 @extends('layout.admin_navbar')
 @section('title')
     Edit User
-
 @endsection
 @section('content')
-    <form action="{{route('admin.update_user', $user->id_user)}}" method="post">
+<div class="px-8 py-6 pb-[4rem]">
+    <div class="text-2xl font-semibold mb-6" style="color: #412f26">
+        Edit User
+    </div>
+    <form action="{{ route('admin.update_user', $user->id_user) }}" method="post" class="bg-white shadow-md rounded-lg p-6">
         @csrf
-        <p>{{session('error')}}</p>
-        <input type="hidden" name="id_user" value="{{$user->id_user}}">
-        <label for="nama">Nama Depan :</label>
-        <input type="text" name="nama_depan" id="nama" value="{{$user->nama_depan}}">
-        <br>
-        <label for="nama">Nama Belakang :</label>
-        <input type="text" name="nama_belakang" id="nama" value="{{$user->nama_belakang}}">
-        <br>
-        <label for="email">Email :</label>
-        <input type="email" name="email" id="email" value="{{$user->email}}">
-        <br>
-        <label for="no_telepon">No Telepon :</label>
-        <input type="text" name="no_telepon" id="no_telepon" value="{{$user->no_telepon}}">
-        <br>
-        <label for="role">Role :</label>
-        <select name="role" id="role">
-            <option value="Admin" @if($user->role == 'Admin') selected @endif>Admin</option>
-            <option value="Kasir" @if($user->role == 'Kasir') selected @endif>Kasir</option>
-        </select>
-        <br>
-        <button type="button" onclick="editPassword()">Edit Password</button>
-        <div id="password" style="display: none;">
-            <label for="password">New Password :</label>
-            <input type="password" name="password" id="password">
-            <br>
-            <label for="password_confirmation">Confirm Password :</label>
-            <input type="password" name="password_confirmation" id="password_confirmation">
-            <br>
+        @if (session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
+        <input type="hidden" name="id_user" value="{{ $user->id_user }}">
+        <div class="mb-4">
+            <label for="nama_depan" class="block text-gray-700 text-sm font-bold mb-2">Nama Depan:</label>
+            <input type="text" name="nama_depan" id="nama_depan" value="{{ $user->nama_depan }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
         </div>
-        <br>
-        <button type="submit">Edit User</button>
+        <div class="mb-4">
+            <label for="nama_belakang" class="block text-gray-700 text-sm font-bold mb-2">Nama Belakang:</label>
+            <input type="text" name="nama_belakang" id="nama_belakang" value="{{ $user->nama_belakang }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+            <input type="email" name="email" id="email" value="{{ $user->email }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="no_telepon" class="block text-gray-700 text-sm font-bold mb-2">No Telepon:</label>
+            <input type="text" name="no_telepon" id="no_telepon" value="{{ $user->no_telepon }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="role" class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
+            <select name="role" id="role" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                <option value="Kasir" {{ $user->role == 'Cashier' ? 'selected' : '' }}>Cashier</option>
+            </select>
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Update User
+            </button>
+        </div>
     </form>
-    <script>
-        function editPassword() {
-            var x = document.getElementById("password");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
+</div>
 @endsection

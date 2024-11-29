@@ -25,9 +25,12 @@ return new class extends Migration
             $table->string('customer', 50);
             $table->tinyInteger('meja')->unsigned()->check('meja >= 1 AND meja <= 21');
             $table->enum('tipe_order', ['Dine In', 'Take Away', 'Delivery']);
+            $table->enum('metode_pembayaran', ['EDC', 'Debit', 'Cash'])->nullable();
             $table->enum('status', ['Paid', 'Open Bill', 'Cancelled']);
             $table->integer('total_harga')->unsigned();
             $table->timestamp('waktu_transaksi')->useCurrent();
+            $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 

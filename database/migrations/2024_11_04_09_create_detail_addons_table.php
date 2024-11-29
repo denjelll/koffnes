@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_addons', function (Blueprint $table) {
-            $table->string('id_detailaddon', 10)->primary();
+            $table->string('id_detailaddon', 50)->primary();
 
             $table->unsignedBigInteger('id_addon'); 
             $table->foreign('id_addon') 
@@ -30,7 +30,9 @@ return new class extends Migration
 
             $table->integer('kuantitas');
             $table->integer('harga');
-
+            $table->timestamp('waktu_transaksi')->useCurrent();
+            $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 

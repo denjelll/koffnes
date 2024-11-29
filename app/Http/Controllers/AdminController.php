@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Promo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\AddOn;
+use App\Models\Event;
+use App\Models\Promo;
 use App\Models\Kategori;
 use App\Models\Isi_kategori;
-use App\Models\User;
-use App\Models\Event;
+use App\Models\Order;
+use App\Exports\TransactionExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TransactionExportByID;
+use Illuminate\Http\Request;
+use App\Models\KoffnesStatus;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -23,6 +29,25 @@ class AdminController extends Controller
         }
     }
 
+    public function status()
+    {
+        $status = KoffnesStatus::first();
+
+        return view('admin.koffnes_status', compact('status'));
+    }
+
+    public function toggleStatus()
+    {
+        $status = KoffnesStatus::first();
+        $newStatus = $status->status_koffnes === 'open' ? 'close' : 'open';
+
+        $status->update(['status_koffnes' => $newStatus]);
+
+        // Perbarui cache
+        Cache::forget('koffnes_status');
+        return back()->with('success', 'Status updated successfully!');
+    }
+
     public function logout()
     {
         Session::flush();
@@ -31,7 +56,8 @@ class AdminController extends Controller
 
     public function menu(){
         $menus = Menu::all();
-        return view('admin.menu', compact('menus'));
+        $kategoris = Kategori::all();
+        return view('admin.menu', compact('menus','kategoris'));
     }
 
     public function showAddMenuForm(){
@@ -47,7 +73,8 @@ class AdminController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
         $image = $request->file('gambar');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $now = date('jmYHis');
+        $imageName = $now . '_' . $image->getClientOriginalName();
 
         if(isset($request->harga_promo)){
             $promo = new Promo();
@@ -105,15 +132,17 @@ class AdminController extends Controller
     }
 
     public function promo(){
-        $menus = Menu::whereNotNull('id_promo')->get();
-        return view('admin.promo', compact('menus'));
+        $promos = Promo::all();
+        return view('admin.promo', compact('promos'));
     }
 
     public function showAddPromoForm(){
         $menus = Menu::where('id_promo', null)->get();
         return view('admin.add_promo', compact('menus'));
     }
-
+    public function showEditPromoForm(Promo $promo){
+        return view('admin.edit_promo', compact('promo'));
+    }
     public function storePromo(Request $request){
         $request->validate([
             'judul_promo' => 'required',
@@ -139,7 +168,23 @@ class AdminController extends Controller
 
         return redirect('/admin/promo');
     }
-
+    public function updatePromo(Request $request){
+        $request->validate([
+            'judul_promo' => 'required',
+            'harga_promo' => 'required|numeric',
+            'hari'=> 'required',
+            'waktu_mulai' => 'required',
+            'waktu_berakhir' => 'required'
+        ]);
+        $promo = Promo::find($request->id_promo);
+        $promo->judul_promo = $request->judul_promo;
+        $promo->harga_promo = $request->harga_promo;
+        $promo->hari = $request->hari;
+        $promo->waktu_mulai = $request->waktu_mulai;
+        $promo->waktu_berakhir = $request->waktu_berakhir;
+        $promo->save();
+        return redirect('/admin/promo');
+    }
     public function deletePromo(Promo $promo){
         $promo->delete();
         return redirect('/admin/promo');
@@ -152,8 +197,9 @@ class AdminController extends Controller
         $menu = Menu::find($request->id_menu);
 
     if ($request->hasFile('gambar')) {
+        $now = date('jmYHis');
         $image = $request->file('gambar');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $imageName = $now . '_' . $image->getClientOriginalName();
         $image->move(public_path('menu'), $imageName);
 
         // Hapus gambar lama setelah gambar baru disimpan
@@ -190,8 +236,7 @@ class AdminController extends Controller
 
     public function kategori(){
         $kategoris = Kategori::all();
-        $isi_kategoris = Isi_kategori::groupBy('id_kategori')->count();
-        return view('admin.kategori',compact('kategoris','isi_kategoris'));
+        return view('admin.kategori',compact('kategoris'));
     }
     public function showAddKategoriForm(){
         $menus = Menu::all();
@@ -260,8 +305,12 @@ class AdminController extends Controller
         if($request->password != $request->password_confirmation){
             return redirect()->back()->with('error', 'Password confirmation does not match');
         }
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            return redirect()->back()->with('error', 'Email already exists');
+        }
+
         $user = new User();
-        
         $user->nama_depan = $request->nama_depan;
         $user->nama_belakang = $request->nama_belakang;
         $user->no_telepon = $request->no_telepon;
@@ -321,7 +370,8 @@ class AdminController extends Controller
             'deskripsi_event' => 'required'
         ]);
         $image = $request->file('banner_event');
-        $imageName = time() . '_' . $image->getClientOriginalName();
+        $now = date('jmYHis');
+        $imageName = $now . '_' . $image->getClientOriginalName();
         $event = new Event();
         $event->nama_event = $request->nama_event;
         $event->tanggal_event = $request->tanggal_event;
@@ -338,21 +388,70 @@ class AdminController extends Controller
     }
     public function updateEvent(Request $request){
         $request->validate([
-            'judul_event' => 'required',
-            'tanggal' => 'required',
-            'waktu' => 'required',
-            'deskripsi' => 'required'
+            'nama_event' => 'required',
+            'tanggal_event' => 'required',
+            'jam_event' => 'required',
+            'hadiah' => 'required',
+            'deskripsi_event' => 'required'
         ]);
         $event = Event::find($request->id_event);
-        $event->judul_event = $request->judul_event;
-        $event->tanggal = $request->tanggal;
-        $event->waktu = $request->waktu;
-        $event->deskripsi = $request->deskripsi;
+        $event->nama_event = $request->nama_event;
+        $event->tanggal_event = $request->tanggal_event;
+        $event->jam_event = $request->jam_event;
+        $event->hadiah_event = $request->hadiah;
+        $event->deskripsi_event = $request->deskripsi_event;
+        if ($request->hasFile('banner_event')) {
+            $image = $request->file('banner_event');
+            $now = date('jmYHis');
+            $imageName = $now . '_' . $image->getClientOriginalName();
+            $image->move(public_path('event'), $imageName);
+    
+            // Hapus gambar lama setelah gambar baru disimpan
+            if ($event->banner_event && file_exists(public_path('event/' . $event->banner_event))) {
+                unlink(public_path('event/' . $event->banner_event));
+            }
+    
+            // Perbarui kolom gambar di database
+            $event->banner_event = $imageName;
+        }
         $event->save();
         return redirect('/admin/event')->with('success', 'Event updated successfully');
     }
     public function deleteEvent(Event $event){
         $event->delete();
+        unlink(public_path('event/'.$event->banner_event));
         return redirect('/admin/event');
+    }
+    public function updatePromoStatus(Request $request, $id)
+{
+    $promo = Promo::find($id);
+    if ($promo) {
+        $promo->status = $request->status;
+        $promo->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false]);
+}
+    public function transaction(){
+        $orders = Order::all();
+        $orders = Order::selectRaw('DATE(waktu_transaksi) as date, SUM(total_harga) as total_harga')
+            ->groupBy('date')
+            ->get();
+        return view('admin.transaction', compact('orders'));
+    }
+    public function transactionDate($date){
+        $orders = Order::whereDate('waktu_transaksi', $date)->get();
+        return view('admin.transaction_date', compact('orders'));
+    }
+    public function transactionDetail(Order $order){
+        return view('admin.detail_transaksi', compact('order'));
+    }
+    public function downloadExcelTransaction($date){
+        return Excel::download(new TransactionExport($date), 'transaction_'.$date.'.xlsx');
+    }
+    public function downloadExcelTransactionByID($id_order){
+        return Excel::download(new TransactionExportByID($id_order), 'transaction'.$id_order.'.xlsx');
     }
 }

@@ -3,77 +3,117 @@
     Add Menu
 @endsection
 @section('content')
-    <form action="{{route('admin.store')}}" method="post" enctype="multipart/form-data">
+<div class="px-8 py-6 pb-[4rem]">
+    <div class="text-2xl font-semibold mb-6" style="color: #412f26">
+        Add Menu
+    </div>
+    <form action="{{ route('admin.store') }}" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-6">
         @csrf
-        <label for="nama">Nama Menu :</label>
-        <input type="text" name="nama_menu" id="nama">
-        <br>
-        <label for="harga">Harga :</label>
-        <input type="number" name="harga" id="harga">
-        <br>
-        <label for="deskripsi">Deskripsi :</label>
-        <textarea name="deskripsi" id="deskripsi"></textarea>
-        <br>
-        <label for="stok">Stok :</label>
-        <input type="number" name="stok" id="stok">
-        <br>
-        <label for="gambar">Gambar :</label>
-        <input type="file" name="gambar" id="gambar">
-        <br>
-        <button type="button" onclick="togglePromo()">Add Promo</button>
+        <div class="mb-4">
+            <label for="nama_menu" class="block text-gray-700 text-sm font-bold mb-2">Nama Menu:</label>
+            <input type="text" name="nama_menu" id="nama_menu" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="harga" class="block text-gray-700 text-sm font-bold mb-2">Harga:</label>
+            <input type="number" name="harga" id="harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="deskripsi" class="block text-gray-700 text-sm font-bold mb-2">Deskripsi:</label>
+            <textarea name="deskripsi" id="deskripsi" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="stok" class="block text-gray-700 text-sm font-bold mb-2">Stok:</label>
+            <input type="number" name="stok" id="stok" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="gambar" class="block text-gray-700 text-sm font-bold mb-2">Gambar:</label>
+            <input type="file" name="gambar" id="gambar" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <button type="button" onclick="togglePromo()" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Promo</button>
+        </div>
         <div id="promo-container" style="display: none;">
-            <label for="promo">Judul Promo :</label>
-            <input type="text" name="judul_promo" id="promo">
-            <br>
-            <label for="harga_promo">Harga Promo :</label>
-            <input type="number" name="harga_promo" id="harga_promo">
-            <br>
-            <label for="hari">Hari Promo :</label>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Monday">Monday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Tuesday">Tuesday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Wednesday">Wednesday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Thursday">Thursday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Friday">Friday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Saturday">Saturday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="Sunday">Sunday</input>
-        <br>
-        <input type="radio" name="hari" id="hari" value="AllDay">Setiap hari</input>
-        <br>
-            <br>
-            <label for="waktu">Setiap Jam :</label>
-            <input type="time" name="waktu_mulai" id="waktu_mulai"> - <input type="time" name="waktu_berakhir" id="waktu_berakhir">
+            <div class="mb-4">
+                <label for="judul_promo" class="block text-gray-700 text-sm font-bold mb-2">Judul Promo:</label>
+                <input type="text" name="judul_promo" id="judul_promo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="harga_promo" class="block text-gray-700 text-sm font-bold mb-2">Harga Promo:</label>
+                <input type="number" name="harga_promo" id="harga_promo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="hari" class="block text-gray-700 text-sm font-bold mb-2">Hari Promo:</label>
+                <div class="flex flex-wrap gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Monday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Monday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Tuesday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Tuesday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Wednesday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Wednesday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Thursday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Thursday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Friday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Friday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Saturday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Saturday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="Sunday" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Sunday</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="hari" value="AllDay" class="form-radio text-[#412f26]">
+                        <span class="ml-2">Setiap hari</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="waktu_mulai" class="block text-gray-700 text-sm font-bold mb-2">Waktu Mulai:</label>
+                <input type="time" name="waktu_mulai" id="waktu_mulai" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="waktu_berakhir" class="block text-gray-700 text-sm font-bold mb-2">Waktu Berakhir:</label>
+                <input type="time" name="waktu_berakhir" id="waktu_berakhir" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
         </div>
-        <br>
-        <button type="button" onclick="addAddOns()">Add Add-Ons</button>
-        <br>
-        <div id="addOns">
+        <div class="mb-4">
+            <button type="button" onclick="addAddOns()" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Add-Ons</button>
         </div>
-        <button type="submit">Add Menu</button>
+        <div id="addOns" class="mb-4">
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Add Menu
+            </button>
+        </div>
     </form>
-    <script>
-        let i = 0;
-        function togglePromo() {
-            const promoContainer = document.getElementById('promo-container');
-            if (promoContainer.style.display === 'none') {
-                promoContainer.style.display = 'block';
-            } else {
-                promoContainer.style.display = 'none';
-            }
-        }
-        
-        function addAddOns() {
-            const AddOns = document.getElementById('addOns');
-            AddOns.innerHTML += `
-                <input type="text" name="addOns[]" placeholder="Add-Ons"><br>
-                <input type="text" name="harga_addon[]" placeholder="Harga"><br>
-            `;
-        }
-    </script>
+</div>
+
+<script>
+    function togglePromo() {
+        const promoContainer = document.getElementById('promo-container');
+        promoContainer.style.display = promoContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addAddOns() {
+        const addOns = document.getElementById('addOns');
+        addOns.innerHTML += `
+            <div class="flex items-center mb-2">
+                <input type="text" name="addOns[]" placeholder="Add-Ons" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
+                <input type="number" name="harga_addon[]" placeholder="Harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+        `;
+    }
+</script>
 @endsection
