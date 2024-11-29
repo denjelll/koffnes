@@ -138,10 +138,7 @@
                             class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3"
                             id="total-section">
                             <span id="total-price">Total: Rp. 0,00-</span>
-                            <img
-                                src="{{ asset('storage/uploads/Cashnes.png') }}"
-                                alt="Chart Icon"
-                                class="ml-auto h-5 w-5">
+                            <img src="{{ asset('storage/uploads/Cashnes.png') }}" alt="Chart Icon" class="ml-auto h-5 w-5">
                         </div>
                     </a>
 
@@ -163,14 +160,6 @@
 
             <!-- JavaScript to Toggle Mobile Menu -->
             <script>
-                const menuToggle = document.getElementById('menu-toggle');
-                const mobileNav = document.getElementById('mobile-nav');
-
-                menuToggle.addEventListener('click', () => {
-                    mobileNav
-                        .classList
-                        .toggle('hidden');
-                });
                 // Get all menu cards and total price element
                 const menuCards = document.querySelectorAll('.menu-card');
                 const totalPriceElement = document.getElementById('total-price');
