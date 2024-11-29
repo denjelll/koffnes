@@ -11,8 +11,6 @@ class Promo extends Model
 
     protected $table = 'promos';
     protected $primaryKey = 'id_promo';
-    public $incrementing = false;
-    protected $keyType = 'string';
     
     protected $fillable = [
         'id_promo',
@@ -20,4 +18,9 @@ class Promo extends Model
         'waktu_mulai',
         'waktu_berakhir',
     ];
+    
+    public function menu(){
+        return $this->hasOne(Menu::class, 'id_promo', 'id_promo');
+    }
+
 }
