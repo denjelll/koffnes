@@ -14,17 +14,6 @@ return new class extends Migration
         Schema::create('detail_addons', function (Blueprint $table) {
             $table->string('id_detailaddon', 50)->primary();
 
-<<<<<<< HEAD:database/migrations/2024_11_04_10_create_detail_addons_table.php
-            $table->unsignedBigInteger('id_addons');
-            $table->foreign('id_addons')
-                  ->references('id_addons')
-                  ->on('addons')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
-            
-            $table->string('detail_addons', 50);
-            $table->integer('harga_addons');
-=======
             $table->unsignedBigInteger('id_addon'); 
             $table->foreign('id_addon') 
                   ->references('id_addon') 
@@ -44,7 +33,6 @@ return new class extends Migration
             $table->timestamp('waktu_transaksi')->useCurrent();
             $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
             $table->softDeletes();
->>>>>>> main:database/migrations/2024_11_04_09_create_detail_addons_table.php
         });
     }
 

@@ -11,11 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-<<<<<<< HEAD:database/migrations/2024_11_04_05_create_addons_table.php
-        Schema::create('addons', function (Blueprint $table) {
-            $table->id('id_addons')->autoIncrement();
-            $table->string('addons_menu', 50);
-=======
         Schema::create('add_ons', function (Blueprint $table) {
             $table->id('id_addon')->autoIncrement();
             $table->unsignedBigInteger('id_menu');
@@ -26,7 +21,6 @@ return new class extends Migration
                   ->onUpdate('cascade');
             $table->string('nama_addon', 50);
             $table->integer('harga');
->>>>>>> main:database/migrations/2024_11_04_06_create_add_ons_table.php
             $table->timestamps();
         });
     }

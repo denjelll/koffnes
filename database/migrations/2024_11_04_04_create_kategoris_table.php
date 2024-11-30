@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-<<<<<<<< HEAD:database/migrations/2024_11_04_02_create_kategori_utama_table.php
-        Schema::create('kategori_utama', function (Blueprint $table) {
-            $table->id('id_kategoriutama')->autoIncrement();
-            $table->string('nama_kategori', 50);
-========
 
         Schema::create('kategoris', function (Blueprint $table) {
             $table->id('id_kategori')->autoIncrement();
             $table->string('nama_kategori', 50);
             $table->timestamps();
->>>>>>>> main:database/migrations/2024_11_04_04_create_kategoris_table.php
         });
     }
 
@@ -30,10 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-<<<<<<<< HEAD:database/migrations/2024_11_04_02_create_kategori_utama_table.php
-        Schema::dropIfExists('kategori_utama');
-========
         Schema::dropIfExists('kategoris');
->>>>>>>> main:database/migrations/2024_11_04_04_create_kategoris_table.php
     }
 };
