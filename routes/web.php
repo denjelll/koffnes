@@ -16,11 +16,11 @@ use App\Models\Event;
 
 Route::get('/', function () {
     $events = Event::all();
-    return view('index', compact('events'));
+    return view('home', compact('events'));
 });
 
-Route::get('/index', function () {
-    return view('index');
+Route::get('/home', function () {
+    return view('home');
 });
 
 Route::get('/closed', function () {
