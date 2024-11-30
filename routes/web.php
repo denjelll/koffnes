@@ -112,11 +112,12 @@ Route::middleware(['role:Admin'])->group(function() {
 });
 
 Route::middleware(['role:Kasir|Admin'])->group(function () {
-    //isi disini ya Kerby, buat cashier controller
     Route::get('cashier', PesanManual::class)->name('pesan-manual');
+    Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
     Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
-
+    Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
     Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
+    Route::get('cashier/stock', Inventory::class)->name('inventory');
 });
 
 Route::middleware(['check_koffnes'])->group(function () {
@@ -131,8 +132,3 @@ Route::middleware(['check_koffnes'])->group(function () {
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 
-Route::get('cashier', PesanManual::class)->name('pesan-manual');
-Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
-Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
-Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
-Route::get('cashier/stock', Inventory::class)->name('inventory');

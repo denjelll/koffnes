@@ -94,7 +94,15 @@
             
                 <!-- Results Section -->
                 <div class="mt-6">
-                    <h2 class="text-xl font-bold text-[#412f26] mb-3">Transaction Results</h2>
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-bold text-[#412f26] mb-3">Transaction Results</h2>
+                        <form action="{{ route('daily.report') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bg-[#412f26] text-white py-1 px-3 rounded-lg text-sm hover:bg-[#5a4533]">
+                                Daily Report
+                            </button>
+                        </form>
+                    </div>
                     <ul class="space-y-4">
                         @forelse ($orders as $order)
                             <li class="bg-white p-4 rounded-lg shadow-md">
