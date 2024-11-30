@@ -98,8 +98,10 @@
     
                 <!-- Kuantitas -->
                 <div class="flex items-center justify-between mt-4">
+                    <!-- Harga Item -->
                     <p class="font-semibold text-lg text-gray-800">
-                        Rp. {{ number_format( ($item['quantity'] ?? 0) * $item['menu']->harga + 
+                        Rp. {{ number_format(($item['quantity'] ?? 0) * 
+                        ($item['menu']->promo && $item['menu']->promo->status === 'Aktif' && (now()->format('l') === $item['menu']->promo->hari || $item['menu']->promo->hari === 'AllDay') && now()->between($item['menu']->promo->waktu_mulai, $item['menu']->promo->waktu_berakhir) ? $item['menu']->promo->harga_promo : $item['menu']->harga) + 
                         collect($item['addOn'] ?? [])->sum(function ($addon) 
                         { return $addon['harga'] * ($addon['quantity'] ?? 0); }), 0, ',', '.' ) }}
                     </p>
@@ -111,15 +113,8 @@
                             <h2 class="text-xl w-8 h-8 font-bold"><a>-</a></h2>
                         </button>
                         
-                        <!-- <input 
-                            type="number"
-                            wire:change="updateMenuQuantity({{ $item['menu']->id_menu }}, $event.target.value)"
-                            value="{{ $item['quantity'] }}"
-                            class="flex justify-center font-semibold input input-bordered w-12 text-center"
-                            min="0" /> -->
-
                         <span class="font-bold text-[#412F26] mx-2 text-sm sm:text-base"  wire:change="updateMenuQuantity({{ $item['menu']->id_menu }}, $event.target.value)">
-                                                    {{ $item['quantity'] }}
+                            {{ $item['quantity'] }}
                         </span>
                         <button 
                             wire:click="updateMenuQuantity({{ $item['menu']->id_menu }}, {{ $item['quantity'] + 1 }})"

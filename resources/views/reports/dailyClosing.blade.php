@@ -46,7 +46,8 @@
 </head>
 <body>
     <h1>Laporan Penjualan Harian</h1>
-    <h2>Date: {{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM YYYY, HH:mm:ss') }}</h2>
+    <h2>Tanggal: {{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM YYYY, HH:mm:ss') }}</h2>
+    <h3>Dicetak oleh: {{ $printedBy }}</h3>
 
     <table>
         <thead>
@@ -58,6 +59,7 @@
                 <th>No Meja</th>
                 <th>Tipe Order</th>
                 <th>Status</th>
+                <th>Metode Pembayaran</th> 
                 <th>Waktu Transaksi</th>
                 <th>Total Harga</th>
             </tr>
@@ -75,6 +77,7 @@
                     <td>{{ $order->meja }}</td>
                     <td>{{ $order->tipe_order }}</td>
                     <td>{{ $order->status }}</td>
+                    <td>{{ $order->metode_pembayaran }}</td> 
                     <td>{{ $order->waktu_transaksi }}</td>
                     <td>Rp. {{ number_format($order->total_harga, 0, ',', '.') }}</td>
                 </tr>
@@ -103,7 +106,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="8" class="footer">Total Pendapatan Hari Ini:</td>
+                <td colspan="9" class="footer">Total Pendapatan Hari Ini:</td>
                 <td class="footer">Rp. {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
             </tr>
         </tfoot>

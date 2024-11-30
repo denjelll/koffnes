@@ -1,7 +1,5 @@
 <?php
 
-<<<<<<< HEAD
-=======
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
 use App\Livewire\Inventory;
@@ -9,56 +7,22 @@ use App\Livewire\OrderMenu;
 use App\Livewire\CartPesanan;
 use App\Livewire\PesanManual;
 use App\Livewire\HistorySearch;
->>>>>>> main
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
-<<<<<<< HEAD
-
-=======
 use App\Http\Controllers\DailyReportController;
->>>>>>> main
+use App\Models\Event;
 
 Route::get('/', function () {
-    return view('home');
+    $events = Event::all();
+    return view('home', compact('events'));
 });
 
 Route::get('/home', function () {
     return view('home');
 });
 
-//cashier
-
-Route::get('/cashier/home', function () {
-    return view('/cashier/menu');
-});
-
-Route::get('/cashier/chart', function(){
-    return view('/cashier/chart');
-});
-
-Route::get('/cashier/checkout', function(){
-    return view('/cashier/checkout');
-});
-
-Route::get('cashier/history', function(){
-    return view('/cashier/history');
-});
-
-Route::get('/cashier/order', function(){
-    return view('/cashier/order');
-});
-
-Route::get('/cashier/inventory', function(){
-    return view('/cashier/inventory');
-});
-
-Route::get('/cashier/table', function(){
-    return view('/cashier/table');
-});
-
-//bagian lain
 Route::get('/closed', function () {
     return view('closed');
 })->name('closed.page');
@@ -66,27 +30,6 @@ Route::get('/closed', function () {
 
 Route::controller( LoginController::class)->group(function(){
     Route::get('/login', 'index')->name('login.index');
-<<<<<<< HEAD
-    Route::post('/login/verify', 'verify')->name('login.verify');
-    Route::get('/admin', 'index')->name('admin.index');
-    Route::get('/admin/logout', 'logout')->name('admin.logout');
-
-    Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
-    Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
-
-    Route::get('/order/meja/{nomorMeja}/menu', 'showMenu')->name('order.menu');
-
-    Route::post('/order/meja/{nomorMeja}/checkout', 'cart')->name('order.cart');
-    Route::get('/order/meja/{nomorMeja}/checkout', 'checkout')->name('order.checkout');
-    Route::get('/admin/menu', 'menu')->name('admin.menu');
-    Route::get('/admin/menu/add', 'showAddMenuForm')->name('admin.menu.add');
-    Route::post('/admin/store', 'storeMenu')->name('admin.store');
-    Route::get('/admin/menu/edit/{id}', 'showEditMenuForm')->name('admin.menu.edit');
-    Route::get('/admin/menu/delete/{id}', 'DeleteMenu')->name('admin.menu.delete');
-    Route::post('/admin/update', 'updateMenu')->name('admin.update.menu');
-});
-
-=======
     Route::post('/login/verify', 'verify')
     ->middleware('throttle:5,1')
     ->name('login.verify');
@@ -140,12 +83,12 @@ Route::middleware(['role:Admin'])->group(function() {
 });
 
 Route::middleware(['role:Kasir|Admin'])->group(function () {
-    //isi disini ya Kerby, buat cashier controller
     Route::get('cashier', PesanManual::class)->name('pesan-manual');
+    Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
     Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
->>>>>>> main
-
+    Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
     Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
+    Route::get('cashier/stock', Inventory::class)->name('inventory');
 });
 
 Route::middleware(['check_koffnes'])->group(function () {
@@ -157,17 +100,6 @@ Route::middleware(['check_koffnes'])->group(function () {
     });
 });
 
-<<<<<<< HEAD
-Route::get('/home', function () {
-    return view('/customer_ex/home');
-});
-=======
 Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
 Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 
-Route::get('cashier', PesanManual::class)->name('pesan-manual');
-Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
-Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
-Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
-Route::get('cashier/stock', Inventory::class)->name('inventory');
->>>>>>> main
