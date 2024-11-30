@@ -158,3 +158,15 @@
 
     </div>
 </div>
+
+<script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+</script>
