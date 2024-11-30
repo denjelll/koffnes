@@ -68,10 +68,12 @@
     </div>
     <!-- Best Seller Card Content -->
     <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
-    <div class="flex space-x-4">
-     @foreach($menus as $menu)
-      <x-customer_menu_card :menu="$menu"/>
-     @endforeach
+    <div class="grid grid-cols-2 gap-4">
+      @foreach($menus->chunk(2) as $menuChunk)
+        @foreach($menuChunk as $menu)
+          <x-customer_menu_card :menu="$menu"/>
+        @endforeach
+      @endforeach
     </div>
     
     <!-- Bundling Card Content -->
