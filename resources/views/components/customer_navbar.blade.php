@@ -7,7 +7,7 @@
           <img src="{{ asset('storage/asset/gambar/home.png') }}" width="24" height="24" class="mb-1" />
           <span class="text-sm">Home</span>
         </a>
-        <a href="/menu" class="text-center flex flex-col items-center">
+        <a href="/menugate" class="text-center flex flex-col items-center">
           <img src="{{ asset('storage/asset/gambar/menu.png') }}" width="24" height="24" class="mb-1" />
           <span class="text-sm">Menu</span>
         </a>

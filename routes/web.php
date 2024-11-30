@@ -34,6 +34,10 @@ Route::get('/events', function () {
     return view('events', compact('events'));
 });
 
+Route::get('/menugate', function () {
+    return view('menu_gate');
+});
+
 Route::get('/closed', function () {
     return view('closed');
 })->name('closed.page');
