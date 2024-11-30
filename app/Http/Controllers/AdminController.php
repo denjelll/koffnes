@@ -220,8 +220,15 @@ class AdminController extends Controller
     if(isset($request->addOns)){
         $menu = Menu::find($request->id_menu);
         foreach($request->addOns as $index => $addOn){
+            if(empty($addOn)){
+                if(isset($request->id_addon[$index])){
+                    $AddOn = AddOn::find($request->id_addon[$index]);
+                    $AddOn->delete();
+                }
+                continue;
+            }
             if(!isset($request->id_addon[$index])){
-            $AddOn = new AddOn();
+                $AddOn = new AddOn();
             }else{
                 $AddOn = AddOn::find($request->id_addon[$index]);
             }

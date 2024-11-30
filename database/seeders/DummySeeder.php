@@ -16,6 +16,44 @@ class DummySeeder extends Seeder
             'status_koffnes' => 'close',
         ]);
 
+        //Dummy Events
+        DB::table('events')->insert([
+            [
+                'id_event' => 1,
+                'nama_event' => 'Festival Musim Panas',
+                'banner_event' => 'images/banner1.jpg',
+                'hadiah_event' => 'Hadiah Utama: Liburan ke Bali',
+                'tanggal_event' => Carbon::create(2023, 6, 21),
+                'jam_event' => Carbon::createFromTime(18, 0, 0),
+                'deskripsi_event' => 'Festival Musim Panas terbesar tahun ini dengan berbagai kegiatan menarik dan hadiah besar.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_event' => 2,
+                'nama_event' => 'Lomba Makan Burger',
+                'banner_event' => 'images/banner2.jpg',
+                'hadiah_event' => 'Voucher Makan Gratis Selama Setahun',
+                'tanggal_event' => Carbon::create(2023, 7, 4),
+                'jam_event' => Carbon::createFromTime(12, 0, 0),
+                'deskripsi_event' => 'Lomba makan burger cepat dengan berbagai hadiah menarik.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_event' => 3,
+                'nama_event' => 'Marathon Amal',
+                'banner_event' => 'images/banner3.jpg',
+                'hadiah_event' => 'Medali Emas dan Donasi ke Yayasan',
+                'tanggal_event' => Carbon::create(2023, 9, 10),
+                'jam_event' => Carbon::createFromTime(6, 0, 0),
+                'deskripsi_event' => 'Marathon untuk amal dengan tujuan mengumpulkan donasi untuk yayasan yang membutuhkan.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            // Tambahkan data lainnya sesuai kebutuhan
+        ]);
+
 
         // Menambahkan data kategori
         DB::table('kategoris')->insert([
