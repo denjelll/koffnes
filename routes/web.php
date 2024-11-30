@@ -12,46 +12,17 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DailyReportController;
+use App\Models\Event;
 
 Route::get('/', function () {
-    return view('home');
+    $events = Event::all();
+    return view('index', compact('events'));
 });
 
-Route::get('/home', function () {
-    return view('home');
+Route::get('/index', function () {
+    return view('index');
 });
 
-//cashier
-
-Route::get('/cashier/home', function () {
-    return view('/cashier/menu');
-});
-
-Route::get('/cashier/chart', function(){
-    return view('/cashier/chart');
-});
-
-Route::get('/cashier/checkout', function(){
-    return view('/cashier/checkout');
-});
-
-Route::get('cashier/history', function(){
-    return view('/cashier/history');
-});
-
-Route::get('/cashier/order', function(){
-    return view('/cashier/order');
-});
-
-Route::get('/cashier/inventory', function(){
-    return view('/cashier/inventory');
-});
-
-Route::get('/cashier/table', function(){
-    return view('/cashier/table');
-});
-
-//bagian lain
 Route::get('/closed', function () {
     return view('closed');
 })->name('closed.page');
