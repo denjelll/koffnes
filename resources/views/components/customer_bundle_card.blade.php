@@ -6,7 +6,7 @@
     <p class="text-sm text-gray-600 mt-1">{{$bundle->menu->deskripsi}}</p>
     <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4" id="best-seller-controls">
     <!-- Initial ADD TO CART button (responsive size) -->
-      <a class="bg-[#4f3222] text-white rounded-lg py-2 px-4 text-xs sm:text-sm w-full sm:w-auto flex items-center justify-center" href="/menugate">
+      <a class="btn btn-primary mt-2 px-6 py-2 rounded-full text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 bg-[#412F26] text-white hover:bg-white hover:text-[#412F26] border-none shadow-lg active:scale-95 w-full text-center" href="/menugate">
           Order Now
       </a>
       <!-- Quantity controls (hidden initially) -->
