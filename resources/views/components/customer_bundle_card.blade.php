@@ -2,7 +2,7 @@
   <img src="{{ asset('menu/'.$bundle->menu->gambar) }}" alt="Americano" class="w-full h-32 object-cover rounded-lg" />
   <div class="pt-4 pb-10">
     <h3 class="text-lg font-semibold text-gray-800">{{$bundle->menu->nama_menu}}</h3>
-    <p class="text-green-800 text-lg">{{$bundle->menu->harga}}</p>
+    <p class="text-green-800 text-lg">Rp.{{$bundle->menu->harga}}</p>
     <p class="text-sm text-gray-600 mt-1">{{$bundle->menu->deskripsi}}</p>
     <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4" id="best-seller-controls">
     <!-- Initial ADD TO CART button (responsive size) -->

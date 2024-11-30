@@ -29,6 +29,11 @@ Route::get('/home', function () {
     return view('home');
 });
 
+Route::get('/events', function () {
+    $events = Event::all();
+    return view('events', compact('events'));
+});
+
 Route::get('/closed', function () {
     return view('closed');
 })->name('closed.page');

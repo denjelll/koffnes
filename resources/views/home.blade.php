@@ -88,7 +88,7 @@
     @endforeach
     <div class="flex items-center justify-center mt-3">
       <a
-      href="#events"
+      href="/events"
       class="inline-block px-4 py-2 mt-4 text-white font-semibold" style="background-color: #412f26; border-radius: 15px; font-size: x-large;" 
     >
       See More Events
