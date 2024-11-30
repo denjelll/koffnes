@@ -71,6 +71,7 @@
         <a href="{{ route('admin.transaction') }}" class="hover:underline">Transaction Recap</a>
         <a href="{{ route('admin.user') }}" class="hover:underline">User Management</a>
         <a href="{{ route('admin.event') }}" class="hover:underline">Event Management</a>
+        <a href="{{ route('admin.koffnesstatus') }}" class="hover:underline">Store Management</a>
         <a href="{{ route('admin.logout') }}" class="hover:underline text-[#CBB89D]">Logout</a>
       </div>
     </nav>

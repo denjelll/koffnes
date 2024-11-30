@@ -112,8 +112,12 @@
             <div class="flex items-center mb-2">
                 <input type="text" name="addOns[]" placeholder="Add-Ons" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                 <input type="number" name="harga_addon[]" placeholder="Harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <button type="button" onclick="removeAddOn(this)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">X</button>
             </div>
         `;
+    }
+    function removeAddOn(button) {
+        button.parentElement.remove();
     }
 </script>
 @endsection
