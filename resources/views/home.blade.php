@@ -68,7 +68,7 @@
     </div>
     <!-- Best Seller Card Content -->
     <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
       @foreach($menus->chunk(2) as $menuChunk)
         @foreach($menuChunk as $menu)
           <x-customer_menu_card :menu="$menu"/>
