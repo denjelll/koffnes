@@ -9,16 +9,18 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DailyReportController;
+use App\Models\Event;
 
 
 
 
 Route::get('/', function () {
-    return view('home');
+    $events = Event::all();
+    return view('index', compact('events'));
 });
 
-Route::get('/home', function () {
-    return view('home');
+Route::get('/index', function () {
+    return view('index');
 });
 
 Route::get('/closed', function () {
