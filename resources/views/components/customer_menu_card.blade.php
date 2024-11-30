@@ -5,15 +5,15 @@
 -moz-box-shadow: 8px 10px 0px -2px rgba(106,111,76,0.72);"
         >
           <img
-            src="foto-menu.jpg"
+            src="{{ asset('menu/'.$menu->image) }}"
             alt="Foto Menu"
             class="w-full h-48 object-cover"
           />
           <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
+            <h3 class="text-xl font-semibold text-gray-800">{{$menu->name}}</h3>
+            <p class="text-lg text-green-600">Rp. {{number_format($menu->price, 0, ',', '.')}}</p>
             <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
+              {{$menu->description}}
             </p>
             <!-- <button
               class="mt-4 w-full py-2 text-white rounded-lg"

@@ -69,23 +69,21 @@
     <!-- Best Seller Card Content -->
     <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
     <div class="flex space-x-4">
-      <x-customer_menu_card />
-      <x-customer_menu_card />
+     @foreach($menus as $menu)
+      <x-customer_menu_card :menu="$menu"/>
+     @endforeach
     </div>
-    <div class="flex space-x-4">
-      <x-customer_menu_card />
-      <x-customer_menu_card />
-    </div>
+    
     <!-- Bundling Card Content -->
     <h1 class="text-3xl font-bold mb-4 mt-5">Bundling & Deals</h1>
-      <x-customer_bundle_card />
-      <x-customer_bundle_card />
-      <x-customer_bundle_card />
+      @foreach($bundles as $bundle)
+        <x-customer_bundle_card :bundle="$bundle"/>
+      @endforeach
     <!-- Event Card Content -->
     <h1 class="text-3xl font-bold mb-4 mt-5">Event News</h1>
-    <x-customer_event_home />
-    <x-customer_event_home />
-    <x-customer_event_home />
+   @foreach($events as $event)
+    <x-customer_event_home :event="$event"/>
+    @endforeach
     <div class="flex items-center justify-center mt-3">
       <a
       href="#events"

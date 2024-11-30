@@ -13,10 +13,16 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DailyReportController;
 use App\Models\Event;
+use App\Models\Menu;
+use App\Models\Kategori;
+use App\Models\Isi_kategori;
 
 Route::get('/', function () {
     $events = Event::all();
-    return view('home', compact('events'));
+    $menus = Menu::all()->take(4);  
+    $kategori_bundle = Kategori::where('nama_kategori', 'Bundling')->first();
+    $bundles = Isi_kategori::where('id_kategori', $kategori_bundle->id_kategori)->get()->take(3);
+    return view('home', compact( 'menus', 'events', 'bundles'));
 });
 
 Route::get('/home', function () {
