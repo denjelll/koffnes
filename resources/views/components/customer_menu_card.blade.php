@@ -1,34 +1,17 @@
-<div
-          class="w-1/2 rounded-lg shadow-lg overflow-hidden mt-5"
-          style="background-color: #fff2e2; box-shadow: 8px 10px 0px -2px rgba(106,111,76,0.72);
--webkit-box-shadow: 8px 10px 0px -2px rgba(106,111,76,0.72);
--moz-box-shadow: 8px 10px 0px -2px rgba(106,111,76,0.72);"
-        >
+<div class="p-2 menu-card bg-[#FFF2E2] shadow-md rounded-lg overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto" style="width: 100%;">
           <img
-            src="foto-menu.jpg"
+            src="{{ asset('menu/'.$menu->image) }}"
             alt="Foto Menu"
             class="w-full h-48 object-cover"
           />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold text-gray-800">Nama Menu</h3>
-            <p class="text-lg text-green-600">Rp 25.000</p>
+            <div class="p-2">
+            <h1 class="text-[#412f26] font-bold text-left text-sm sm:text-base">{{$menu->name}}</h1>
+            <p class="text-[#412f26] text-sm sm:text-base">Rp. {{number_format($menu->price, 0, ',', '.')}}</p>
             <p class="text-sm text-gray-600 mt-2">
-              Deskripsi singkat mengenai menu ini.
+              {{$menu->description}}
             </p>
-            <!-- <button
-              class="mt-4 w-full py-2 text-white rounded-lg"
-              style="background-color: #412f26"
-            >
-              Add to Cart
-            </button> -->
-            <div class="flex items-center mt-4 ml-4">
-                <button onclick="" class="bg-cocoa w-8 h-8 flex items-center justify-center rounded-full mr-2" style="color:white;">
-                    -
-                </button>
-                <span id="americanoQuantity" class="mx-4 text-gray-800 font-semibold">1</span>
-                <button onclick="" class="bg-cocoa w-8 h-8 flex items-center justify-center rounded-full ml-2" style="color:white;">
-                    +
-                </button>
-            </div>
+            <a class="btn btn-primary mt-2 rounded-full text-sm font-semibold transition duration-300 ease-in-out transform hover:scale-105 bg-[#412F26] text-white hover:bg-white hover:text-[#412F26] border-none shadow-lg active:scale-95 w-full text-center py-2" href="/menugate">
+          Order Now
+            </a>
           </div>
 </div>
