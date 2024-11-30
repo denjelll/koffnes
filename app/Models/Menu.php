@@ -11,12 +11,10 @@ class Menu extends Model
 
     protected $table = 'menus';
     protected $primaryKey = 'id_menu';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
 
     protected $fillable = [
         'id_menu',
-        'id_kategori',
         'id_promo',
         'nama_menu',
         'stock',
@@ -25,11 +23,7 @@ class Menu extends Model
         'gambar'
     ];
 
-    public function kategori()
-    {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
-    }
-
+    protected $with = ['promo'];
     public function promo()
     {
         return $this->belongsTo(Promo::class, 'id_promo');
@@ -39,17 +33,13 @@ class Menu extends Model
     {
         return $this->hasMany(DetailOrder::class, 'id_menu');
     }
+    
+    public function isi_kategori(){
+        return $this->hasMany(Isi_kategori::class, 'id_menu');
+    }
 
     public function addOns()
     {
-        return $this->belongsToMany(
-            Addon::class,         // Model target
-            'paket_addons',       // Tabel pivot
-            'id_menu',            // FK di tabel pivot yang merujuk ke Menu
-            'id_addon',           // FK di tabel pivot yang merujuk ke AddOn
-            'id_menu',            // Primary key di tabel Menu
-            'id_addon'            // Primary key di tabel AddOn
-        );
+        return $this->hasMany(AddOn::class, 'id_menu', 'id_menu');
     }
-
 }

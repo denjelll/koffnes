@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DetailAddon extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'detail_addons';
     protected $primaryKey = 'id_detailaddon';
     public $incrementing = false;
+    public $timestamps = false;
     protected $keyType = 'string';
+
+    const CREATED_AT = 'waktu_transaksi';
+    const UPDATED_AT = 'updated_on';
 
     protected $fillable = [
         'id_detailaddon',
@@ -20,7 +25,11 @@ class DetailAddon extends Model
         'id_detailorder',
         'kuantitas',
         'harga',
+        'waktu_transaksi',
+        'updated_on'
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function addon()
     {
