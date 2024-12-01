@@ -159,7 +159,12 @@
 
                     <div class="mt-4 flex justify-end space-x-4">
                         <button wire:click="$set('isApproveModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
-                        <button wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" class="bg-green-500 text-white px-4 py-2 rounded">Konfirmasi</button>
+                        <button 
+                            wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" 
+                            onclick="printReceipt('{{ $approveDetails['orderId'] }}')" 
+                            class="bg-green-500 text-white px-4 py-2 rounded">
+                            Konfirmasi
+                        </button>
                     </div>
                 </div>
             </div>
@@ -211,17 +216,55 @@
 
 @push('scripts')
 <script>
-    console.log("Echo status:", window.Echo);
-    console.log("Listening to channel: orders");
-
-    window.Echo.channel('orders')
-    .listen('PesananBaru', (event) => {
-        console.log('Pesanan Baru diterima:', event);
-        Livewire.dispatch('orderAdded');
+    function printReceipt(orderId) {
+    // Lakukan permintaan POST menggunakan Fetch API
+    fetch(`{{ url('/receipt/') }}/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ id_order: orderId })
     })
-    .catch(error => {
-        console.error('Error with Echo channel:', error);
-    });
+    .then(response => response.text()) // Dapatkan konten HTML dari respons
+    .then(html => {
+        // Buka jendela baru dengan ukuran tertentu dan cetak struk
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.onload = function () {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+    })
+    .catch(error => console.error('Error:', error));
+}
 
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function waitForEcho() {
+            if (window.Echo) {
+                console.log("Echo status:", window.Echo);
+                console.log("Listening to channel: orders");
+
+                window.Echo.channel('orders')
+                    .listen('PesananBaru', (event) => {
+                        console.log('Pesanan Baru diterima:', event);
+                        Livewire.dispatch('orderAdded');
+                    })
+                    .error((error) => {
+                        console.error("Error on Echo channel:", error);
+                    });
+            } else {
+                console.error("Echo is not yet defined. Retrying...");
+                setTimeout(waitForEcho, 500); // Cek lagi setelah 500ms
+            }
+        }
+
+        waitForEcho(); // Panggil fungsi
+    });
 </script>
 @endpush
+

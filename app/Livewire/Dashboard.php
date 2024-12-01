@@ -13,8 +13,6 @@ use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Log;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\PrintConnectors\BluetoothPrintConnector;
-
 
 class Dashboard extends Component
 {
@@ -62,26 +60,18 @@ class Dashboard extends Component
             // Ambil data order
             $order = Order::with(['detailOrders.detailAddon', 'cashier'])->findOrFail($idOrder);
     
-            $macAddresBluetooth = "00:1B:44:11:3A:B7"; // Ganti dengan alamat Bluetooth printer Anda
             $usbPath = "/dev/usb/lp0"; // Ganti dengan path USB printer Anda
     
             // Coba koneksi ke printer Bluetooth
-            try {
-                $connector = new BluetoothPrintConnector($macAddresBluetooth);
-            } catch (Exception $e) {
-                // Jika Bluetooth gagal, gunakan USB
-                try {
-                    $connector = new FilePrintConnector($usbPath);
-                } catch (Exception $e) {
-                    throw new Exception("Printer tidak tersedia. Silakan periksa koneksi Bluetooth atau USB.");
-                }
-            }
-    
+            $connector = new FilePrintConnector($usbPath);
+
             // Inisialisasi Printer
             $printer = new Printer($connector);
-    
-            // Print data dari Order
+
+            // Cetak data order
             $this->printOrder($printer, $order);
+
+            // Tutup printer
             $printer->close();
             
             session()->flash('success', 'Struk berhasil dicetak.');
