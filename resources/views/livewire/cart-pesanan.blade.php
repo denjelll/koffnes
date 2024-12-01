@@ -3,7 +3,7 @@
     <nav
         class="bg-[#412f26] p-4 fixed top-0 w-full z-10 flex items-center justify-between text-white">
         <!-- Kembali Button -->
-        <a href="/cashier" class="flex items-center space-x-2">
+        <button class="flex items-center space-x-2">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -17,9 +17,9 @@
                     d="M15 19l-7-7 7-7"></path>
             </svg>
             <span>
-                <p>Keranjang</p>
+                <a href="/cashier">Keranjang</a>
             </spa>
-        </a>
+        </button>
     </nav>
 
     <!-- Main Content (for spacing) -->
