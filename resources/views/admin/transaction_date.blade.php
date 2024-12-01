@@ -56,6 +56,8 @@
     </div>
 </div>
 
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.0/dist/echo.iife.min.js"></script>
 <script>
     function filterTransactions() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
@@ -76,6 +78,54 @@
                 row.style.display = 'none';
             }
         });
+    }
+
+    // Initialize Pusher
+    Pusher.logToConsole = true;
+    const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        encrypted: true
+    });
+
+    // Initialize Laravel Echo
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: '{{ env('PUSHER_APP_KEY') }}',
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        encrypted: true
+    });
+
+    // Listen for new orders
+    echo.channel('orders')
+        .listen('NewOrderEvent', (e) => {
+            const newOrder = e.order;
+            const newRow = `
+                <tr class="border-b border-gray-300">
+                    <td class="p-4">${new Date(newOrder.waktu_transaksi).toLocaleDateString()}</td>
+                    <td class="p-4">${newOrder.id_order}</td>
+                    <td class="p-4">${newOrder.customer}</td>
+                    <td class="p-4">${newOrder.meja}</td>
+                    <td class="p-4">${newOrder.tipe_order}</td>
+                    <td class="p-4">Rp${newOrder.total_harga.toLocaleString()}</td>
+                    <td class="p-4">${newOrder.status}</td>
+                    <td class="p-4">
+                        <a href="/admin/detail_transaction/${newOrder.id_order}" class="text-[#412f26] hover:underline">View Detail</a>
+                        <a href="/admin/transaction/export/id_order/${newOrder.id_order}" class="text-[#412f26] hover:underline">Download Excel</a>
+                    </td>
+                </tr>
+            `;
+            document.getElementById('transactionTable').insertAdjacentHTML('afterbegin', newRow);
+            showNotification('New order received!');
+        });
+
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg';
+        notification.innerText = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 </script>
 @endsection
