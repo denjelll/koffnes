@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
-use App\Events\PesananBaru;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
@@ -294,9 +293,6 @@ class Checkout extends Component
             $count++;
         
         }
-
-        //Event Listener
-        event(new PesananBaru($order));
 
         // Mengosongkan cart di session
         session()->forget('cart');
