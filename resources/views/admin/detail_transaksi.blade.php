@@ -61,42 +61,31 @@
 
 <!-- Modal -->
 <div id="printModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white rounded-lg p-6 w-3/4 max-h-[80vh] overflow-y-auto">
-        <h2 class="text-xl font-semibold mb-4">Print Preview</h2>
-        <div id="printContent">
-            <div class="mb-4">
-                <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
-                <p class="text-gray-700"><strong>ID Order:</strong> {{ $order->id_order }}</p>
-                <p class="text-gray-700"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
-                <p class="text-gray-700"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
-                <p class="text-gray-700"><strong>Tipe Order:</strong> {{ $order->tipe_order }}</p>
-                <p class="text-gray-700"><strong>Kasir:</strong> {{ $order->cashier->nama }}</p>
+    <div class="bg-white rounded-lg p-6 w-3/4 h-auto overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4 text-black">Print Preview</h2>
+        <div id="printContent" class="text-xxs text-black">
+            <p class="text-black"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
+            <p class="text-black"><strong>ID Order:</strong> {{ $order->id_order }}</p>
+            <p class="text-black"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
+            <p class="text-black"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
+            <p class="text-black"><strong>Tipe Order:</strong> {{ $order->tipe_order }}</p>
+            <p class="text-black"><strong>Kasir:</strong> {{ $order->cashier->nama }}</p>
+            <hr class="my-4">
+            @foreach ($order->detailOrders as $detail)
+            <strong class="text-black">{{$detail->menu->nama_menu}}</strong>
+            <div class="flex justify-between">
+                <p class="text-black">{{$detail->kuantitas}} x @ {{$detail->harga_menu}}</p>
+                <p class="text-black">{{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</p>
             </div>
-            <div class="overflow-x-auto">
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="font-bold p-4 text-black">Nama Menu</div>
-                    <div class="font-bold p-4 text-black">Kuantitas</div>
-                    <div class="font-bold p-4 text-black">Harga</div>
-                    <div class="font-bold p-4 text-black">Subtotal</div>
-                    @foreach ($order->detailOrders as $detail)
-                        <div class="border-b border-gray-300 p-4"><strong>{{ $detail->menu->nama_menu }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>{{ $detail->kuantitas }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>Rp{{ number_format($detail->harga_menu, 0, ',', '.') }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>Rp{{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</strong></div>
-                        @if ($detail->detailAddon != null)
-                            @foreach ($detail->detailAddon as $addon)
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">+ {{ $addon->addon->nama_addon }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">{{ $addon->kuantitas }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">Rp{{ number_format($addon->harga, 0, ',', '.') }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">Rp{{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</div>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </div>
-            </div>
+            @if ($detail->detailAddon != null)
+                @foreach ($detail->detailAddon as $addon)
+                <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
+                @endforeach
+            @endif
+            @endforeach
             <div class="mt-6 flex justify-between">
-                <p class="text-xl font-bold text-black col-span-3 text-right">Total Harga:</p>
-                <p class="text-xl font-bold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            <p class="font-bold text-black">Total Harga:</p>
+            <p class="font-bold text-black text-right">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
             </div>
         </div>
         <div class="flex justify-end mt-6">
@@ -119,7 +108,7 @@
         const printContent = document.getElementById('printContent').innerHTML;
         const originalContent = document.body.innerHTML;
 
-        document.body.innerHTML = printContent;
+        document.body.innerHTML = `<div style="font-size: 6pt; height: auto;">${printContent}</div>`;
         window.print();
         document.body.innerHTML = originalContent;
     }

@@ -82,41 +82,41 @@
 
     // Initialize Pusher
     Pusher.logToConsole = true;
-    const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+    const pusher = new Pusher('{{ env('82867975b55212321827') }}', {
+        cluster: '{{ env('ap1') }}',
         encrypted: true
     });
 
     // Initialize Laravel Echo
     const echo = new Echo({
         broadcaster: 'pusher',
-        key: '{{ env('PUSHER_APP_KEY') }}',
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        key: '{{ env('82867975b55212321827') }}',
+        cluster: '{{ env('ap1') }}',
         encrypted: true
     });
 
     // Listen for new orders
-    echo.channel('orders')
-        .listen('NewOrderEvent', (e) => {
-            const newOrder = e.order;
-            const newRow = `
-                <tr class="border-b border-gray-300">
-                    <td class="p-4">${new Date(newOrder.waktu_transaksi).toLocaleDateString()}</td>
-                    <td class="p-4">${newOrder.id_order}</td>
-                    <td class="p-4">${newOrder.customer}</td>
-                    <td class="p-4">${newOrder.meja}</td>
-                    <td class="p-4">${newOrder.tipe_order}</td>
-                    <td class="p-4">Rp${newOrder.total_harga.toLocaleString()}</td>
-                    <td class="p-4">${newOrder.status}</td>
-                    <td class="p-4">
-                        <a href="/admin/detail_transaction/${newOrder.id_order}" class="text-[#412f26] hover:underline">View Detail</a>
-                        <a href="/admin/transaction/export/id_order/${newOrder.id_order}" class="text-[#412f26] hover:underline">Download Excel</a>
-                    </td>
-                </tr>
-            `;
-            document.getElementById('transactionTable').insertAdjacentHTML('afterbegin', newRow);
-            showNotification('New order received!');
-        });
+        echo.channel('orders')
+            .listen('NewOrderEvent', (e) => {
+                const newOrder = e.order;
+                const newRow = `
+                    <tr class="border-b border-gray-300">
+                        <td class="p-4">${new Date(newOrder.waktu_transaksi).toLocaleDateString()}</td>
+                        <td class="p-4">${newOrder.id_order}</td>
+                        <td class="p-4">${newOrder.customer}</td>
+                        <td class="p-4">${newOrder.meja}</td>
+                        <td class="p-4">${newOrder.tipe_order}</td>
+                        <td class="p-4">Rp${newOrder.total_harga.toLocaleString()}</td>
+                        <td class="p-4">${newOrder.status}</td>
+                        <td class="p-4">
+                            <a href="/admin/detail_transaction/${newOrder.id_order}" class="text-[#412f26] hover:underline">View Detail</a>
+                            <a href="/admin/transaction/export/id_order/${newOrder.id_order}" class="text-[#412f26] hover:underline">Download Excel</a>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('transactionTable').insertAdjacentHTML('afterbegin', newRow);
+                showNotification('New order received!');
+            });
 
     function showNotification(message) {
         const notification = document.createElement('div');
