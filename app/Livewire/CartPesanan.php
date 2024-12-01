@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Events\PesananBaru;
 use App\Models\Menu;
 use App\Models\AddOn;
 use App\Models\Order;
@@ -220,6 +221,9 @@ class CartPesanan extends Component
                 }
             }
         }
+
+        //Event listener
+        event(new PesananBaru($order));
 
         // Hapus sesi
         $this->pesanan = [];
