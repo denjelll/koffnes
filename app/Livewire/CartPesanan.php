@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
-use App\Models\AddOn;
 use App\Models\Menu;
-use Illuminate\Support\Facades\Session;
-use Livewire\Component;
+use App\Models\AddOn;
 use App\Models\Order;
-use App\Models\DetailOrder;
+use Livewire\Component;
 use App\Models\DetailAddon;
+use App\Models\DetailOrder;
 use Illuminate\Support\Str;
+use App\Events\NewOrderCreated;
+use Illuminate\Support\Facades\Session;
 
 class CartPesanan extends Component
 {
@@ -177,6 +178,9 @@ class CartPesanan extends Component
             'waktu_transaksi' => now(),
         ]);
 
+        // Broadcast event setelah order disimpan
+        event(new NewOrderCreated($order));
+
         // Simpan detail order ke detail_orders
         foreach ($this->pesanan as $menu) {
             $menuDb = Menu::find($menu['id_menu']);
@@ -226,6 +230,7 @@ class CartPesanan extends Component
 
         session()->flash('success', 'Pesanan berhasil disimpan.');
         $this->updateTotalHarga(); // Reset total harga
+
         return redirect()->route('dashboard');
     }
 
