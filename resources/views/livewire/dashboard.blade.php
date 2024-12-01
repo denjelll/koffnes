@@ -154,13 +154,11 @@
 
                     <div class="mb-6">
                         <label class="block mb-2 text-[#412f26]">Metode Pembayaran</label>
-                        <div wire:model="paymentMethod">
-                            <select class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
+                            <select wire:model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
                                 <option value="edc">EDC</option>
                                 <option value="debit">Debit</option>
                                 <option value="cash">Cash</option>
                             </select>
-                        </div>
                     </div>
 
                     <div class="flex justify-end mt-6 space-x-4">
@@ -216,5 +214,23 @@
             </div>
         @endif
     </div>
-    
+
 </div>
+
+<script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+
+
+    window.Echo.channel('orders')
+        .listen('NewOrderCreated', (event) => {
+            Livewire.dispatch('orderAdded');
+        });
+</script>
