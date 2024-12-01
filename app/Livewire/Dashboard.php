@@ -18,7 +18,7 @@ use Mike42\Escpos\PrintConnectors\BluetoothPrintConnector;
 
 class Dashboard extends Component
 {
-    public $currentTab = 'Open Bill';
+    public $currentTab = 'All';
 
     //Data Pesanan
     public $orders = [];
@@ -34,7 +34,16 @@ class Dashboard extends Component
     public $addonQuantities = [];
 
     //Pop Up Variable
-    public $isModalOpen = false;
+    public $isApproveModalOpen = false;
+    public $paymentMethod;
+    public $approveDetails = [
+        'menuItems' => [],
+        'addOns' => [],
+        'totalHarga' => 0,
+        'orderId' => null
+    ];
+    public $isEditModalOpen = false;
+
 
     public function mount()
     {
@@ -122,10 +131,63 @@ class Dashboard extends Component
     }
     
     public function approveOrder($id)
+{
+    // Mengambil data order beserta detail menu dan add-ons
+    $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
+
+    if ($order) {
+        // Siapkan detail menu dan harga
+        $menuItems = $order->detailOrders->map(function ($detail) {
+            return [
+                'nama_menu' => $detail->menu->nama_menu,
+                'kuantitas' => $detail->kuantitas,
+                'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
+                'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
+            ];
+        });
+
+        // Siapkan detail add-ons dan harga
+        $addOns = $order->detailOrders->flatMap(function ($detail) {
+            return $detail->addOns->map(function ($addon) {
+                return [
+                    'nama_addon' => $addon->addon->nama_addon,
+                    'kuantitas' => $addon->kuantitas,
+                    'harga' => $addon->addon->harga, // Mengambil harga dari tabel add_ons
+                    'total_harga' => $addon->kuantitas * $addon->addon->harga, // Menghitung total harga per add-on
+                ];
+            });
+        });
+
+        // Menghitung total harga untuk menu dan add-ons
+        $totalHarga = $menuItems->sum('total_harga') + $addOns->sum('total_harga');
+
+        // Menyimpan data ke modal untuk ditampilkan
+        $this->approveDetails = [
+            'menuItems' => $menuItems->toArray(),
+            'addOns' => $addOns->toArray(),
+            'totalHarga' => $totalHarga,
+            'orderId' => $order->id_order,
+        ];
+
+        // Membuka modal approve
+        $this->isApproveModalOpen = true;
+    }
+}
+
+
+    // Fungsi Finalisasi Pembayaran
+    public function finalizePayment($id)
     {
         $order = Order::find($id);
-        if($order && $order->status === 'Open Bill') {
-            $order->update(['status' => 'Paid']);
+        if ($order && $order->metode_pembayaran === null) {
+            $paymentMethod = $this->paymentMethod;
+
+            $order->update([
+                'metode_pembayaran' => $paymentMethod,
+                'status' => 'Paid'
+            ]);
+
+            $this->isApproveModalOpen = false;
             $this->updateOrders();
         }
     }
@@ -151,51 +213,9 @@ class Dashboard extends Component
             }
 
             $this->selectedOrder = $order;
-            $this->isModalOpen = true;
+            $this->isEditModalOpen = true;
         }
     }
-
-    public function cancelOrder($id)
-    {
-        // Load order along with related detailOrders and their detailAddon
-        $order = Order::with('detailOrders.detailAddon')->find($id);
-
-        if($order && $order->status === 'Open Bill') {
-            $order->update(['status' => 'Cancelled']);
-            $order->delete(); // Melakukan soft delete pada order
-
-            foreach ($order->detailOrders as $detailOrder) {
-                // Update stok menu
-                $menu = Menu::find($detailOrder->id_menu);
-                if ($menu) {
-                    $menu->increment('stock', $detailOrder->kuantitas);
-                }
-
-                // Set kuantitas detailOrder to 0 before soft delete
-                $detailOrder->kuantitas = 0;
-                $detailOrder->save();
-
-                // Soft delete detail order
-                $detailOrder->delete(); 
-
-                // Soft delete detail addons jika ada
-                $detailAddons = $detailOrder->detailAddon; // Ensure we get all related detailAddon
-                if ($detailAddons) {
-                    foreach ($detailAddons as $detailAddon) {
-                        // Set kuantitas detailAddon to 0 before soft delete
-                        $detailAddon->kuantitas = 0;
-                        $detailAddon->save();
-
-                        // Soft delete detail addon
-                        $detailAddon->delete(); 
-                    }
-                }
-            }
-
-            $this->updateOrders();
-        }
-    }
-
 
     public function saveOrder()
     {
@@ -251,7 +271,7 @@ class Dashboard extends Component
             'total_harga' => $totalHarga,
         ]);
 
-        $this->isModalOpen = false;
+        $this->isEditModalOpen = false;
         $this->updateOrders();
     }
 
@@ -289,6 +309,47 @@ class Dashboard extends Component
             $this->addonQuantities[$id_addon]--;
             $this->updateAddonPrice($id_addon); // Update harga saat kuantitas berkurang
             $this->updateOrderTotal(); // Update total harga order
+        }
+    }
+
+    public function cancelOrder($id)
+    {
+        // Load order along with related detailOrders and their detailAddon
+        $order = Order::with('detailOrders.detailAddon')->find($id);
+
+        if($order && $order->status === 'Open Bill') {
+            $order->update(['status' => 'Cancelled']);
+            $order->delete(); // Melakukan soft delete pada order
+
+            foreach ($order->detailOrders as $detailOrder) {
+                // Update stok menu
+                $menu = Menu::find($detailOrder->id_menu);
+                if ($menu) {
+                    $menu->increment('stock', $detailOrder->kuantitas);
+                }
+
+                // Set kuantitas detailOrder to 0 before soft delete
+                $detailOrder->kuantitas = 0;
+                $detailOrder->save();
+
+                // Soft delete detail order
+                $detailOrder->delete(); 
+
+                // Soft delete detail addons jika ada
+                $detailAddons = $detailOrder->detailAddon; // Ensure we get all related detailAddon
+                if ($detailAddons) {
+                    foreach ($detailAddons as $detailAddon) {
+                        // Set kuantitas detailAddon to 0 before soft delete
+                        $detailAddon->kuantitas = 0;
+                        $detailAddon->save();
+
+                        // Soft delete detail addon
+                        $detailAddon->delete(); 
+                    }
+                }
+            }
+
+            $this->updateOrders();
         }
     }
 
@@ -331,9 +392,19 @@ class Dashboard extends Component
         }
     }
 
+
+    protected $listeners = ['orderAdded' => 'updateOrders'];
     private function updateOrders()
     {
-        $this->orders = Order::where('status', $this->currentTab)->get();
+        if ($this->currentTab === 'All') {
+            // Jika 'All', ambil semua pesanan
+            $this->orders = Order::orderBy('antrian', 'asc')->get();
+        } else {
+            // Jika Dine In atau Take Away, filter berdasarkan tipe order
+            $this->orders = Order::where('tipe_order', $this->currentTab)
+                ->orderBy('antrian', 'asc')
+                ->get();
+        }
     }
 
     public function render()

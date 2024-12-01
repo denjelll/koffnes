@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
+use App\Events\PesananBaru;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
@@ -222,6 +223,7 @@ class Checkout extends Component
     {
         $this->checkEmpty();
         $today = Carbon::today();
+        $count = 1;
 
         // Cari order terakhir berdasarkan tanggal yang sama
         $lastOrder = Order::whereDate('waktu_transaksi', $today)->orderBy('antrian', 'desc')->first();
@@ -236,12 +238,13 @@ class Checkout extends Component
         }
         // Membuat order baru
         $order = Order::create([
-            'id_order' => 'ORD' . strrev(Carbon::now()->format('YmdHis')) . $antrian,
-            'id_user' => '99999999', // Kosongkan karena akan diisi oleh kasir nanti
+            'id_order' => 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $antrian . '-M'.session('meja'),
+            'id_user' => '1', // Kosongkan karena akan diisi oleh kasir nanti
             'antrian' => $antrian,
             'customer' => session('nama_customer'),
             'meja' => session('meja'),
             'tipe_order' => 'Dine In',
+            'metode_pembayaran' => null,
             'status' => 'Open Bill',
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => Carbon::now(), // Menggunakan waktu saat ini
@@ -250,22 +253,34 @@ class Checkout extends Component
         // Menambahkan detail order untuk setiap item di cart
         Log::info('Isi item di CreateOrder ' . json_encode($this->cartItems, JSON_PRETTY_PRINT)); 
         foreach ($this->cartItems as $item) {
-            Log::info('Harga Menu ' . json_encode($item['menu']['promo'], JSON_PRETTY_PRINT)); 
+            $now = Carbon::now();
+            $promo = $item['menu']['promo'];
 
+            // Periksa apakah promo berlaku
+            $hargaMenu = $item['menu']['harga'];
+            if (
+                $promo && 
+                $promo['status'] === 'Aktif' &&
+                ($promo['hari'] === 'AllDay' || $promo['hari'] === $now->format('l')) &&
+                $now->between($promo['waktu_mulai'], $promo['waktu_berakhir'])
+            ) {
+                $hargaMenu = $promo['harga_promo'];
+            }
+
+            Log::info('Harga Menu (setelah promo): ' . json_encode(($hargaMenu), JSON_PRETTY_PRINT));
+           
             $detailOrder = DetailOrder::create([
-                'id_detailorder'=> 'DO' . Str::uuid(),
+                'id_detailorder'=> 'DO-' .  Carbon::now()->format('YmdHis') . '-' . $count . '-' . $item['menu']['id_menu'],
                 'id_order' => $order->id_order,
                 'id_menu' => $item['menu']['id_menu'],
                 'kuantitas' => $item['quantity'],
-                'harga_menu' => (isset($item['menu']['promo']) && $item['menu']['promo']['status'] === 'Aktif' 
-                 ? $item['menu']['promo']['harga_promo'] 
-                 : $item['menu']['harga']) * $item['quantity'],  //Harga Final
+                'harga_menu' => $hargaMenu * $item['quantity'], // Harga Final
                 'notes' => $item['notes'],  // Simpan notes
             ]);
 
            // Jika ada add-ons, buat DetailAddon
            if (!empty($item['addOn'])) { // Perbaikan key
-            $this->createDetailAddon($detailOrder['id_detailorder'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
+            $this->createDetailAddon($detailOrder['id_detailorder'], $item['menu']['id_menu'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
             }
 
             // **Pengurangan Stok**
@@ -275,8 +290,13 @@ class Checkout extends Component
             } else {
                 throw new \Exception('Stok tidak mencukupi untuk menu ' . $item['menu']['nama_menu']);
             }
+
+            $count++;
         
         }
+
+        //Event Listener
+        event(new PesananBaru($order));
 
         // Mengosongkan cart di session
         session()->forget('cart');
@@ -287,18 +307,20 @@ class Checkout extends Component
     }
 
     // Fungsi untuk membuat DetailAddon baru
-    public function createDetailAddon($idDetailOrder, $addOns, $quantity, $menuHarga)
+    public function createDetailAddon($idDetailOrder, $idMenu, $addOns, $quantity, $menuHarga)
     {
+        $count = 1;
         foreach ($addOns as $addon) {
             if ($addon['quantity'] > 0) {
                 DetailAddon::create([
-                    'id_detailaddon' => Str::random(10),
+                    'id_detailaddon' => 'DA-'. Carbon::now()->format('YmdHis') . '-' .$count . '-'. $idMenu,
                     'id_addon' => $addon['id_addon'],
                     'id_detailorder' => $idDetailOrder,
                     'kuantitas' => $addon['quantity'],
                     'harga' => $addon['harga'] * $addon['quantity'], // Perhitungan harga
                 ]);
             }
+            $count++;
         }
     }
 

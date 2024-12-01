@@ -1,79 +1,165 @@
-<div>
-    <h1 class="text-center font-bold text-4xl">Pesanan Manual</h1>
-    <a href="cashier/dashboard" class="m-5 border border-black">Dashboard</a>
-    <h1 class="font-bold text-2xl m-5">Menu Utama</h1>
-    <div class="border border-black m-5 p-3 gap-4">
-        @foreach ($items as $item)
-            <!-- Menu Utama -->
-            <div class="bg-green-300 m-2 p-5" wire:key="menu-{{ $item->id_menu }}">
-                <img loading="lazy" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}"/>
-                <p class="font-bold text-2xl">{{ $item->nama_menu }}</p>
-                <p>Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
-    
-                <!-- Kuantitas -->
-                <div class="flex justify-center">
-                    <button class="m-2 text-xl px-5 bg-red-500" wire:click="kurangMenu('{{ $item->id_menu }}')">-</button>
-                    <input type="number" class="text-center" min="0" wire:model.debounce.500ms="qtyMenu.{{ $item->id_menu }}"/>
-                    <button class="m-2 text-xl px-5 bg-green-500" wire:click="tambahMenu('{{ $item->id_menu }}')">+</button>
+<div class="font-sans" style="background-color: #fff2e2;">
+
+    <!-- Top Navbar -->
+    <header
+        class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
+        style="background-color: #412f26;">
+        <img
+            src="{{ asset('storage/uploads/7.png') }}"
+            alt="Logo"
+            class="h-8 w-auto"
+            style="max-width: 96px;">
+        <!-- Mobile Menu Toggle Button -->
+        <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16m-7 6h7"/>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Main Container -->
+    <div class="flex pt-20 h-screen pb-20">
+
+        <!-- Sidebar Navigation -->
+        <nav
+            id="mobile-nav"
+            class="text-white w-55 p-7 fixed top-16 h-full z-20 hidden bg-[#76634c] md:block"
+            style="transition: transform 0.3s ease-in-out;">
+            <ul class="space-y-4">
+                <li>
+                    <a
+                        href=""
+                        class="hover:bg-opacity-50 p-2 block rounded">Home</a>
+                </li>
+                <li>
+                    <a
+                        href="{{ url('cashier/dashboard') }}"
+                        class="hover:bg-opacity-50 p-2 block rounded">Order</a>
+                </li>
+                <li>
+                    <a
+                        href="{{ url('cashier/transaksi') }}"
+                        class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
+                </li>
+                <li>
+                    <a
+                        href="{{ url('cashier/stock') }}"
+                        class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                </li>
+                <li>
+                    <a
+                        href="#"
+                        class="hover:bg-opacity-50 p-2 block rounded">Table</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Content Area -->
+        <div class=" md:ml-40 p-7 w-full overflow-auto relative">
+
+            <!-- Form for Customer Info and Table Selection -->
+            <div class="space-y-3">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <input
+                        type="text"
+                        placeholder="Customer Name"
+                        class="p-2 w-full md:w-[80rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
+                        wire:model.defer="customer.nama"
+                        style="background-color: #cbb89d; color: white;">
+                    <select
+                        wire:model="customer.tipe_order"
+                        class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
+                        style="background-color: #cbb89d; color: white;">
+                        <option value="Dine In">Dine In</option>
+                        <option value="Take Away">Take Away</option>
+                    </select>
                 </div>
-    
-                <!-- Add-Ons Terkait -->
-                @if ($item->addOns->count() > 0)
-                    <div class="mt-4 border-t border-black pt-2">
-                        <h3 class="font-bold text-lg">Add Ons</h3>
-                        <div class="grid grid-cols-3 gap-4">
-                            @foreach ($item->addOns as $addon)
-                                <div class="bg-blue-200 p-2" wire:key="addon-{{ $addon->id_addon }}">
-                                    <p>{{ $addon->nama_addon }}</p>
-                                    <p>Rp. {{ number_format($addon->harga, 0, ',', '.') }}</p>
-    
-                                    <!-- Kuantitas Add-On -->
-                                    <div class="flex justify-center">
-                                        <button class="m-2 text-xl px-5 bg-red-500" wire:click="kurangAddon('{{ $addon->id_addon }}')">-</button>
-                                        <input type="number" class="text-center" min="0" wire:model.debounce.500ms="qtyAddOns.{{ $addon->id_addon }}"/>
-                                        <button class="m-2 text-xl px-5 bg-green-500" wire:click="tambahAddon('{{ $addon->id_addon }}')">+</button>
-                                    </div>
-                                </div>
-                            @endforeach
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <input
+                        placeholder="Table Number"
+                        wire:model="customer.meja"
+                        type="number"
+                        class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
+                        style="background-color: #cbb89d; color: white;">
+                    </input>
+                </div>
+                <div class="flex flex-col md:flex-row items-center gap-4 relative">
+                    <input
+                        type="text"
+                        placeholder="Search menu"
+                        class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
+                        wire:model.defer="search"
+                        wire:keydown.enter="searchMenu"
+                        style="background-color: #cbb89d; color: white;">
+                    
+                    <button
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-white"
+                        wire:click="searchMenu">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.35 4.35a7.5 7.5 0 0012.3 12.3z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Utama -->
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
+                @foreach ($items as $item)
+                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card bg-[#e8d2b7] shadow-md rounded-lg overflow-hidden w-full">
+                        <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
+
+                        <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
+                            <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
+                            <div class="flex justify-between items-center mt-2 sm:mt-4">
+                                <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+
+                                <!-- Kuantitas -->
+                                <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                @endif
-            </div>
-        @endforeach
-    </div>
-    
-
-    <div class="border border-black m-5 p-3 flex justify-between">
-        <h2 class="text-2xl font-bold">Total Harga: Rp. {{ number_format($totalHarga, 0, ',', '.') }}</h2>
-        <!-- Inputan Data Customer -->
-        <div>
-            <div>
-                <label>Nama</label>
-                <input type="text" class="border border-black" wire:model="customer" required />
-            </div>
-            
-            <div>
-                <label for="Dine In">Dine In</label>
-                <input type="radio" id="Dine In" name="tipeOrder" value="Dine In" wire:model="tipeOrder" required />
+                @endforeach
                 
-                <label for="Take Away">Take Away</label>
-                <input type="radio" id="Take Away" name="tipeOrder" value="Take Away" wire:model="tipeOrder" required />
+
+                <!-- Total Section -->
+                <button wire:click="confirmOrder">
+                    <div
+                        class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
+                        <span>Total Harga: Rp. {{ number_format($totalHarga, 0, ',', '.') }}</span>
+                        <img
+                            src="{{ asset('storage/uploads/Cashnes.png') }}"
+                            alt="Chart Icon"
+                            class="ml-auto h-5 w-5">
+                    </div>
+                </button>
             </div>
-        
-            <div>
-                <label>Table</label>
-                <input type="number" class="border border-black" wire:model="meja" 
-                    @if($tipeOrder === 'Take Away') 
-                        disabled
-                    @elseif($tipeOrder === 'Dine In') 
-                        min="1" max="21" 
-                    @endif
-                    required />
-            </div>
+
         </div>
-        
-        
-        <button wire:click="confirmOrder">Confirm</button>
+
+        <!-- Footer -->
+        <footer
+            class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
+            style="background-color: #412f26;">
+            <img
+                src="{{ asset('storage/uploads/8.png') }}"
+                alt="Footer Logo"
+                class="h-7 md:h-7 mb-2"
+                style="max-width: 180px;">
+            <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
+        </footer>
+
     </div>
-    
 </div>

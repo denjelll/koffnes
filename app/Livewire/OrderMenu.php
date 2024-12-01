@@ -43,6 +43,15 @@ class OrderMenu extends Component
         $this->calculateTotal();
     }
 
+    public function updatedSearch($value)
+    {
+        $this->validate([
+            'search' => 'string|max:255' // Validasi bahwa input adalah string dan maksimal 255 karakter
+        ]);
+        $this->selectedCategory = null; // Pastikan kategori di-reset    
+        $this->fetchMenus();
+    }
+    
     public function fetchMenus()
     {
         $now = Carbon::now();
@@ -51,10 +60,10 @@ class OrderMenu extends Component
         Log::info('Kategori yang dipilih:', [$this->selectedCategory]);
         Log::info('Menu yang dicari:', [json_encode($this->search, JSON_PRETTY_PRINT)]);
 
-        // Reset nilai search setiap kali kategori berubah
-        if (!empty($this->selectedCategory) && empty($this->search)) {
+       // Reset nilai search setiap kali kategori berubah
+       if (!empty($this->selectedCategory)) {
             $this->search = ''; // Reset nilai search hanya jika selectedCategory diisi dan search kosong
-        }
+       }
 
         // Query awal untuk menu dengan stock > 0
         $query = Menu::with(['promo' => function ($query) use ($now) {
@@ -71,15 +80,16 @@ class OrderMenu extends Component
         // Filter berdasarkan pencarian jika ada
         if (!empty($this->search)) {
             $this->selectedCategory = null; // Pastikan kategori di-reset
-            Log::info('Menu yang dicari:', [json_encode($this->search, JSON_PRETTY_PRINT)]);
             $query->where('nama_menu', 'like', '%' . $this->search . '%');
-            $this->search = '';
+            Log::info('Menu yang dicari:', [json_encode($this->search, JSON_PRETTY_PRINT)]);
+           
         }
 
 
         // Reset kategori jika semua dipilih (null)
-        if (is_null($this->selectedCategory)) {
+        if (empty($this->selectedCategory)) {
             $this->menus = $query->get();
+            Log::info('Semua menu:', [json_encode($this->menus, JSON_PRETTY_PRINT)]);
         } else {
             // Filter berdasarkan kategori yang dipilih
             if ($this->selectedCategory == 4) {
@@ -92,7 +102,7 @@ class OrderMenu extends Component
                     ->get()
                     ->pluck('menu')
                     ->flatten();
-
+            
                 Log::info('Menu Bundling:', [json_encode($this->menus, JSON_PRETTY_PRINT)]);
             } else {
                 $query->whereHas('isi_kategori', function ($q) {

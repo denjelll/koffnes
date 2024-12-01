@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite('resources/css/app.css')
     <script>
         tailwind.config = {
             theme: {
@@ -18,7 +18,7 @@
     </script>
     <style>
         body {
-            background-image: url("motif.png");
+            background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
             background-repeat: repeat;
             background-position: top left;
             background-size: 400px 400px;
@@ -32,7 +32,7 @@
 </head>
 <body class="h-screen flex items-end bg-[#EDE1D2] relative">
     <!-- Logo -->
-    <img src="asset/Cashnes/6.png" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
+    <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
 
     <!-- Header (Teks Welcome Back!) -->
     <div class="absolute top-44 sm:top-40 lg:top-48 w-full text-center z-10">
