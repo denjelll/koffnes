@@ -35,7 +35,7 @@ class Dashboard extends Component
 
     //Pop Up Variable
     public $isApproveModalOpen = false;
-    public $paymentMethod = 'edc';
+    public $paymentMethod;
     public $approveDetails = [
         'menuItems' => [],
         'addOns' => [],
@@ -130,48 +130,48 @@ class Dashboard extends Component
     }
     
     public function approveOrder($id)
-    {
-        // Mengambil data order beserta detail menu dan add-ons
-        $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
+{
+    // Mengambil data order beserta detail menu dan add-ons
+    $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
 
-        if ($order) {
-            // Siapkan detail menu dan harga
-            $menuItems = $order->detailOrders->map(function ($detail) {
+    if ($order) {
+        // Siapkan detail menu dan harga
+        $menuItems = $order->detailOrders->map(function ($detail) {
+            return [
+                'nama_menu' => $detail->menu->nama_menu,
+                'kuantitas' => $detail->kuantitas,
+                'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
+                'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
+            ];
+        });
+
+        // Siapkan detail add-ons dan harga
+        $addOns = $order->detailOrders->flatMap(function ($detail) {
+            return $detail->addOns->map(function ($addon) {
                 return [
-                    'nama_menu' => $detail->menu->nama_menu,
-                    'kuantitas' => $detail->kuantitas,
-                    'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
-                    'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
+                    'nama_addon' => $addon->addon->nama_addon,
+                    'kuantitas' => $addon->kuantitas,
+                    'harga' => $addon->addon->harga, // Mengambil harga dari tabel add_ons
+                    'total_harga' => $addon->kuantitas * $addon->addon->harga, // Menghitung total harga per add-on
                 ];
             });
+        });
 
-            // Siapkan detail add-ons dan harga
-            $addOns = $order->detailOrders->flatMap(function ($detail) {
-                return $detail->addOns->map(function ($addon) {
-                    return [
-                        'nama_addon' => $addon->addon->nama_addon,
-                        'kuantitas' => $addon->kuantitas,
-                        'harga' => $addon->addon->harga, // Mengambil harga dari tabel add_ons
-                        'total_harga' => $addon->kuantitas * $addon->addon->harga, // Menghitung total harga per add-on
-                    ];
-                });
-            });
+        // Menghitung total harga untuk menu dan add-ons
+        $totalHarga = $menuItems->sum('total_harga') + $addOns->sum('total_harga');
 
-            // Menghitung total harga untuk menu dan add-ons
-            $totalHarga = $menuItems->sum('total_harga') + $addOns->sum('total_harga');
+        // Menyimpan data ke modal untuk ditampilkan
+        $this->approveDetails = [
+            'menuItems' => $menuItems->toArray(),
+            'addOns' => $addOns->toArray(),
+            'totalHarga' => $totalHarga,
+            'orderId' => $order->id_order,
+        ];
 
-            // Menyimpan data ke modal untuk ditampilkan
-            $this->approveDetails = [
-                'menuItems' => $menuItems->toArray(),
-                'addOns' => $addOns->toArray(),
-                'totalHarga' => $totalHarga,
-                'orderId' => $order->id_order,
-            ];
-
-            // Membuka modal approve
-            $this->isApproveModalOpen = true;
-        }
+        // Membuka modal approve
+        $this->isApproveModalOpen = true;
     }
+}
 
 
     // Fungsi Finalisasi Pembayaran
@@ -403,8 +403,6 @@ class Dashboard extends Component
                 ->get();
         }
     }
-
-    protected $listeners = ['orderAdded' => 'updateOrders'];
 
     public function render()
     {
