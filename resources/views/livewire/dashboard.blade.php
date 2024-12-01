@@ -183,7 +183,13 @@
                                         <div>
                                             <button wire:click="decreaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#412f26] text-white px-2 rounded-md">-</button>
                                             <input type="text" wire:model="quantities.{{ $menu->id_detailorder }}" class="w-12 text-center border" readonly>
-                                            <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                            
+                                            @if ($menu->menu->stock != 0)
+                                                <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                            @else
+                                                <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#f5e7d9] text-white px-2 rounded-md" disabled>+</button>
+                                            @endif
+
                                         </div>
                                     </div>
                                 @endforeach
@@ -191,17 +197,19 @@
                         </div>
     
                         <div class="mb-6">
-                            <p class="text-[#412f26]"><strong>Addons:</strong></p>
                             <div id="addons-menu" class="space-y-6">
                                 @foreach ($addOns as $addon)
-                                    <div class="flex items-center justify-between">
-                                        <span>{{ $addon->addon->nama_addon }}</span>
-                                        <div>
-                                            <button wire:click="decreaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">-</button>
-                                            <input type="text" wire:model="addonQuantities.{{ $addon->id_detailaddon }}" class="w-12 text-center border" readonly>
-                                            <button wire:click="increaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                    @if (!empty($addon))
+                                        <p class="text-[#412f26]"><strong>Addons:</strong></p>
+                                        <div class="flex items-center justify-between">
+                                            <span>{{ $addon->addon->nama_addon }}</span>
+                                            <div>
+                                                <button wire:click="decreaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">-</button>
+                                                <input type="text" wire:model="addonQuantities.{{ $addon->id_detailaddon }}" class="w-12 text-center border" readonly>
+                                                <button wire:click="increaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>

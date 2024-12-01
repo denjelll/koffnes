@@ -106,7 +106,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="9" class="footer">Total Pendapatan Hari Ini:</td>
+                <td colspan="9" class="footer">Estimasi Pendapatan Hari Ini:</td>
                 <td class="footer">Rp. {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
             </tr>
         </tfoot>
