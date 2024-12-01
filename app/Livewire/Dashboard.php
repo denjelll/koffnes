@@ -44,6 +44,7 @@ class Dashboard extends Component
     ];
     public $isEditModalOpen = false;
 
+
     public function mount()
     {
         $this->updateOrders();
@@ -391,6 +392,8 @@ class Dashboard extends Component
         }
     }
 
+
+    protected $listeners = ['orderAdded' => 'updateOrders'];
     private function updateOrders()
     {
         if ($this->currentTab === 'All') {

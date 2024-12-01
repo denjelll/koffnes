@@ -208,3 +208,20 @@
     </div>
     
 </div>
+
+@push('scripts')
+<script>
+    console.log("Echo status:", window.Echo);
+    console.log("Listening to channel: orders");
+
+    window.Echo.channel('orders')
+    .listen('PesananBaru', (event) => {
+        console.log('Pesanan Baru diterima:', event);
+        Livewire.dispatch('orderAdded');
+    })
+    .catch(error => {
+        console.error('Error with Echo channel:', error);
+    });
+
+</script>
+@endpush
