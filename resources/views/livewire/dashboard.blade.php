@@ -72,7 +72,7 @@
                 </div>
     
                 <!-- Card Section -->
-                <div>
+                <div wire:poll.5s="refreshOrders">
                     @forelse ($orders as $order)
                         @if ($order->status === 'Open Bill')
                             <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
@@ -161,9 +161,19 @@
                             </select>
                     </div>
 
-                    <div class="flex justify-end mt-6 space-x-4">
+                    <div class="flex justify-between font-bold mt-4">
+                        <span>Total Harga</span>
+                        <span>Rp. {{ number_format($approveDetails['totalHarga'], 0, ',', '.') }}</span>
+                    </div>
+
+                    <div class="mt-6 flex justify-end space-x-4">
                         <button wire:click="$set('isApproveModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Batal</button>
-                        <button wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Konfirmasi</button>
+                        <button 
+                            wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" 
+                            onclick="printReceipt('{{ $approveDetails['orderId'] }}')" 
+                            class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">
+                            Konfirmasi
+                        </button>
                     </div>
                 </div>
             </div>
@@ -225,6 +235,7 @@
 
 </div>
 
+@push('scripts')
 <script>
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
@@ -236,9 +247,30 @@
         mobileNav.classList.toggle('hidden');
     });
 
-
-    window.Echo.channel('orders')
-        .listen('NewOrderCreated', (event) => {
-            Livewire.dispatch('orderAdded');
-        });
+    function printReceipt(orderId) {
+    // Lakukan permintaan POST menggunakan Fetch API
+    fetch(`{{ url('/receipt/') }}/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ id_order: orderId })
+    })
+    .then(response => response.text()) // Dapatkan konten HTML dari respons
+    .then(html => {
+        // Buka jendela baru dengan ukuran tertentu dan cetak struk
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.onload = function () {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
+@endpush
+
