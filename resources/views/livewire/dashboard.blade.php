@@ -72,7 +72,7 @@
                 </div>
     
                 <!-- Card Section -->
-                <div>
+                <div wire:poll.5s="refreshOrders">
                     @forelse ($orders as $order)
                         @if ($order->status === 'Open Bill')
                             <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
@@ -271,31 +271,6 @@
     })
     .catch(error => console.error('Error:', error));
 }
-
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        function waitForEcho() {
-            if (window.Echo) {
-                console.log("Echo status:", window.Echo);
-                console.log("Listening to channel: orders");
-
-                window.Echo.channel('orders')
-                    .listen('PesananBaru', (event) => {
-                        console.log('Pesanan Baru diterima:', event);
-                        Livewire.dispatch('orderAdded');
-                    })
-                    .error((error) => {
-                        console.error("Error on Echo channel:", error);
-                    });
-            } else {
-                console.error("Echo is not yet defined. Retrying...");
-                setTimeout(waitForEcho, 500); // Cek lagi setelah 500ms
-            }
-        }
-
-        waitForEcho(); // Panggil fungsi
-    });
 </script>
 @endpush
 

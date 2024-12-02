@@ -10,7 +10,6 @@
     <body>
         {{ $slot }}
         @livewireScripts
-        @vite(['resources/js/bootstrap.js'])
         @stack('scripts')
     </body>
 </html>

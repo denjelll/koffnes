@@ -6,13 +6,8 @@ use Exception;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
-
-//Ini konfigurasi ngeprint, kalo suatu saat dia pindah ke livewire mana pindahin ini
-use Mike42\Escpos\Printer;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Log;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class Dashboard extends Component
 {
@@ -47,78 +42,17 @@ class Dashboard extends Component
         $this->updateOrders();
     }
 
+    public function refreshOrders() 
+    { 
+        $this->updateOrders(); 
+    }
+
     public function switchTab($tab)
     {
         $this->currentTab = $tab;
         $this->updateOrders();
     }
 
-    public function printReceipt($idOrder)
-    {
-        try {
-            // Ambil data order
-            $order = Order::with(['detailOrders.detailAddon', 'cashier'])->findOrFail($idOrder);
-    
-            $usbPath = "/dev/usb/lp0"; // Ganti dengan path USB printer Anda
-    
-            // Coba koneksi ke printer Bluetooth
-            $connector = new FilePrintConnector($usbPath);
-
-            // Inisialisasi Printer
-            $printer = new Printer($connector);
-
-            // Cetak data order
-            $this->printOrder($printer, $order);
-
-            // Tutup printer
-            $printer->close();
-            
-            session()->flash('success', 'Struk berhasil dicetak.');
-        } catch (Exception $e) {
-            session()->flash('error', 'Gagal mencetak struk: ' . $e->getMessage());
-            Log::error("Error printing receipt: " . $e->getMessage());
-        }
-    }
-
-    private function printOrder(Printer $printer, $order)
-    {
-        // Header
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->setTextSize(2, 2);
-        $printer->text("KAFE ANDA\n");
-        $printer->setTextSize(1, 1);
-        $printer->text("Jalan Cafe No. 58, Indonesia\n");
-        $printer->text("--------------------------------\n");
-    
-        // Info Order
-        $printer->setJustification(Printer::JUSTIFY_LEFT);
-        $printer->text("Tanggal: " . now()->format('Y-m-d H:i:s') . "\n");
-        $printer->text("Antrian: #" . $order->antrian . "\n");
-        $printer->text("Cashier: " . $order->cashier->nama_depan . " " . $order->cashier->nama_belakang . "\n");
-        $printer->text("--------------------------------\n");
-    
-        // Detail Pesanan
-        foreach ($order->detailOrders as $detail) {
-            $printer->text($detail->menu->nama_menu . " x " . $detail->quantity . " = Rp " . number_format($detail->harga_menu, 0, ',', '.') . "\n");
-            foreach ($detail->detailAddon as $detailAdd) {
-                $printer->text("  + " . $detailAdd->addon->nama_addon . " x " . $detailAdd->quantity . " = Rp " . number_format($detailAdd->harga, 0, ',', '.') . "\n");
-            }
-        }
-    
-        // Total
-        $printer->text("--------------------------------\n");
-        $printer->setEmphasis(true);
-        $printer->text("Total: Rp " . number_format($order->total_harga, 0, ',', '.') . "\n");
-        $printer->setEmphasis(false);
-        $printer->text("--------------------------------\n");
-    
-        // Footer
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->text("Terima kasih telah berkunjung!\n");
-        $printer->text("--------------------------------\n");
-        $printer->cut();
-    }
-    
     public function approveOrder($id)
     {
         // Mengambil data order beserta detail menu dan add-ons
@@ -393,8 +327,6 @@ class Dashboard extends Component
                 ->get();
         }
     }
-
-    protected $listeners = ['orderAdded' => 'updateOrders'];
 
     public function render()
     {
