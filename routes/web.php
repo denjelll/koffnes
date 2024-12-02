@@ -1,9 +1,13 @@
 <?php
 
+use App\Models\Menu;
+use App\Models\Event;
+use App\Models\Kategori;
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
 use App\Livewire\Inventory;
 use App\Livewire\OrderMenu;
+use App\Models\Isi_kategori;
 use App\Livewire\CartPesanan;
 use App\Livewire\PesanManual;
 use App\Livewire\HistorySearch;
@@ -11,11 +15,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\DailyReportController;
-use App\Models\Event;
-use App\Models\Menu;
-use App\Models\Kategori;
-use App\Models\Isi_kategori;
 
 Route::get('/', function () {
     $events = Event::all();
@@ -97,11 +98,15 @@ Route::middleware(['role:Admin'])->group(function() {
     });
 });
 
+
+
+
 Route::middleware(['role:Kasir|Admin'])->group(function () {
     Route::get('cashier', PesanManual::class)->name('pesan-manual');
     Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
     Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
     Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
+    Route::post('/receipt/{id}', [CashierController::class, 'printReceipt'])->name('pos.receipt');
     Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
     Route::get('cashier/stock', Inventory::class)->name('inventory');
 });
