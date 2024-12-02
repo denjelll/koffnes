@@ -58,7 +58,7 @@
         <div class="details">
             <div class="item">
                 <span>Tanggal:</span>
-                <span>{{ now()->format('Y-m-d H:i:s') }}</span>
+                <span>{{ $order->waktu_transaksi }}</span>
             </div>
             <div class="item">
                 <span>Cashier:</span>
@@ -76,8 +76,17 @@
             @foreach ($order->detailOrders as $detail)
                 <div class="item">
                     <span>{{ $detail->menu->nama_menu }}</span>
-                    <span>{{ $detail->kuantitas}} x Rp {{ number_format($detail->harga_menu, 0, ',', '.') }}</span>
+                    <span>{{ $detail->kuantitas }} x Rp {{ number_format($detail->harga_menu, 0, ',', '.') }}</span>
                 </div>
+                <div class="item" style="padding-left: 10px;">
+                    <span>@ Rp. {{ number_format($detail->menu->harga, 0, ',', '.') }}</span>
+                </div>
+                @if (!empty($detail->notes))
+                    <div class="item" style="padding-left: 10px;">
+                        <span>Catatan:</span>
+                        <span>{{ $detail->notes }}</span>
+                    </div>
+                @endif
                 @foreach ($detail->detailAddon as $addon)
                     <div class="item" style="padding-left: 10px;">
                         <span>+ {{ $addon->addon->nama_addon }}</span>
@@ -86,6 +95,7 @@
                 @endforeach
             @endforeach
         </div>
+
         <div class="line"></div>
 
         <!-- Total -->

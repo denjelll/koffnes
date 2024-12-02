@@ -101,6 +101,7 @@ class Dashboard extends Component
     // Fungsi Finalisasi Pembayaran
     public function finalizePayment($id)
     {
+        Log::info('Memulai finalizePayment untuk orderId:', ['orderId' => $id]);
         $order = Order::find($id);
         if ($order && $order->metode_pembayaran === null) {
             $paymentMethod = $this->paymentMethod;
@@ -113,6 +114,10 @@ class Dashboard extends Component
             $this->isApproveModalOpen = false;
             $this->updateOrders();
         }
+        // Kirim event ke frontend untuk memicu printReceipt
+        Log::info('Dispatching event bayarBerhasil for orderId:', ['orderId' => $id]);
+        $this->dispatch('bayarBerhasil', ['orderId' => $id]);
+
     }
 
     public function editOrder($orderId)

@@ -170,11 +170,11 @@
                         <button wire:click="$set('isApproveModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Batal</button>
                         <button 
                             wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" 
-                            onclick="printReceipt('{{ $approveDetails['orderId'] }}')" 
                             class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">
                             Konfirmasi
                         </button>
                     </div>
+                    
                 </div>
             </div>
         @endif
@@ -237,6 +237,7 @@
 
 @push('scripts')
 <script>
+    console.log('JavaScript file loaded');
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
     const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
@@ -246,6 +247,25 @@
         // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
         mobileNav.classList.toggle('hidden');
     });
+
+    //Listener dari Livewire dispatch untuk panggil function printReceipt
+    document.addEventListener('livewire:initialized', () => {
+        console.log('Livewire initialized'); // Pastikan ini muncul di console.
+
+        // Tambahkan listener untuk event 'bayarBerhasil'
+        Livewire.on('bayarBerhasil', (event) => {
+            if (event && event[0] && event[0].orderId) {
+                const orderId = event[0].orderId;
+                console.log('Order ID:', orderId); // Pastikan orderId diterima dengan benar
+                printReceipt(orderId); // Panggil fungsi printReceipt dengan orderId
+            } else {
+                console.error('Order ID tidak ditemukan di event');
+            }
+        });
+
+
+    });
+
 
     function printReceipt(orderId) {
     // Lakukan permintaan POST menggunakan Fetch API
@@ -270,7 +290,7 @@
         };
     })
     .catch(error => console.error('Error:', error));
-}
+    }
 </script>
 @endpush
 
