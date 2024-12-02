@@ -43,9 +43,6 @@
                     <li>
                         <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                     </li>
-                    <li>
-                        <a href="#" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                    </li>
                 </ul>
             </nav>
     
@@ -83,15 +80,15 @@
                                     <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
                                     <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
                                 </div>
-                                <div class="flex">
-                                    <button wire:click="approveOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
-                                        <h2 class="text-xl w-8 h-8 font-bold">✓</h2>
+                                <div class="flex items-center ml-auto space-x-3">
+                                    <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
+                                        <h2 class="text-sm">✓</h2>
                                     </button>
                                     <button wire:click="editOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
-                                        <h2 class="text-xl w-8 h-8 font-bold">+</h2>
+                                        <h2 class="text-xl w-8 h-8">+</h2>
                                     </button>
-                                    <button wire:click="cancelOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#4b3621] text-white rounded-full">
-                                        <h2 class="text-xl w-8 h-8 font-bold">X</h2>
+                                    <button wire:click="cancelOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
+                                        <h2 class="text-xl w-8 h-8">x</h2>
                                     </button>
                                 </div>    
                             </div>
@@ -122,34 +119,46 @@
     <!-- Pop Up Approve -->
     <div>
         @if ($isApproveModalOpen)
-            <div class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6">
-                    <h2 class="text-lg font-bold mb-4">Konfirmasi Pembayaran</h2>
-                    <h3 class="font-semibold">Detail Pesanan</h3>
-                    <div class="mb-4">
-                        @foreach ($approveDetails['menuItems'] as $menu)
-                            <div class="flex justify-between">
-                                <span>{{ $menu['nama_menu'] }}</span>
-                                <span>{{ $menu['kuantitas'] }} x Rp. {{ number_format($menu['harga'], 0, ',', '.') }}</span>
-                            </div>
-                        @endforeach
-                        @if (!empty($approveDetails['addOns']))
-                            <h4 class="font-semibold mt-2">Add-Ons</h4>
-                            @foreach ($approveDetails['addOns'] as $addon)
+            <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+                <div class="bg-[#e8d2b7] p-12 rounded-lg w-1/2 shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#412f26] mb-6">Konfirmasi Pembayaran</h2>
+                    <div class="mb-6">
+                        <p class="text-[#412f26]"><strong>Detail Pesanan:</strong></p>
+                        <ul class="text-[#412f26] mb-4">
+                            @foreach ($approveDetails['menuItems'] as $menu)
                                 <div class="flex justify-between">
-                                    <span>{{ $addon['nama_addon'] }}</span>
-                                    <span>{{ $addon['kuantitas'] }} x Rp. {{ number_format($addon['harga'], 0, ',', '.') }}</span>
+                                    <span>{{ $menu['nama_menu'] }}</span>
+                                    <span>{{ $menu['kuantitas'] }} x Rp. {{ number_format($menu['harga'], 0, ',', '.') }}</span>
                                 </div>
                             @endforeach
-                        @endif
+                            @if (!empty($approveDetails['addOns']))
+                                <h4 class="font-semibold mt-2">Add-Ons</h4>
+                                @foreach ($approveDetails['addOns'] as $addon)
+                                    <div class="flex justify-between">
+                                        <span>{{ $addon['nama_addon'] }}</span>
+                                        <span>{{ $addon['kuantitas'] }} x Rp. {{ number_format($addon['harga'], 0, ',', '.') }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </ul>
+                        <p class="text-[#412f26]">
+                            <strong>
+                                Total Harga:
+                            </strong> 
+                            Rp. 
+                            <span>
+                                {{ number_format($approveDetails['totalHarga'], 0, ',', '.') }}
+                            </span>
+                        </p>
                     </div>
 
-                    <div wire:model="paymentMethod" class="border border-black">
-                        <select class="w-full">
-                            <option value="edc">EDC</option>
-                            <option value="debit">Debit</option>
-                            <option value="cash">Cash</option>
-                        </select>
+                    <div class="mb-6">
+                        <label class="block mb-2 text-[#412f26]">Metode Pembayaran</label>
+                            <select wire:model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
+                                <option value="edc">EDC</option>
+                                <option value="debit">Debit</option>
+                                <option value="cash">Cash</option>
+                            </select>
                     </div>
 
                     <div class="flex justify-between font-bold mt-4">
@@ -157,12 +166,12 @@
                         <span>Rp. {{ number_format($approveDetails['totalHarga'], 0, ',', '.') }}</span>
                     </div>
 
-                    <div class="mt-4 flex justify-end space-x-4">
-                        <button wire:click="$set('isApproveModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button wire:click="$set('isApproveModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Batal</button>
                         <button 
                             wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" 
                             onclick="printReceipt('{{ $approveDetails['orderId'] }}')" 
-                            class="bg-green-500 text-white px-4 py-2 rounded">
+                            class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">
                             Konfirmasi
                         </button>
                     </div>
@@ -172,50 +181,72 @@
 
         <!-- Pop Up Edit -->
         @if ($isEditModalOpen)
-            <div class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg max-w-2xl w-full mx-auto p-4">
-                    <h2 class="text-lg font-bold mb-4">Edit Pesanan</h2>
-                    <h3 class="font-semibold">Menu Utama</h3>
-                    <div>
-                        @foreach ($menuItems as $menu)
-                            <div class="flex items-center justify-between">
-                                <span>{{ $menu->menu->nama_menu }}</span>
-                                <div>
-                                    <button wire:click="decreaseQuantity('{{ $menu->id_detailorder }}')" class="bg-gray-300 px-2">-</button>
-                                    <input type="text" wire:model="quantities.{{ $menu->id_detailorder }}" class="w-12 text-center border">
-                                    <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-gray-300 px-2">+</button>
-                                </div>
+            <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+                <div class="bg-[#e8d2b7] p-12 rounded-lg w-1/2 shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#412f26] mb-6">Edit Pesanan</h2>
+                        <div class="mb-6">
+                            <p class="text-[#412f26]"><strong>Menu Utama:</strong></p>
+                            <div class="space-y-6">
+                                @foreach ($menuItems as $menu)
+                                    <div class="flex items-center space-x-2 justify-between">
+                                        <span>{{ $menu->menu->nama_menu }}</span>
+                                        <div>
+                                            <button wire:click="decreaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#412f26] text-white px-2 rounded-md">-</button>
+                                            <input type="text" wire:model="quantities.{{ $menu->id_detailorder }}" class="w-12 text-center border" readonly>
+                                            
+                                            @if ($menu->menu->stock != 0)
+                                                <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                            @else
+                                                <button wire:click="increaseQuantity('{{ $menu->id_detailorder }}')" class="bg-[#f5e7d9] text-white px-2 rounded-md" disabled>+</button>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
     
-                    <h3 class="font-semibold mt-4">Add-Ons</h3>
-                    <div>
-                        @foreach ($addOns as $addon)
-                            <div class="flex items-center justify-between">
-                                <span>{{ $addon->addon->nama_addon }}</span>
-                                <div>
-                                    <button wire:click="decreaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-gray-300 px-2">-</button>
-                                    <input type="text" wire:model="addonQuantities.{{ $addon->id_detailaddon }}" class="w-12 text-center border">
-                                    <button wire:click="increaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-gray-300 px-2">+</button>
-                                </div>
+                        <div class="mb-6">
+                            <div id="addons-menu" class="space-y-6">
+                                @foreach ($addOns as $addon)
+                                    @if (!empty($addon))
+                                        <p class="text-[#412f26]"><strong>Addons:</strong></p>
+                                        <div class="flex items-center justify-between">
+                                            <span>{{ $addon->addon->nama_addon }}</span>
+                                            <div>
+                                                <button wire:click="decreaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">-</button>
+                                                <input type="text" wire:model="addonQuantities.{{ $addon->id_detailaddon }}" class="w-12 text-center border" readonly>
+                                                <button wire:click="increaseAddonQuantity('{{ $addon->id_detailaddon }}')" class="bg-[#412f26] text-white px-2 rounded-md">+</button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
     
-                    <div class="mt-4">
-                        <button wire:click="saveOrder" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
-                        <button wire:click="$set('isEditModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                    <div class="flex justify-end mt-6 space-x-4">
+                        <button wire:click="$set('isEditModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Batal</button>
+                        <button wire:click="saveOrder" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]" >Simpan</button>
                     </div>
                 </div>
             </div>
         @endif
     </div>
-    
+
 </div>
 
 @push('scripts')
 <script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+
     function printReceipt(orderId) {
     // Lakukan permintaan POST menggunakan Fetch API
     fetch(`{{ url('/receipt/') }}/${orderId}`, {

@@ -43,9 +43,6 @@
                 <li>
                     <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                 </li>
-                <li>
-                    <a href="#" class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                </li>
             </ul>
         </nav>
     
@@ -104,12 +101,16 @@
                         </form>
                     </div>
                     <ul class="space-y-4">
+                        <h2 class="text-lg font-bold text-[#412f26]">Total Transaction:
+                            <span>Rp. {{ number_format($totalTransaction, 0, ',', '.') }}</span>
+                        </h2>
                         @forelse ($orders as $order)
-                            <li class="bg-white p-4 rounded-lg shadow-md">
-                                <p class="text-[#412f26] font-semibold">Customer: {{ $order->customer }}</p>
-                                <p class="text-gray-600">Date: {{ $order->waktu_transaksi }}</p>
-                                <p class="text-gray-600">Total: Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
-                            </li>
+                                <li class="bg-white p-4 rounded-lg shadow-md">
+                                    <button class="text-[#412f26] font-semibold hover:text-[#d4ab79]" wire:click="showOrders('{{ $order->id_order }}')">ID: {{ $order->id_order }}</button>
+                                    <p class="text-gray-600">Customer: {{ $order->customer }}</p>
+                                    <p class="text-gray-600">Date: {{ $order->waktu_transaksi }}</p>
+                                    <p class="text-gray-600">Total: Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+                                </li>
                         @empty
                             <li class="text-sm text-gray-500">No results found. Please refine your search.</li>
                         @endforelse
@@ -130,4 +131,61 @@
             </footer>
         </div>
     </div>
+
+
+    <!-- Popup Detail Orders -->
+    @if ($isShowModalOpen)
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
+            <div class="bg-[#e8d2b7] p-8 rounded-lg w-1/2 shadow-lg">
+                <h3 class="text-2xl font-bold text-[#412f26] mb-6">Informasi Pesanan</h2>
+                <div class="mb-6">
+                    <p class="text-[#412f26]"><strong>Detail Pesanan:</strong></p>
+                    <ul class="text-[#412f26] mb-4">
+                        @foreach ($showDetails['menuItems'] as $menu)
+                            <div class="flex justify-between">
+                                <span>{{ $menu['nama_menu'] }}</span>
+                                <span>{{ $menu['kuantitas'] }} x Rp. {{ number_format($menu['harga'], 0, ',', '.') }}</span>
+                            </div>
+                        @endforeach
+                        @if (!empty($showDetails['addOns']))
+                            <h4 class="font-semibold mt-2">Add-Ons</h4>
+                            @foreach ($showDetails['addOns'] as $addon)
+                                <div class="flex justify-between">
+                                    <span>{{ $addon['nama_addon'] }}</span>
+                                    <span>{{ $addon['kuantitas'] }} x Rp. {{ number_format($addon['harga'], 0, ',', '.') }}</span>
+                                </div>
+                            @endforeach
+                        @endif
+                    </ul>
+                    <p class="text-[#412f26]">
+                        <strong>
+                            Total Harga:
+                        </strong> 
+                        Rp. 
+                        <span>
+                            {{ number_format($showDetails['totalHarga'], 0, ',', '.') }}
+                        </span>
+                    </p>
+                </div>
+                <div class="mt-6 space-x-4"">
+                    <button wire:click="$set('isShowModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Close</button>
+                    <button class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Print</button>
+                </div>
+                
+            </div>
+        </div>
+    @endif
+    
 </div>
+
+<script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+</script>

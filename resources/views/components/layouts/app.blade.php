@@ -6,7 +6,6 @@
         @stack('styles')
         @vite(['resources/css/app.css'])
         <title>{{ $title ?? 'Page Title' }}</title>
-        @livewireStyles
     </head>
     <body>
         {{ $slot }}
