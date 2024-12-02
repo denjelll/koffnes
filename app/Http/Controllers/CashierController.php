@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -33,27 +31,138 @@ class CashierController extends Controller
         }
     }
 
-    public function printReceipt(Request $request, $id)
+    public function inputOrder(Request $request)
     {
-        Log::info('Print Receipt Called for Order ID:', ['id' => $id]);
-
-        // Validasi ID order
-        $order = Order::with(['detailOrders.detailAddon', 'cashier'])->find($id);
-        if (!$order) {
-            Log::error('Order not found:', ['id' => $id]);
-            abort(404, 'Order tidak ditemukan.');
+        if (Session::get('role') !== 'cashier') {
+            return redirect('/login');
         }
 
-        $cashier = $order->cashier;
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'meja' => 'nullable|integer|min:1|max:23',
+                'tipe_order' => 'required|in:Dine In,Take Away,Delivery',
+                'items.*.id_menu' => 'required|exists:menu,id_menu',
+                'items.*.quantity' => 'required|integer|min:1',
+            ]);
 
-        // Log data untuk memastikan semuanya benar
-        Log::info('Order Data:', $order->toArray());
-        Log::info('Cashier Data:', $cashier->toArray());
+            $lastQueue = DB::table('orders')
+                ->whereDate('waktu_transaksi', now()->toDateString())
+                ->max('antrian');
 
-        // Render view template struk menjadi HTML
-        return view('pos_receipt', compact('order', 'cashier'));
+            $newQueue = $lastQueue ? $lastQueue + 1 : 1;
+
+            $totalHarga = 0;
+            foreach ($request->input('items') as $item) {
+                $menu = DB::table('menus')->where('id_menu', $item['id_menu'])->first();
+                $totalHarga += $menu->harga * $item['quantity'];
+            }
+
+            $IDorder = uniqid('ORD-');
+            DB::table('orders')->insert([
+                'id_order' => $IDorder,
+                'id_user' => Session::get('id_user'),
+                'antrian' => $newQueue,
+                'customer' => 'Walk-in Customer',
+                'meja' => $request->input('meja'),
+                'tipe_order' => $request->input('tipe_order'),
+                'status' => 'Open Bill',
+                'total_harga' => $totalHarga,
+                'waktu_transaksi' => now(),
+            ]);
+
+            foreach ($request->input('items') as $item) {
+                $menu = DB::table('menus')->where('id_menu', $item['id_menu'])->first();
+                DB::table('detail_orders')->insert([
+                    'id_detailorder' => uniqid('DO-'),
+                    'id_order' => $IDorder,
+                    'id_menu' => $item['id_menu'],
+                    'kuantitas' => $item['quantity'],
+                    'harga' => $menu->harga,
+                ]);
+            }
+        }
+
+        return redirect('/cashier');
     }
 
+    public function dashboard()
+    {
+        if (Session::get('role') !== 'cashier') {
+            return redirect('/login');
+        }
 
+        $orders = DB::table('orders')
+            ->select('antrian', 'meja', 'tipe_order', 'status', 'total_harga', 'waktu_transaksi')
+            ->whereDate('waktu_transaksi', now()->toDateString())
+            ->orderBy('antrian', 'asc')
+            ->get();
+
+        return view('cashier.dashboard', ['orders' => $orders]);
+    }
+
+    public function printReceipt($id_order)
+    {
+        // Periksa role
+        if (Session::get('role') !== 'cashier') {
+            return redirect('/login');
+        }
+
+        // Ambil data order
+        $order = DB::table('orders')
+            ->where('id_order', $id_order)
+            ->first();
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+
+        // Ambil detail order
+        $details = DB::table('detail_orders')
+            ->join('menus', 'detail_orders.id_menu', '=', 'menus.id_menu')
+            ->where('detail_orders.id_order', $id_order)
+            ->select('menus.nama_menu', 'detail_orders.kuantitas', 'detail_orders.harga')
+            ->get();
+
+        // Total harga
+        $totalHarga = DB::table('detail_orders')
+            ->where('id_order', $id_order)
+            ->sum(DB::raw('kuantitas * harga'));
+
+        // Kirim data ke view untuk dicetak
+        return view('cashier.print', [
+            'order' => $order,
+            'details' => $details,
+            'totalHarga' => $totalHarga,
+        ]);
+    }
+
+    public function salesReport(Request $request) {
+    // Periksa role
+    if (Session::get('role') !== 'cashier') {
+        return redirect('/login');
+    }
+
+    // Ambil tanggal filter (default: hari ini)
+    $startDate = $request->input('start_date', now()->startOfDay());
+    $endDate = $request->input('end_date', now()->endOfDay());
+
+    // Ambil data penjualan dalam rentang waktu
+    $orders = DB::table('orders')
+        ->whereBetween('waktu_transaksi', [$startDate, $endDate])
+        ->select('id_order', 'antrian', 'customer', 'tipe_order', 'total_harga', 'waktu_transaksi', 'status')
+        ->orderBy('waktu_transaksi', 'asc')
+        ->get();
+
+    // Hitung total penjualan
+    $totalSales = $orders->sum('total_harga');
+
+    // Kirim data ke view
+    return view('cashier.closing', [
+        'orders' => $orders,
+        'totalSales' => $totalSales,
+        'startDate' => $startDate,
+        'endDate' => $endDate,
+    ]);
+}
 
 }

@@ -169,11 +169,7 @@
                 </div>
                 <div class="mt-6 space-x-4"">
                     <button wire:click="$set('isShowModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Close</button>
-                    <button 
-                        class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]"
-                        onclick="printReceipt('{{ $showDetails['orderId'] }}')" >
-                        Print
-                    </button>
+                    <button class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Print</button>
                 </div>
                 
             </div>
@@ -182,7 +178,6 @@
     
 </div>
 
-@push('scripts')
 <script>
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
@@ -193,30 +188,4 @@
         // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
         mobileNav.classList.toggle('hidden');
     });
-
-    function printReceipt(orderId) {
-    // Lakukan permintaan POST menggunakan Fetch API
-    fetch(`{{ url('/receipt/') }}/${orderId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ id_order: orderId })
-    })
-    .then(response => response.text()) // Dapatkan konten HTML dari respons
-    .then(html => {
-        // Buka jendela baru dengan ukuran tertentu dan cetak struk
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.onload = function () {
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        };
-    })
-    .catch(error => console.error('Error:', error));
-    }
 </script>
-@endpush

@@ -64,19 +64,6 @@
                 @endif
             </div>
 
-            <!-- Notes -->
-            <div class="items-center justify-between mt-4">
-                <label for="notes-{{ $item['id_menu'] }}" class="text-cocoa font-semibold">
-                    Catatan:
-                </label>
-                <textarea
-                    id="notes-{{ $item['id_menu'] }}"
-                    wire:model="pesanan.{{ $loop->index }}.notes"
-                    class="w-full p-2 border border-gray-300 rounded-md resize-none"
-                    placeholder="Masukkan catatan untuk menu ini">
-                </textarea>
-            </div>
-
             <!-- Total Harga Makanan -->
             <div class="flex items-center justify-between mt-4">
                 <p class="font-semibold text-lg text-gray-800">Total: Rp. <span id="totalPriceIndomie">{{ number_format($item['total'], 0, ',', '.') }}</span></p>
