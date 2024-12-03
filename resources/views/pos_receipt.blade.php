@@ -42,15 +42,18 @@
             margin-top: 10px;
             text-align: center;
         }
+        .fontSmall {
+            font-size: 7px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="receipt">
         <!-- Header -->
         <div class="header">
-            <div>KAFE ANDA</div>
-            <div>Jalan Cafe No. 58</div>
-            <div>Indonesia</div>
+            <div>KOFFNES</div>
+            <div class="fontSmall">Jl. Rawa Buntu Utara No.7 BLOK A, RT.4/RW.4, Rw. Buntu, BSD, Kec. Serpong, Kota Tangerang Selatan, Banten 15310</div>
         </div>
         <div class="line"></div>
 
@@ -104,8 +107,19 @@
                 <span>Total:</span>
                 <span>Rp {{ number_format($order->total_harga, 0, ',', '.') }}</span>
             </div>
+
+            <div class="item">
+                <span>Bayar:</span>
+                <span>Rp {{ number_format($order->bayar, 0, ',', '.') }}</span>
+            </div>
+
+            <div class="item">
+                <span>Kembalian:</span>
+                <span>Rp {{ number_format($order->kembalian, 0, ',', '.') }}</span>
+            </div>
         </div>
 
+        <div class="line"></div>
         <!-- Footer -->
         <div class="footer">
             Terima kasih telah berkunjung!

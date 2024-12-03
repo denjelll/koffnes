@@ -120,7 +120,7 @@
     <div>
         @if ($isApproveModalOpen)
             <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
-                <div class="bg-[#e8d2b7] p-12 rounded-lg w-1/2 shadow-lg">
+                <div class="bg-[#e8d2b7] p-12 rounded-lg w-1/2 shadow-lg max-h-[80vh] overflow-y-auto">
                     <h3 class="text-2xl font-bold text-[#412f26] mb-6">Konfirmasi Pembayaran</h2>
                     <div class="mb-6">
                         <p class="text-[#412f26]"><strong>Detail Pesanan:</strong></p>
@@ -159,7 +159,27 @@
                                 <option value="debit">Debit</option>
                                 <option value="cash">Cash</option>
                             </select>
+                            
                     </div>
+
+                    @if ($paymentMethod === 'cash')
+                        <div class="mb-6">
+                            <label class="block mb-2 text-[#412f26]">Jumlah Uang yang Diberikan</label>
+                            <input 
+                                type="number" 
+                                wire:model="amountPaid" 
+                                class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]" 
+                                placeholder="Masukkan jumlah uang">
+                            
+                            <div class="mt-2 text-[#412f26]">
+                                @if ($amountPaid >= $approveDetails['totalHarga'])
+                                    <p><strong>Kembalian:</strong> Rp. {{ number_format($amountPaid - $approveDetails['totalHarga'], 0, ',', '.') }}</p>
+                                @elseif ($amountPaid < $approveDetails['totalHarga'])
+                                    <p class="text-red-500">Uang yang diberikan kurang!</p>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="flex justify-between font-bold mt-4">
                         <span>Total Harga</span>
@@ -237,7 +257,6 @@
 
 @push('scripts')
 <script>
-    console.log('JavaScript file loaded');
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
     const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
@@ -262,8 +281,6 @@
                 console.error('Order ID tidak ditemukan di event');
             }
         });
-
-
     });
 
 

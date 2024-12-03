@@ -32,7 +32,7 @@ Route::get('/', function () {
 
 
 Route::get('/home', function () {
-    return view('home');
+    return redirect('/');
 });
 
 Route::get('/events', function () {
@@ -104,8 +104,6 @@ Route::middleware(['role:Admin'])->group(function() {
 });
 
 
-
-
 Route::middleware(['role:Kasir|Admin'])->group(function () {
     Route::get('cashier', PesanManual::class)->name('pesan-manual');
     Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
@@ -120,11 +118,10 @@ Route::middleware(['check_koffnes'])->group(function () {
     Route::controller(OrderController::class)->group(function() {
         Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
         Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
-
+        Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
+        Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
         Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
     });
 });
 
-Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
-Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 

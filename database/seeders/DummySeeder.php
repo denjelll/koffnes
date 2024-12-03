@@ -13,7 +13,7 @@ class DummySeeder extends Seeder
     {
          // Insert waktu buka/tutup
         DB::table('koffnes_statuses')->insert([
-            'status_koffnes' => 'close',
+            'status_koffnes' => 'open',
         ]);
 
         //Dummy Events
@@ -153,12 +153,12 @@ class DummySeeder extends Seeder
             ],
             [
                 'id_user' => 3,
-                'nama_depan' => 'Admin',
-                'nama_belakang' => '1',
+                'nama_depan' => 'Jamal',
+                'nama_belakang' => 'Cashier',
                 'no_telepon' => '1',
-                'email' => 'admin@gmail.com',
+                'email' => '123@gmail.com',
                 'password' => bcrypt('123'),
-                'role' => 'Admin',
+                'role' => 'Kasir',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

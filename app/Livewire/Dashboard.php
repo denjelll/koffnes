@@ -29,6 +29,7 @@ class Dashboard extends Component
     //Pop Up Variable
     public $isApproveModalOpen = false;
     public $paymentMethod = 'edc';
+    public $amountPaid = 0;
     public $approveDetails = [
         'menuItems' => [],
         'addOns' => [],
@@ -104,6 +105,19 @@ class Dashboard extends Component
         Log::info('Memulai finalizePayment untuk orderId:', ['orderId' => $id]);
         $order = Order::find($id);
         if ($order && $order->metode_pembayaran === null) {
+            if ($this->paymentMethod === 'cash') {
+                if ($this->amountPaid < $this->approveDetails['totalHarga']) {
+                    $this->addError('amountPaid', 'Jumlah uang yang diberikan kurang.');
+                    return;
+                }
+        
+                $order->bayar = $this->amountPaid;
+                $order->kembalian = $this->amountPaid - $this->approveDetails['totalHarga'];
+            } else {
+                $order->bayar = $this->approveDetails['totalHarga'];
+                $order->kembalian = 0;
+            }
+        
             $paymentMethod = $this->paymentMethod;
 
             $order->update([

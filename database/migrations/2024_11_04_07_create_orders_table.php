@@ -27,6 +27,8 @@ return new class extends Migration
             $table->enum('tipe_order', ['Dine In', 'Take Away', 'Delivery']);
             $table->enum('metode_pembayaran', ['EDC', 'Debit', 'Cash'])->nullable();
             $table->enum('status', ['Paid', 'Open Bill', 'Cancelled']);
+            $table->integer('bayar')->unsigned();
+            $table->integer('kembalian')->unsigned();
             $table->integer('total_harga')->unsigned();
             $table->timestamp('waktu_transaksi')->useCurrent();
             $table->timestamp('updated_on')->useCurrent()->useCurrentOnUpdate();
