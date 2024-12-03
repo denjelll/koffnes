@@ -165,6 +165,7 @@
                         <button wire:click="$set('isApproveModalOpen', false)" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Batal</button>
                         <button wire:click="finalizePayment('{{ $approveDetails['orderId'] }}')" class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#d4ab79]">Konfirmasi</button>
                     </div>
+                    
                 </div>
             </div>
         @endif
@@ -228,6 +229,7 @@
 </div>
 
 <script>
+    console.log('JavaScript file loaded');
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
     const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
@@ -237,4 +239,48 @@
         // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
         mobileNav.classList.toggle('hidden');
     });
+
+    //Listener dari Livewire dispatch untuk panggil function printReceipt
+    document.addEventListener('livewire:initialized', () => {
+        console.log('Livewire initialized'); // Pastikan ini muncul di console.
+
+        // Tambahkan listener untuk event 'bayarBerhasil'
+        Livewire.on('bayarBerhasil', (event) => {
+            if (event && event[0] && event[0].orderId) {
+                const orderId = event[0].orderId;
+                console.log('Order ID:', orderId); // Pastikan orderId diterima dengan benar
+                printReceipt(orderId); // Panggil fungsi printReceipt dengan orderId
+            } else {
+                console.error('Order ID tidak ditemukan di event');
+            }
+        });
+
+
+    });
+
+
+    function printReceipt(orderId) {
+    // Lakukan permintaan POST menggunakan Fetch API
+    fetch(`{{ url('/receipt/') }}/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ id_order: orderId })
+    })
+    .then(response => response.text()) // Dapatkan konten HTML dari respons
+    .then(html => {
+        // Buka jendela baru dengan ukuran tertentu dan cetak struk
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.onload = function () {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+    })
+    .catch(error => console.error('Error:', error));
+    }
 </script>

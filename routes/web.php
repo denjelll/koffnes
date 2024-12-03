@@ -19,11 +19,16 @@ use App\Models\Isi_kategori;
 
 Route::get('/', function () {
     $events = Event::all();
-    $menus = Menu::all()->take(4);  
-    $kategori_bundle = Kategori::where('nama_kategori', 'Bundling')->first();
-    $bundles = Isi_kategori::where('id_kategori', $kategori_bundle->id_kategori)->get()->take(3);
-    return view('home', compact( 'menus', 'events', 'bundles'));
+    
+    // Ambil best seller dengan id_kategori 1
+    $best_seller = Isi_kategori::where('id_kategori', 1)->take(4)->get();
+    
+    // Ambil bundling dengan id_kategori 4
+    $bundles = Isi_kategori::where('id_kategori', 4)->take(3)->get();
+    
+    return view('home', compact('best_seller', 'events', 'bundles'));
 });
+
 
 Route::get('/home', function () {
     return view('home');
