@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk Pembayaran</title>
     <style>
-        /* Ukuran kertas 58mm x 45mm */
+        /* Ukuran kertas 58mm x auto */
         @page {
-            size: 58mm 45mm;
+            size: 58mm auto;
             margin: 0;
         }
         body {
@@ -17,7 +17,7 @@
             padding: 0;
         }
         .receipt {
-            width: 100%;
+            width: 58mm;
             padding: 5px;
             box-sizing: border-box;
             text-align: center;
