@@ -49,6 +49,11 @@ class Dashboard extends Component
         $this->updateOrders();
     }
 
+    public function refreshOrders()
+    {
+        $this->updateOrders();
+    }
+
     public function switchTab($tab)
     {
         $this->currentTab = $tab;

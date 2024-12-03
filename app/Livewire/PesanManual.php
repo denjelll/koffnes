@@ -93,7 +93,7 @@ class PesanManual extends Component
             session()->flash('error', 'Nama Harus diisi.');
             return;
         }
-        if($this->customer['tipe_order'] == 'Take Away') {
+        if($this->customer['tipe_order'] == 'Take Away' || $this->customer['tipe_order'] == 'Delivery') {
             $this->customer['meja'] = 0;
         }
 

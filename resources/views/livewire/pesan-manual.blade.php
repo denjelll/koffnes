@@ -76,6 +76,7 @@
                         style="background-color: #cbb89d; color: white;">
                         <option value="Dine In">Dine In</option>
                         <option value="Take Away">Take Away</option>
+                        <option value="Delivery">Delivery</option>
                     </select>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-4">

@@ -72,7 +72,7 @@
                 </div>
     
                 <!-- Card Section -->
-                <div>
+                <div wire:poll.5s="refreshOrders">
                     @forelse ($orders as $order)
                         @if ($order->status === 'Open Bill')
                             <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
