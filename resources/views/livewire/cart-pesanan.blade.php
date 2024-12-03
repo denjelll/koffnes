@@ -116,12 +116,21 @@
                 </div>
                 <div class="flex items-center space-x-2">
                     <label class="text-sm font-semibold text-[#412f26]">Table:</label>
-                    <input
+                    @if ($customer['tipe_order'] === 'Take Away' || $customer['tipe_order'] === 'Delivery')
+                        <input
+                        type="number"
+                        id="table_number"
+                        wire:model="customer.meja"
+                        min="0"
+                        class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]"  readonly>
+                    @else
+                        <input
                         type="number"
                         id="table_number"
                         wire:model="customer.meja"
                         min="0"
                         class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]">
+                    @endif
                 </div>
                 <div class="flex items-center space-x-4">
                     <label for="tipe_order" class="text-sm font-semibold text-[#412f26]">Tipe Order:</label>
@@ -132,6 +141,7 @@
 
                         <option value="Dine In" class="text-sm font-semibold text-[#412f26]">Dine In</label>
                         <option value="Take Away" class="text-sm font-semibold text-[#412f26]">Take Away</label>
+                        <option value="Delivery" class="text-sm font-semibold text-[#412f26]">Delivery</label>
                     </select>
                 </div>
             </div>

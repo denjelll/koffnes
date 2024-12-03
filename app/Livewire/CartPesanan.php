@@ -201,7 +201,12 @@ class CartPesanan extends Component
          }
 
         // Generate ID Order unik
+        if($this->customer['tipe_order'] === 'Dine In')
             $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-M'. $this->customer['meja'] ;
+        else if($this->customer['tipe_order'] === 'Take Away')
+            $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-TA' ;
+        else
+            $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-DV' ;
 
         // Simpan ke tabel orders
         $order = Order::create([
@@ -218,20 +223,6 @@ class CartPesanan extends Component
 
         // Simpan detail order ke detail_orders
         foreach ($this->pesanan as $menu) {
-            $now = Carbon::now();
-            $promo = $menu['menu']['promo'];
-
-            // Periksa apakah promo berlaku
-            $hargaMenu = $menu['menu']['harga'];
-            if (
-                $promo && 
-                $promo['status'] === 'Aktif' &&
-                ($promo['hari'] === 'AllDay' || $promo['hari'] === $now->format('l')) &&
-                $now->between($promo['waktu_mulai'], $promo['waktu_berakhir'])
-            ) {
-                $hargaMenu = $promo['harga_promo'];
-            }
-
             $menuDb = Menu::find($menu['id_menu']);
             if ($menuDb) {
                 $menuDb->stock -= $menu['kuantitas'];
@@ -242,13 +233,13 @@ class CartPesanan extends Component
                 $menuDb->save();
             }
 
-            $id_detailorder = 'DO-' .  Carbon::now()->format('YmdHis') . '-' . $count . '-' . $menu['menu']['id_menu'];
+            $id_detailorder = 'DO-' .  Carbon::now()->format('YmdHis') . '-' . $count . '-' . $menu['id_menu'];
             $detailOrder = DetailOrder::create([
                 'id_detailorder' => $id_detailorder,
                 'id_order' => $id_order,
                 'id_menu' => $menu['id_menu'],
                 'kuantitas' => $menu['kuantitas'],
-                'harga_menu' => $hargaMenu * $menu['kuantitas'], // Harga Final
+                'harga_menu' => $menu['harga'], // Harga Final
                 'notes' => $menu['notes'] ?? '',
                 'waktu_transaksi' => now(),
             ]);
@@ -285,34 +276,6 @@ class CartPesanan extends Component
 
         return redirect()->route('dashboard');
     }
-
-    public function payment()
-    {
-        // Kirim pesanan dan add-on ke halaman payment
-        $pesananAddOn = [];
-
-        foreach ($this->pesanan as $menu) {
-            if (isset($this->addOns[$menu['id_menu']])) {
-                foreach ($this->addOns[$menu['id_menu']] as $addon) {
-                    if ($this->addOnQty[$addon->id_addon] > 0) {
-                        $pesananAddOn[] = [
-                            'nama_addon' => $addon->nama_addon,
-                            'harga' => $addon->harga,
-                            'kuantitas' => $this->addOnQty[$addon->id_addon],
-                            'total' => $this->addOnQty[$addon->id_addon] * $addon->harga,
-                        ];
-                    }
-                }
-            }
-        }
-
-        return redirect()->route('payment')->with([
-            'pesanan' => $this->pesanan,
-            'pesananAddOn' => $pesananAddOn,
-            'totalHarga' => $this->totalHarga,
-        ]);
-    }
-
 
     public function render()
     {
