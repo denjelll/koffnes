@@ -6,15 +6,8 @@ use Exception;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
-
-//Ini konfigurasi ngeprint, kalo suatu saat dia pindah ke livewire mana pindahin ini
-use Mike42\Escpos\Printer;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Log;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\PrintConnectors\BluetoothPrintConnector;
-
 
 class Dashboard extends Component
 {
@@ -35,7 +28,8 @@ class Dashboard extends Component
 
     //Pop Up Variable
     public $isApproveModalOpen = false;
-    public $paymentMethod;
+    public $paymentMethod = 'edc';
+    public $amountPaid = 0;
     public $approveDetails = [
         'menuItems' => [],
         'addOns' => [],
@@ -49,136 +43,81 @@ class Dashboard extends Component
         $this->updateOrders();
     }
 
+    public function refreshOrders() 
+    { 
+        $this->updateOrders(); 
+    }
+
     public function switchTab($tab)
     {
         $this->currentTab = $tab;
         $this->updateOrders();
     }
 
-    public function printReceipt($idOrder)
-    {
-        try {
-            // Ambil data order
-            $order = Order::with(['detailOrders.detailAddon', 'cashier'])->findOrFail($idOrder);
-    
-            $macAddresBluetooth = "00:1B:44:11:3A:B7"; // Ganti dengan alamat Bluetooth printer Anda
-            $usbPath = "/dev/usb/lp0"; // Ganti dengan path USB printer Anda
-    
-            // Coba koneksi ke printer Bluetooth
-            try {
-                $connector = new BluetoothPrintConnector($macAddresBluetooth);
-            } catch (Exception $e) {
-                // Jika Bluetooth gagal, gunakan USB
-                try {
-                    $connector = new FilePrintConnector($usbPath);
-                } catch (Exception $e) {
-                    throw new Exception("Printer tidak tersedia. Silakan periksa koneksi Bluetooth atau USB.");
-                }
-            }
-    
-            // Inisialisasi Printer
-            $printer = new Printer($connector);
-    
-            // Print data dari Order
-            $this->printOrder($printer, $order);
-            $printer->close();
-            
-            session()->flash('success', 'Struk berhasil dicetak.');
-        } catch (Exception $e) {
-            session()->flash('error', 'Gagal mencetak struk: ' . $e->getMessage());
-            Log::error("Error printing receipt: " . $e->getMessage());
-        }
-    }
-
-    private function printOrder(Printer $printer, $order)
-    {
-        // Header
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->setTextSize(2, 2);
-        $printer->text("KAFE ANDA\n");
-        $printer->setTextSize(1, 1);
-        $printer->text("Jalan Cafe No. 58, Indonesia\n");
-        $printer->text("--------------------------------\n");
-    
-        // Info Order
-        $printer->setJustification(Printer::JUSTIFY_LEFT);
-        $printer->text("Tanggal: " . now()->format('Y-m-d H:i:s') . "\n");
-        $printer->text("Antrian: #" . $order->antrian . "\n");
-        $printer->text("Cashier: " . $order->cashier->nama_depan . " " . $order->cashier->nama_belakang . "\n");
-        $printer->text("--------------------------------\n");
-    
-        // Detail Pesanan
-        foreach ($order->detailOrders as $detail) {
-            $printer->text($detail->menu->nama_menu . " x " . $detail->quantity . " = Rp " . number_format($detail->harga_menu, 0, ',', '.') . "\n");
-            foreach ($detail->detailAddon as $detailAdd) {
-                $printer->text("  + " . $detailAdd->addon->nama_addon . " x " . $detailAdd->quantity . " = Rp " . number_format($detailAdd->harga, 0, ',', '.') . "\n");
-            }
-        }
-    
-        // Total
-        $printer->text("--------------------------------\n");
-        $printer->setEmphasis(true);
-        $printer->text("Total: Rp " . number_format($order->total_harga, 0, ',', '.') . "\n");
-        $printer->setEmphasis(false);
-        $printer->text("--------------------------------\n");
-    
-        // Footer
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->text("Terima kasih telah berkunjung!\n");
-        $printer->text("--------------------------------\n");
-        $printer->cut();
-    }
-    
     public function approveOrder($id)
-{
-    // Mengambil data order beserta detail menu dan add-ons
-    $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
+    {
+        // Mengambil data order beserta detail menu dan add-ons
+        $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
 
-    if ($order) {
-        // Siapkan detail menu dan harga
-        $menuItems = $order->detailOrders->map(function ($detail) {
-            return [
-                'nama_menu' => $detail->menu->nama_menu,
-                'kuantitas' => $detail->kuantitas,
-                'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
-                'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
-            ];
-        });
-
-        // Siapkan detail add-ons dan harga
-        $addOns = $order->detailOrders->flatMap(function ($detail) {
-            return $detail->addOns->map(function ($addon) {
+        if ($order) {
+            // Siapkan detail menu dan harga
+            $menuItems = $order->detailOrders->map(function ($detail) {
                 return [
-                    'nama_addon' => $addon->addon->nama_addon,
-                    'kuantitas' => $addon->kuantitas,
-                    'harga' => $addon->addon->harga, // Mengambil harga dari tabel add_ons
-                    'total_harga' => $addon->kuantitas * $addon->addon->harga, // Menghitung total harga per add-on
+                    'nama_menu' => $detail->menu->nama_menu,
+                    'kuantitas' => $detail->kuantitas,
+                    'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
+                    'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
                 ];
             });
-        });
 
-        // Menghitung total harga untuk menu dan add-ons
-        $totalHarga = $menuItems->sum('total_harga') + $addOns->sum('total_harga');
+            // Siapkan detail add-ons dan harga
+            $addOns = $order->detailOrders->flatMap(function ($detail) {
+                return $detail->addOns->map(function ($addon) {
+                    return [
+                        'nama_addon' => $addon->addon->nama_addon,
+                        'kuantitas' => $addon->kuantitas,
+                        'harga' => $addon->addon->harga, // Mengambil harga dari tabel add_ons
+                        'total_harga' => $addon->kuantitas * $addon->addon->harga, // Menghitung total harga per add-on
+                    ];
+                });
+            });
 
-        // Menyimpan data ke modal untuk ditampilkan
-        $this->approveDetails = [
-            'menuItems' => $menuItems->toArray(),
-            'addOns' => $addOns->toArray(),
-            'totalHarga' => $totalHarga,
-            'orderId' => $order->id_order,
-        ];
+            // Menghitung total harga untuk menu dan add-ons
+            $totalHarga = $menuItems->sum('total_harga') + $addOns->sum('total_harga');
 
-        // Membuka modal approve
-        $this->isApproveModalOpen = true;
+            // Menyimpan data ke modal untuk ditampilkan
+            $this->approveDetails = [
+                'menuItems' => $menuItems->toArray(),
+                'addOns' => $addOns->toArray(),
+                'totalHarga' => $totalHarga,
+                'orderId' => $order->id_order,
+            ];
+
+            // Membuka modal approve
+            $this->isApproveModalOpen = true;
+        }
     }
-}
 
 
     // Fungsi Finalisasi Pembayaran
     public function finalizePayment($id)
     {
+        Log::info('Memulai finalizePayment untuk orderId:', ['orderId' => $id]);
         $order = Order::find($id);
         if ($order && $order->metode_pembayaran === null) {
+            if ($this->paymentMethod === 'cash') {
+                if ($this->amountPaid < $this->approveDetails['totalHarga']) {
+                    $this->addError('amountPaid', 'Jumlah uang yang diberikan kurang.');
+                    return;
+                }
+        
+                $order->bayar = $this->amountPaid;
+                $order->kembalian = $this->amountPaid - $this->approveDetails['totalHarga'];
+            } else {
+                $order->bayar = $this->approveDetails['totalHarga'];
+                $order->kembalian = 0;
+            }
+        
             $paymentMethod = $this->paymentMethod;
 
             $order->update([
@@ -189,6 +128,10 @@ class Dashboard extends Component
             $this->isApproveModalOpen = false;
             $this->updateOrders();
         }
+        // Kirim event ke frontend untuk memicu printReceipt
+        Log::info('Dispatching event bayarBerhasil for orderId:', ['orderId' => $id]);
+        $this->dispatch('bayarBerhasil', ['orderId' => $id]);
+
     }
 
     public function editOrder($orderId)

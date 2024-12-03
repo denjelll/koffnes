@@ -28,6 +28,8 @@ class Order extends Model
         'tipe_order',
         'metode_pembayaran',
         'status',
+        'bayar',
+        'kembalian',
         'total_harga',
         'waktu_transaksi',
         'updated_on'

@@ -55,11 +55,6 @@
                         href="{{ url('cashier/stock') }}"
                         class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                 </li>
-                <li>
-                    <a
-                        href="#"
-                        class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                </li>
             </ul>
         </nav>
 
@@ -114,7 +109,14 @@
             <!-- Menu Utama -->
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
                 @foreach ($items as $item)
-                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card bg-[#e8d2b7] shadow-md rounded-lg overflow-hidden w-full">
+                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card shadow-md rounded-lg overflow-hidden w-full relative {{ $item->stock == 0 ? 'bg-[#f0c999]' : 'bg-[#e8d2b7]' }}">
+                    
+                        @if ($item->stock == 0)
+                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">Stock Habis</span>
+                            </div>
+                        @endif
+
                         <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
 
                         <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
@@ -122,12 +124,14 @@
                             <div class="flex justify-between items-center mt-2 sm:mt-4">
                                 <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
 
-                                <!-- Kuantitas -->
-                                <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                </button>
+                                <!-- Tombol tambah menu -->
+                                @if ($item->stock != 0)
+                                    <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -163,3 +167,15 @@
 
     </div>
 </div>
+
+<script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+</script>

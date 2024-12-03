@@ -13,7 +13,45 @@ class DummySeeder extends Seeder
     {
          // Insert waktu buka/tutup
         DB::table('koffnes_statuses')->insert([
-            'status_koffnes' => 'close',
+            'status_koffnes' => 'open',
+        ]);
+
+        //Dummy Events
+        DB::table('events')->insert([
+            [
+                'id_event' => 1,
+                'nama_event' => 'Festival Musim Panas',
+                'banner_event' => 'images/banner1.jpg',
+                'hadiah_event' => 'Hadiah Utama: Liburan ke Bali',
+                'tanggal_event' => Carbon::create(2023, 6, 21),
+                'jam_event' => Carbon::createFromTime(18, 0, 0),
+                'deskripsi_event' => 'Festival Musim Panas terbesar tahun ini dengan berbagai kegiatan menarik dan hadiah besar.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_event' => 2,
+                'nama_event' => 'Lomba Makan Burger',
+                'banner_event' => 'images/banner2.jpg',
+                'hadiah_event' => 'Voucher Makan Gratis Selama Setahun',
+                'tanggal_event' => Carbon::create(2023, 7, 4),
+                'jam_event' => Carbon::createFromTime(12, 0, 0),
+                'deskripsi_event' => 'Lomba makan burger cepat dengan berbagai hadiah menarik.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id_event' => 3,
+                'nama_event' => 'Marathon Amal',
+                'banner_event' => 'images/banner3.jpg',
+                'hadiah_event' => 'Medali Emas dan Donasi ke Yayasan',
+                'tanggal_event' => Carbon::create(2023, 9, 10),
+                'jam_event' => Carbon::createFromTime(6, 0, 0),
+                'deskripsi_event' => 'Marathon untuk amal dengan tujuan mengumpulkan donasi untuk yayasan yang membutuhkan.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            // Tambahkan data lainnya sesuai kebutuhan
         ]);
 
 
@@ -115,12 +153,12 @@ class DummySeeder extends Seeder
             ],
             [
                 'id_user' => 3,
-                'nama_depan' => 'Admin',
-                'nama_belakang' => '1',
+                'nama_depan' => 'Jamal',
+                'nama_belakang' => 'Cashier',
                 'no_telepon' => '1',
-                'email' => 'admin@gmail.com',
+                'email' => '123@gmail.com',
                 'password' => bcrypt('123'),
-                'role' => 'Admin',
+                'role' => 'Kasir',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

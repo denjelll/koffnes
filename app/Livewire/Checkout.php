@@ -176,7 +176,7 @@ class Checkout extends Component
     public function updateAddonQuantity($menuId, $addonId, $action)
     {
         Log::info("Menu ID: $menuId, Addon ID: $addonId, Action: $action");
-        // Cari menu dalam cart
+
         foreach ($this->cartItems as &$item) {
             if ($item['id_menu'] === $menuId) {
                 // Cari add-on yang sesuai
@@ -189,15 +189,29 @@ class Checkout extends Component
                         }
                     }
                 }
+
+                // Periksa kembali promo setelah perubahan add-on
+                $now = Carbon::now();
+                $promo = $item['menu']['promo'] ?? null;
+
+                if ($promo && $promo['status'] === 'Aktif' &&
+                    ($promo['hari'] === 'AllDay' || $promo['hari'] === $now->format('l')) &&
+                    $now->between($promo['waktu_mulai'], $promo['waktu_berakhir'])) {
+                    $item['menu']['harga'] = $promo['harga_promo']; // Gunakan harga promo
+                } else {
+                    $item['menu']['harga'] = $item['menu']['harga']; // Harga normal
+                }
             }
         }
 
         // Simpan kembali ke session
         session()->put('cart', $this->cartItems);
+        Log::info("Session setelah update addon quantity: " . json_encode($this->cartItems, JSON_PRETTY_PRINT));
 
         // Hitung ulang total harga
         $this->calculateTotal();
     }
+
 
     public function updateNote($propertyName)
     {
@@ -237,7 +251,7 @@ class Checkout extends Component
         }
         // Membuat order baru
         $order = Order::create([
-            'id_order' => 'ORD' . Carbon::now()->format('YmdHis') . $antrian,
+            'id_order' => 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $antrian . '-M'.session('meja'),
             'id_user' => '1', // Kosongkan karena akan diisi oleh kasir nanti
             'antrian' => $antrian,
             'customer' => session('nama_customer'),
@@ -245,6 +259,8 @@ class Checkout extends Component
             'tipe_order' => 'Dine In',
             'metode_pembayaran' => null,
             'status' => 'Open Bill',
+            'bayar' => 0,
+            'kembalian' => 0,
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => Carbon::now(), // Menggunakan waktu saat ini
         ]);
@@ -269,7 +285,7 @@ class Checkout extends Component
             Log::info('Harga Menu (setelah promo): ' . json_encode(($hargaMenu), JSON_PRETTY_PRINT));
            
             $detailOrder = DetailOrder::create([
-                'id_detailorder'=> 'DO' .  Carbon::now()->format('YmdHis') . $count,
+                'id_detailorder'=> 'DO-' .  Carbon::now()->format('YmdHis') . '-' . $count . '-' . $item['menu']['id_menu'],
                 'id_order' => $order->id_order,
                 'id_menu' => $item['menu']['id_menu'],
                 'kuantitas' => $item['quantity'],
@@ -279,7 +295,7 @@ class Checkout extends Component
 
            // Jika ada add-ons, buat DetailAddon
            if (!empty($item['addOn'])) { // Perbaikan key
-            $this->createDetailAddon($detailOrder['id_detailorder'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
+            $this->createDetailAddon($detailOrder['id_detailorder'], $item['menu']['id_menu'], $item['addOn'], $item['quantity'], $item['menu']['harga']);
             }
 
             // **Pengurangan Stok**
@@ -303,13 +319,13 @@ class Checkout extends Component
     }
 
     // Fungsi untuk membuat DetailAddon baru
-    public function createDetailAddon($idDetailOrder, $addOns, $quantity, $menuHarga)
+    public function createDetailAddon($idDetailOrder, $idMenu, $addOns, $quantity, $menuHarga)
     {
-        $count =  1;
+        $count = 1;
         foreach ($addOns as $addon) {
             if ($addon['quantity'] > 0) {
                 DetailAddon::create([
-                    'id_detailaddon' => 'DA' . Carbon::now()->format('YmdHis') . $count,
+                    'id_detailaddon' => 'DA-'. Carbon::now()->format('YmdHis') . '-' .$count . '-'. $idMenu,
                     'id_addon' => $addon['id_addon'],
                     'id_detailorder' => $idDetailOrder,
                     'kuantitas' => $addon['quantity'],

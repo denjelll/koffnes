@@ -37,10 +37,11 @@
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">Add-Ons:</label>
             @foreach ($addons as $addon)
-                <div class="flex items-center mb-2">
+                <div class="flex items-center mb-2 addon-item">
                     <input type="hidden" name="id_addon[]" value="{{ $addon->id_addon }}">
                     <input type="text" name="addOns[]" value="{{ $addon->nama_addon }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                     <input type="number" name="harga_addon[]" value="{{ $addon->harga }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <button type="button" onclick="removeAddOn(this)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">X</button>
                 </div>
             @endforeach
         </div>
@@ -73,12 +74,23 @@
 
     function addAddOns() {
         const addOns = document.getElementById('addOns');
-        addOns.innerHTML += `
-            <div class="flex items-center mb-2">
-                <input type="text" name="addOns[]" placeholder="Add-Ons" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
-                <input type="number" name="harga_addon[]" placeholder="Harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
+        const addonItem = document.createElement('div');
+        addonItem.classList.add('flex', 'items-center', 'mb-2', 'addon-item');
+        addonItem.innerHTML = `
+            <input type="text" name="addOns[]" placeholder="Add-Ons" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
+            <input type="number" name="harga_addon[]" placeholder="Harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <button type="button" onclick="removeAddOn(this)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">X</button>
         `;
+        addOns.appendChild(addonItem);
+    }
+
+    function removeAddOn(button) {
+        const addonItem = button.parentElement;
+        const addonNameInput = addonItem.querySelector('input[name="addOns[]"]');
+        const addonPriceInput = addonItem.querySelector('input[name="harga_addon[]"]');
+        addonNameInput.value = '';
+        addonPriceInput.value = '';
+        addonItem.style.display = 'none';
     }
 </script>
 @endsection
