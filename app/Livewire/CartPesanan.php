@@ -9,7 +9,7 @@ use Livewire\Component;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
-use App\Events\NewOrderCreated;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CartPesanan extends Component
@@ -23,6 +23,7 @@ class CartPesanan extends Component
     public $addOns = [];
     public $addOnQty = [];
     public $totalHarga = 0;
+    public $user;
 
     public function mount()
     {
@@ -178,9 +179,6 @@ class CartPesanan extends Component
             'waktu_transaksi' => now(),
         ]);
 
-        // Broadcast event setelah order disimpan
-        event(new NewOrderCreated($order));
-
         // Simpan detail order ke detail_orders
         foreach ($this->pesanan as $menu) {
             $menuDb = Menu::find($menu['id_menu']);
@@ -233,34 +231,6 @@ class CartPesanan extends Component
 
         return redirect()->route('dashboard');
     }
-
-    public function payment()
-    {
-        // Kirim pesanan dan add-on ke halaman payment
-        $pesananAddOn = [];
-
-        foreach ($this->pesanan as $menu) {
-            if (isset($this->addOns[$menu['id_menu']])) {
-                foreach ($this->addOns[$menu['id_menu']] as $addon) {
-                    if ($this->addOnQty[$addon->id_addon] > 0) {
-                        $pesananAddOn[] = [
-                            'nama_addon' => $addon->nama_addon,
-                            'harga' => $addon->harga,
-                            'kuantitas' => $this->addOnQty[$addon->id_addon],
-                            'total' => $this->addOnQty[$addon->id_addon] * $addon->harga,
-                        ];
-                    }
-                }
-            }
-        }
-
-        return redirect()->route('payment')->with([
-            'pesanan' => $this->pesanan,
-            'pesananAddOn' => $pesananAddOn,
-            'totalHarga' => $this->totalHarga,
-        ]);
-    }
-
 
     public function render()
     {

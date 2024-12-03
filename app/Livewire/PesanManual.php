@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Menu;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class PesanManual extends Component
 {
@@ -27,7 +29,7 @@ class PesanManual extends Component
             'meja' => ''
         ]);
 
-        $this->items = Menu::all();
+        $this->items = Menu::with('promo')->get();
         $existingPesanan = Session::get('pesanan', []);
 
         // Inisialisasi kuantitas menu
@@ -67,8 +69,20 @@ class PesanManual extends Component
     private function updateTotal()
     {
         $this->totalHarga = 0;
+        $currentTime = Carbon::now()->format('H:i:s');
+
         foreach ($this->items as $item) {
-            $this->totalHarga += $this->qtyMenu[$item->id_menu] * $item->harga;
+            $harga = $item->harga;
+
+            // Cek apakah ada promo aktif
+            if ($item->promo 
+                && $item->promo->status === 'Aktif' 
+                && $currentTime >= $item->promo->waktu_mulai
+                && $currentTime <= $item->promo->waktu_berakhir) {
+                $harga = $item->promo->harga_promo;
+            }
+
+            $this->totalHarga += $this->qtyMenu[$item->id_menu] * $harga;
         }
     }
 
@@ -83,18 +97,28 @@ class PesanManual extends Component
             $this->customer['meja'] = 0;
         }
 
-
         $this->pesanan = [];
-        
+        $currentTime = Carbon::now()->format('H:i:s');
+
         // Loop untuk menyimpan menu yang dipesan saja
         foreach ($this->items as $item) {
             if ($this->qtyMenu[$item->id_menu] > 0) {
+                $harga = $item->harga;
+
+                // Cek apakah ada promo aktif
+                if ($item->promo 
+                    && $item->promo->status === 'Aktif' 
+                    && $currentTime >= $item->promo->waktu_mulai
+                    && $currentTime <= $item->promo->waktu_berakhir) {
+                    $harga = $item->promo->harga_promo;
+                }
+
                 $this->pesanan[] = [
                     'id_menu' => $item->id_menu,
                     'nama_menu' => $item->nama_menu,
                     'kuantitas' => $this->qtyMenu[$item->id_menu],
-                    'harga' => $item->harga,
-                    'total' => $this->qtyMenu[$item->id_menu] * $item->harga
+                    'harga' => $harga,
+                    'total' => $this->qtyMenu[$item->id_menu] * $harga
                 ];
             }
         }
@@ -109,7 +133,7 @@ class PesanManual extends Component
 
     public function searchMenu()
     {
-        $this->items = Menu::where('nama_menu', 'like', '%' . $this->search . '%')->get();
+        $this->items = Menu::where('nama_menu', 'like', '%' . $this->search . '%')->with('promo')->get();
     }
 
     public function render()

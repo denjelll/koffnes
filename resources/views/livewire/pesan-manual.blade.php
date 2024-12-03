@@ -122,8 +122,21 @@
                         <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
                             <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
                             <div class="flex justify-between items-center mt-2 sm:mt-4">
-                                <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @php
+                                    $currentTime = now()->format('H:i:s');
+                                    $isPromoActive = $item->promo && $item->promo->status === 'Aktif' && $currentTime >= $item->promo->waktu_mulai && $currentTime <= $item->promo->waktu_berakhir;
+                                @endphp
 
+                                @if ($isPromoActive)
+                                    <div class="flex flex-col">
+                                        <p class = "text-[#412f26] font-semibold text-sm sm:text-base">Promo:</p>
+                                        <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->promo->harga_promo, 0, ',', '.') }}</span>
+                                    </div>
+                                    
+                                @else
+                                    <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @endif
+                                
                                 <!-- Tombol tambah menu -->
                                 @if ($item->stock != 0)
                                     <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">

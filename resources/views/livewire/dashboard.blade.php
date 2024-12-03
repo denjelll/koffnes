@@ -197,10 +197,10 @@
                         </div>
     
                         <div class="mb-6">
-                            <div id="addons-menu" class="space-y-6">
-                                @foreach ($addOns as $addon)
+                            <div class="space-y-1">
+                                <p class="text-[#412f26]"><strong>Addons:</strong></p>
+                                @forelse ($addOns as $addon)
                                     @if (!empty($addon))
-                                        <p class="text-[#412f26]"><strong>Addons:</strong></p>
                                         <div class="flex items-center justify-between">
                                             <span>{{ $addon->addon->nama_addon }}</span>
                                             <div>
@@ -210,7 +210,9 @@
                                             </div>
                                         </div>
                                     @endif
-                                @endforeach
+                                @empty
+                                    <p>Tidak Ada Addons</p>
+                                @endforelse
                             </div>
                         </div>
     
@@ -235,10 +237,4 @@
         // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
         mobileNav.classList.toggle('hidden');
     });
-
-
-    window.Echo.channel('orders')
-        .listen('NewOrderCreated', (event) => {
-            Livewire.dispatch('orderAdded');
-        });
 </script>

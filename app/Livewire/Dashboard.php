@@ -132,16 +132,27 @@ class Dashboard extends Component
     public function approveOrder($id)
     {
         // Mengambil data order beserta detail menu dan add-ons
-        $order = Order::with(['detailOrders.menu', 'detailOrders.addOns'])->find($id);
+        $order = Order::with(['detailOrders.menu.promo', 'detailOrders.addOns'])->find($id);
 
         if ($order) {
+            $currentTime = now()->format('H:i:s');
+
             // Siapkan detail menu dan harga
-            $menuItems = $order->detailOrders->map(function ($detail) {
+            $menuItems = $order->detailOrders->map(function ($detail) use ($currentTime){
+                $menu = $detail->menu;
+                $promo = $menu->promo;
+                $isPromoActive = $promo 
+                && $promo->status === 'Aktif' // Promo aktif
+                && $currentTime >= $promo->waktu_mulai
+                && $currentTime <= $promo->waktu_berakhir; // Promo berlaku pada jam tertentu
+
+                $harga = $isPromoActive ? $promo->harga_promo : $menu->harga;
+
                 return [
                     'nama_menu' => $detail->menu->nama_menu,
                     'kuantitas' => $detail->kuantitas,
-                    'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
-                    'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
+                    'harga' => $harga,
+                    'total_harga' => $detail->kuantitas * $harga, // Menghitung total harga per menu
                 ];
             });
 
@@ -172,7 +183,6 @@ class Dashboard extends Component
             $this->isApproveModalOpen = true;
         }
     }
-
 
     // Fungsi Finalisasi Pembayaran
     public function finalizePayment($id)
@@ -226,7 +236,16 @@ class Dashboard extends Component
             if ($detailOrder) {
                 $kuantitasBaru = $this->quantities[$menu->id_detailorder] ?? $menu->kuantitas;
                 $kuantitasLama = $menu->kuantitas;
-                $hargaMenu = $menu->menu->harga;
+
+                $promo = $menu->menu->promo;
+
+                // Cek promo aktif
+                $isPromoActive = $promo 
+                && $promo->status === 'Aktif'
+                && now()->format('H:i:s') >= $promo->waktu_mulai
+                && now()->format('H:i:s') <= $promo->waktu_berakhir;
+
+                $hargaMenu = $isPromoActive ? $promo->harga_promo : $menu->menu->harga;
 
                 $perubahan = $kuantitasBaru - $kuantitasLama;
 
@@ -366,7 +385,14 @@ class Dashboard extends Component
     {
         $item = $this->menuItems->firstWhere('id_detailorder', $id_detailorder);
         if ($item) {
-            $this->totalPrices[$id_detailorder] = $item->harga_menu * $this->quantities[$id_detailorder];
+            $promo = $item->menu->promo;
+            $isPromoActive = $promo 
+                && $promo->status === 'Aktif'
+                && now()->format('H:i:s') >= $promo->waktu_mulai
+                && now()->format('H:i:s') <= $promo->waktu_berakhir;
+
+            $harga = $isPromoActive ? $promo->harga_promo : $item->menu->harga;
+            $this->totalPrices[$id_detailorder] = $harga * $this->quantities[$id_detailorder];
         }
     }
 
@@ -374,8 +400,21 @@ class Dashboard extends Component
     private function updateOrderTotal()
     {
         $totalHarga = 0;
+        $currentTime = now()->format('H:i:s');
+
         foreach ($this->menuItems as $item) {
-            $totalHarga += $item->harga_menu * $this->quantities[$item->id_detailorder];
+            $menu = $item->menu;
+            $promo = $menu->promo;
+
+            // Periksa apakah promo aktif
+            $isPromoActive = $promo 
+                && $promo->status === 'Aktif'
+                && $currentTime >= $promo->waktu_mulai
+                && $currentTime <= $promo->waktu_berakhir;
+
+            $hargaMenu = $isPromoActive ? $promo->harga_promo : $menu->harga;
+
+            $totalHarga += $hargaMenu * $this->quantities[$item->id_detailorder];
         }
 
         // Hitung total harga dari add-ons

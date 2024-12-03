@@ -119,6 +119,7 @@
 
                         <option value="Dine In" class="text-sm font-semibold text-[#412f26]">Dine In</label>
                         <option value="Take Away" class="text-sm font-semibold text-[#412f26]">Take Away</label>
+                        <option value="Delivery" class="text-sm font-semibold text-[#412f26]">Delivery</label>
                     </select>
                 </div>
             </div>
