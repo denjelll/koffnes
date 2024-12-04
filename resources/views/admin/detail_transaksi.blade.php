@@ -37,7 +37,7 @@
                 <p class="font-semibold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
             </div>
             <div class="flex justify-between">
-                <p class="font-semibold text-black"><strong>Pembayaran :</strong></p>
+                <p class="font-semibold text-black"><strong>Bayar :</strong></p>
                 <p class="font-semibold text-black">Rp{{ number_format($order->bayar, 0, ',', '.') }}</p>
             </div>
             <div class="flex justify-between">
@@ -88,7 +88,7 @@
                 <p class="font-semibold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
             </div>
             <div class="flex justify-between">
-                <p class="font-semibold text-black"><strong>Pembayaran :</strong></p>
+                <p class="font-semibold text-black"><strong>Bayar :</strong></p>
                 <p class="font-semibold text-black">Rp{{ number_format($order->bayar, 0, ',', '.') }}</p>
             </div>
             <div class="flex justify-between">
