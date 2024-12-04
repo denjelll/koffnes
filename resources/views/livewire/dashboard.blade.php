@@ -51,51 +51,43 @@
     
                 <!-- Filter and Category Buttons -->
                 <div class="flex items-center gap-2 md:justify-start">
-                    <button
-                        class="bg-[#cbb8a0] hover:bg-[#b5a08a] text-white p-2 rounded-md flex items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewbox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-5.414 5.414a1 1 0 00-.293.707v4.172a1 1 0 01-.293.707l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 01-.293-.707v-4.172a1 1 0 00-.293-.707L3.293 6.707A1 1 0 013 6V4z"/>
-                        </svg>
-                    </button>
                     <button wire:click="switchTab('All')" class="hover:bg-[#b5a08a] text-white w-[60px] rounded-md {{ $currentTab === 'All' ? 'bg-[#e0bd93]' : 'bg-[#cbb8a0]'}}">All</button>
                     <button wire:click="switchTab('Dine In')" class="hover:bg-[#b5a08a] text-white w-[60px] rounded-md {{ $currentTab === 'Dine In' ? 'bg-[#e0bd93]' : 'bg-[#cbb8a0]'}}">Dine In</button>
                     <button wire:click="switchTab('Take Away')" class="hover:bg-[#b5a08a] text-white w-[90px] rounded-md {{ $currentTab === 'Take Away' ? 'bg-[#e0bd93]' : 'bg-[#cbb8a0]'}}">Take Away</button>
+                    <button wire:click="switchTab('Delivery')" class="hover:bg-[#b5a08a] text-white w-[90px] rounded-md {{ $currentTab === 'Delivery' ? 'bg-[#e0bd93]' : 'bg-[#cbb8a0]'}}">Delivery</button>
                 </div>
     
                 <!-- Card Section -->
                 <div wire:poll.5s="refreshOrders">
-                    @forelse ($orders as $order)
-                        @if ($order->status === 'Open Bill')
-                            <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
-                                    <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
-                                </div>
-                                <div class="flex items-center ml-auto space-x-3">
-                                    <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
-                                        <h2 class="text-sm">✓</h2>
-                                    </button>
-                                    <button wire:click="editOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
-                                        <h2 class="text-xl w-8 h-8">+</h2>
-                                    </button>
-                                    <button wire:click="cancelOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
-                                        <h2 class="text-xl w-8 h-8">x</h2>
-                                    </button>
-                                </div>    
+                    @php
+                        $filteredOrders = $orders->filter(function ($order) {
+                            return $order->status === 'Open Bill';
+                        });
+                    @endphp
+
+                    @if ($filteredOrders->isEmpty())
+                    <p class="flex justify-center items-center">Tidak Ada Orderan</p>
+                    @else
+                    @foreach ($filteredOrders as $order)
+                        <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
+                                <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
                             </div>
-                        @endif
-                    @empty
-                        <p class="flex justify-center items-center">Tidak Ada Orderan</p>
-                    @endforelse
+                            <div class="flex items-center ml-auto space-x-3">
+                                <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
+                                    <h2 class="text-sm">✓</h2>
+                                </button>
+                                <button wire:click="editOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
+                                    <h2 class="text-xl w-8 h-8">+</h2>
+                                </button>
+                                <button wire:click="cancelOrder('{{ $order->id_order }}')" class="mr-2 flex items-center justify-center bg-[#4b3621] text-white rounded-full">
+                                    <h2 class="text-xl w-8 h-8">x</h2>
+                                </button>
+                            </div>    
+                        </div>
+                    @endforeach
+                    @endif
                 </div>
             </div>
     
@@ -227,10 +219,10 @@
                         </div>
     
                         <div class="mb-6">
-                            <div id="addons-menu" class="space-y-6">
-                                @foreach ($addOns as $addon)
+                            <div class="space-y-1">
+                                <p class="text-[#412f26]"><strong>Addons:</strong></p>
+                                @forelse ($addOns as $addon)
                                     @if (!empty($addon))
-                                        <p class="text-[#412f26]"><strong>Addons:</strong></p>
                                         <div class="flex items-center justify-between">
                                             <span>{{ $addon->addon->nama_addon }}</span>
                                             <div>
@@ -240,7 +232,9 @@
                                             </div>
                                         </div>
                                     @endif
-                                @endforeach
+                                @empty
+                                    <p>Tidak Ada Addons</p>
+                                @endforelse
                             </div>
                         </div>
     

@@ -76,6 +76,7 @@
                         style="background-color: #cbb89d; color: white;">
                         <option value="Dine In">Dine In</option>
                         <option value="Take Away">Take Away</option>
+                        <option value="Delivery">Delivery</option>
                     </select>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-4">
@@ -122,7 +123,20 @@
                         <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
                             <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
                             <div class="flex justify-between items-center mt-2 sm:mt-4">
-                                <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @php
+                                    $currentTime = now()->format('H:i:s');
+                                    $isPromoActive = $item->promo && $item->promo->status === 'Aktif' && $currentTime >= $item->promo->waktu_mulai && $currentTime <= $item->promo->waktu_berakhir;
+                                @endphp
+
+
+                                @if ($isPromoActive)
+                                    <div class="flex flex-col">
+                                        <p class = "text-[#412f26] font-semibold text-sm sm:text-base">Promo:</p>
+                                        <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->promo->harga_promo, 0, ',', '.') }}</span>
+                                    </div>
+                                @else
+                                    <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @endif
 
                                 <!-- Tombol tambah menu -->
                                 @if ($item->stock != 0)
