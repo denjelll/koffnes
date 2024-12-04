@@ -49,7 +49,19 @@
             </table>
         </div>
         <div class="mt-6">
-            <p class="text-xl font-semibold text-gray-700"><strong>Total Harga:</strong> Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            <div class="flex justify-between">
+                <p class="text-xl font-semibold text-gray-700"><strong>Total Harga :</strong></p>
+                <p class="text-xl font-semibold text-gray-700">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="text-xl font-semibold text-gray-700"><strong>Pembayaran :</strong></p>
+                <p class="text-xl font-semibold text-gray-700">Rp{{ number_format($order->bayar, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="text-xl font-semibold text-gray-700"><strong>Kembalian :</strong></p>
+                <p class="text-xl font-semibold text-gray-700">Rp{{ number_format($order->kembalian, 0, ',', '.') }}</p>
+            </div>
+
         </div>
         <div class="mt-6">
             <button onclick="showPrintModal()" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
