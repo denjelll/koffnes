@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
+class ComposerStaticInit4c20a2e35cbd960ebe10cd5b6dd8e8d6
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -393,8 +393,8 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -470,8 +470,13 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
         ),
         'Mike42\\' => 
         array (
+<<<<<<< Updated upstream
             0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
             1 => __DIR__ . '/..' . '/mike42/gfx-php/src/Mike42',
+=======
+            0 => __DIR__ . '/..' . '/mike42/gfx-php/src/Mike42',
+            1 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
+>>>>>>> Stashed changes
         ),
         'Matrix\\' => 
         array (
@@ -8926,10 +8931,17 @@ class ComposerStaticInit641be8603529b7dcf24ce5178817e62a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+<<<<<<< Updated upstream
             $loader->prefixLengthsPsr4 = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit641be8603529b7dcf24ce5178817e62a::$classMap;
+=======
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4c20a2e35cbd960ebe10cd5b6dd8e8d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4c20a2e35cbd960ebe10cd5b6dd8e8d6::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4c20a2e35cbd960ebe10cd5b6dd8e8d6::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4c20a2e35cbd960ebe10cd5b6dd8e8d6::$classMap;
+>>>>>>> Stashed changes
 
         }, null, ClassLoader::class);
     }
