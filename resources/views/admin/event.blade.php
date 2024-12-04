@@ -38,7 +38,7 @@
                                 <!-- Text Content -->
                                 <div class="text-left">
                                     <h2 class="text-[#412f26] font-bold text-xl">{{ $event->nama_event }}</h2>
-                                    <p class="text-[#412f26] text-sm mt-1">{{ $event->deskripsi_event }}</p>
+                                    <p class="text-[#412f26] text-sm mt-1">{{ Str::limit($event->deskripsi_event, 40) }}</p>
                                 </div>
                                 <!-- Button -->
                                 <div class="flex flex-row items-center space-x-2">

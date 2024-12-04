@@ -12,11 +12,11 @@
         background-color: white !important;
       }
       body {
-        background-image: url("{{asset('asset/motif.png')}}"); /* Replace with the path to the background image */
+        background-image: url("{{asset('storage/asset/gambar/motif.png')}}"); /* Replace with the path to the background image */
         background-repeat: repeat;
         background-position: top left;
         background-size: 400px 400px;
-        padding-bottom: 220px;
+        padding-bottom: 240px;
         margin: 0;
       }
     </style>
@@ -32,7 +32,7 @@
       <!-- Logo -->
       <div class="flex items-center justify-between w-full md:w-auto">
         <img
-          src="{{ asset('asset/koffnes_putih.png') }}"
+          src="{{ asset('storage/asset/gambar/koffnes_putih.png') }}"
           alt="Koffnes Logo"
           class="h-8 md:h-10"
         />
@@ -82,7 +82,7 @@
   style="background-color: #412f26; height: 64px"
 >
   <img
-    src="{{asset('asset/koffnes_putih.png')}}"
+    src="{{asset('storage/asset/gambar/koffnes_putih.png')}}"
     alt="Footer Logo"
     class="h-9 md:h-4 mb-2"
     style="max-width: 180px"

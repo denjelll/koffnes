@@ -47,9 +47,9 @@
                         <img src="{{ asset('menu/'.$menu->gambar) }}" alt="Menu Image" class="w-full h-full object-cover">
                     </div>
                     <div class="p-4">
-                        <h3 class="text-lg font-semibold text-[#412f26]">{{ $menu->nama_menu }}</h3>
-                        <p class="text-gray-500 font-medium">Rp. {{ $menu->harga }}</p>
-                        <p class="text-gray-500 font-medium">Stok : {{ $menu->stock }}</p>
+                        <h3 class="text-lg font-bold text-[#412f26]">{{ $menu->nama_menu }}</h3>
+                        <p class="text-black font-medium">Rp. {{ $menu->harga }}</p>
+                        <p class="text-black font-medium">Stok : {{ $menu->stock }}</p>
                     </div>
                     <div class="p-4 pt-0">
                         <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
@@ -60,7 +60,7 @@
                         </a>
                     </div>
                     <div class="p-4 pt-0">
-                        <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
+                        <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-danger text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
                             Delete
                         </button>
                     </div>
