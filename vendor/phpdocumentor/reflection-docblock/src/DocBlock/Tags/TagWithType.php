@@ -71,17 +71,4 @@ abstract class TagWithType extends BaseTag
 
         return [$type, $description];
     }
-
-    public function __toString(): string
-    {
-        if ($this->description) {
-            $description = $this->description->render();
-        } else {
-            $description = '';
-        }
-
-        $type = (string) $this->type;
-
-        return $type . ($description !== '' ? ($type !== '' ? ' ' : '') . $description : '');
-    }
 }
