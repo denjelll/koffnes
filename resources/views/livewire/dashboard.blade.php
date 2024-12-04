@@ -282,6 +282,15 @@
         });
     });
 
+    // function formatAmountPaid() {
+    //     let amountInput = document.getElementById('amountPaid');
+    //     let value = amountInput.value.replace(/[^\d]/g, ''); // Menghapus selain angka
+    //     if (value.length > 3) {
+    //         value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap 3 digit
+    //     }
+    //     amountInput.value = value;
+    // }
+
 
     function printReceipt(orderId) {
     // Lakukan permintaan POST menggunakan Fetch API

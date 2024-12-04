@@ -163,7 +163,7 @@
                 
 
                 <!-- Total Section -->
-                <button wire:click="confirmOrder">
+                <button id="confirmOrderButton">
                     <div
                         class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
                         <span>Total Harga: Rp. {{ number_format($totalHarga, 0, ',', '.') }}</span>
@@ -192,10 +192,28 @@
     </div>
 </div>
 
+<!-- Popup Alert -->
+
 <script>
     // Ambil elemen yang dibutuhkan
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
     const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+     // Ambil elemen tombol dan input nama customer
+    const confirmOrderButton = document.getElementById('confirmOrderButton');
+    const customerNameInput = document.querySelector('input[wire\\:model\\.defer="customer.nama"]');
+
+    // Tambahkan event listener untuk tombol confirm order
+    confirmOrderButton.addEventListener('click', function (event) {
+        // Cek apakah input nama customer kosong
+        if (!customerNameInput.value.trim()) {
+            event.preventDefault(); // Hentikan aksi default tombol
+            alert('Nama customer belum diisi. Silakan isi nama customer sebelum melanjutkan.');
+        } else {
+            // Jika sudah terisi, lakukan aksi seperti biasa
+            @this.call('confirmOrder'); // Panggil fungsi Livewire (opsional)
+        }
+    });
 
     // Event listener untuk tombol hamburger menu
     menuToggle.addEventListener('click', () => {

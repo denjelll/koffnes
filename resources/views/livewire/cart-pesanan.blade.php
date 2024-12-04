@@ -1,4 +1,4 @@
-<div>
+<div class="font-sans" style="background-image: url('{{ asset('storage/asset/gambar/motif.png') }}'); background-size: 400px 400px; background-repeat: repeat; ">
     <!-- Navbar -->
     <nav
         class="bg-[#412f26] p-4 fixed top-0 w-full z-10 flex items-center justify-between text-white">
@@ -23,7 +23,7 @@
     </nav>
 
     <!-- Main Content (for spacing) -->
-    <div class="pt-[5rem] p-4 pb-[20rem] md:pb-[16rem] lg:pb-[13rem]">
+    <div class="pt-20 min-h-screen pb-20">
         <!-- Card Makanan -->
         @foreach ($pesanan as $item)
         <div class="rounded-lg shadow-lg bg-coconut p-4 mt-4" style="margin-right: 20px; margin-left: 20px">

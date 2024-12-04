@@ -84,7 +84,7 @@
                                         @endif
                                     </td>
                                     <td class="py-3 px-4 border-b">
-                                        <button wire:click="openAddStockPopup({{ $menu->id_menu }})" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm">
+                                        <button wire:click="openAddStockPopup({{ $menu->id_menu }})" class="bg-[#412f26] text-white px-4 py-2 rounded text-sm">
                                             Add
                                         </button>
                                     </td>
@@ -113,26 +113,29 @@
 
 <!-- Pop Up Stock -->
 @if ($isAddingStock)
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-6 rounded shadow-md w-80">
-            <h2 class="text-xl font-bold mb-4">Tambah Stok</h2>
-            <p class="mb-2">Nama Menu: <strong>{{ $menuName }}</strong></p>
-            <p class="mb-4">Stok Saat Ini: <strong>{{ $menuStock }}</strong></p>
+<div class="fixed inset-0 flex items-center justify-center bg-[#000000] bg-opacity-50 z-50">
+    <div class="bg-[#e8d2b7] p-6 rounded shadow-md w-80">
+        <h2 class="text-xl font-bold text-[#412f26] mb-4">Tambah Stok</h2>
+        <p class="mb-2 text-[#412f26]">Nama Menu: <strong>{{ $menuName }}</strong></p>
+        <p class="mb-4 text-[#412f26]">Stok Saat Ini: <strong>{{ $menuStock }}</strong></p>
 
-            <label for="newStock" class="block mb-2 font-bold">Jumlah Stok Baru:</label>
-            <input wire:model="newStock" type="number" min="0" id="newStock"
-                class="w-full p-2 border rounded mb-4" />
+        <label for="newStock" class="block mb-2 font-bold text-[#412f26]">Jumlah Stok Baru:</label>
+        <input wire:model="newStock" type="number" min="0" id="newStock" 
+            class="w-full p-2 border rounded mb-4 bg-[#f5e7d9] text-[#412f26]" />
 
-            <div class="flex justify-end space-x-2">
-                <button wire:click="saveStock" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Simpan
-                </button>
-                <button wire:click="resetPopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                    Batal
-                </button>
-            </div>
+        <div class="flex justify-end space-x-2">
+            <button wire:click="saveStock" 
+                class="bg-[#412f26] text-white px-4 py-2 rounded hover:bg-[#d4ab79]">
+                Simpan
+            </button>
+            <button wire:click="resetPopup" 
+                class="bg-[#a17c58] text-white px-4 py-2 rounded hover:bg-[#d4ab79]">
+                Batal
+            </button>
         </div>
     </div>
+</div>
+
 @endif()
 </div>
 
