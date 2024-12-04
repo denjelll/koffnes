@@ -132,6 +132,7 @@ class Dashboard extends Component
             $paymentMethod = $this->paymentMethod;
 
             $order->update([
+                'id_user' => session('id_user'), // Nama cashier yang approved
                 'metode_pembayaran' => $paymentMethod,
                 'status' => 'Paid'
             ]);

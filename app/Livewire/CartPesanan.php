@@ -217,6 +217,8 @@ class CartPesanan extends Component
             'meja' => $this->customer['meja'],
             'tipe_order' => $this->customer['tipe_order'],
             'status' => 'Open Bill',
+            'bayar' => 0,
+            'kembalian' => 0,
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => now(),
         ]);
