@@ -67,33 +67,31 @@
       </div>
     </div>
     <!-- Best Seller Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Best Seller</h1>
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-      @foreach($menus->chunk(2) as $menuChunk)
-        @foreach($menuChunk as $menu)
-          <x-customer_menu_card :menu="$menu"/>
+    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center">Best Seller</h1>
+    <div class="flex flex-wrap justify-center gap-2">
+        @foreach($best_seller as $menu)
+            <x-customer_menu_card :menu="$menu->menu"/>
         @endforeach
-      @endforeach
     </div>
-    
+
     <!-- Bundling Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Bundling & Deals</h1>
+    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center md:justify-start">Bundling & Deals</h1>
       @foreach($bundles as $bundle)
         <x-customer_bundle_card :bundle="$bundle"/>
       @endforeach
     <!-- Event Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5">Event News</h1>
-   @foreach($events as $event)
-    <x-customer_event_home :event="$event"/>
+    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center md:justify-start">Event News</h1>
+    @foreach($events as $event)
+      <x-customer_event_home :event="$event"/>
     @endforeach
     <div class="flex items-center justify-center mt-3">
       <a
-      href="/events"
-      class="inline-block px-4 py-2 mt-4 text-white font-semibold" style="background-color: #412f26; border-radius: 15px; font-size: x-large;" 
-    >
-      See More Events
-    </a>
-    </div>
+          href="{{ url('/events') }}"
+          class="inline-block px-4 py-2 mt-4 text-white font-semibold bg-[#412f26] rounded-xl text-xl">
+          See More Events
+      </a>
+  </div>
+  
     
   </main>
 

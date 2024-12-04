@@ -3,7 +3,7 @@
     <nav
         class="bg-[#412f26] p-4 fixed top-0 w-full z-10 flex items-center justify-between text-white">
         <!-- Kembali Button -->
-        <button class="flex items-center space-x-2">
+        <a href="/cashier" class="flex items-center space-x-2">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -17,9 +17,9 @@
                     d="M15 19l-7-7 7-7"></path>
             </svg>
             <span>
-                <a href="/cashier">Keranjang</a>
+                <p>Keranjang</p>
             </spa>
-        </button>
+        </a>
     </nav>
 
     <!-- Main Content (for spacing) -->
@@ -64,6 +64,19 @@
                 @endif
             </div>
 
+            <!-- Notes -->
+            <div class="items-center justify-between mt-4">
+                <label for="notes-{{ $item['id_menu'] }}" class="text-cocoa font-semibold">
+                    Catatan:
+                </label>
+                <textarea
+                    id="notes-{{ $item['id_menu'] }}"
+                    wire:model="pesanan.{{ $loop->index }}.notes"
+                    class="w-full p-2 border border-gray-300 rounded-md resize-none"
+                    placeholder="Masukkan catatan untuk menu ini">
+                </textarea>
+            </div>
+
             <!-- Total Harga Makanan -->
             <div class="flex items-center justify-between mt-4">
                 <p class="font-semibold text-lg text-gray-800">Total: Rp. <span id="totalPriceIndomie">{{ number_format($item['total'], 0, ',', '.') }}</span></p>
@@ -103,12 +116,21 @@
                 </div>
                 <div class="flex items-center space-x-2">
                     <label class="text-sm font-semibold text-[#412f26]">Table:</label>
-                    <input
+                    @if ($customer['tipe_order'] === 'Take Away' || $customer['tipe_order'] === 'Delivery')
+                        <input
+                        type="number"
+                        id="table_number"
+                        wire:model="customer.meja"
+                        min="0"
+                        class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]"  readonly>
+                    @else
+                        <input
                         type="number"
                         id="table_number"
                         wire:model="customer.meja"
                         min="0"
                         class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]">
+                    @endif
                 </div>
                 <div class="flex items-center space-x-4">
                     <label for="tipe_order" class="text-sm font-semibold text-[#412f26]">Tipe Order:</label>
@@ -119,6 +141,7 @@
 
                         <option value="Dine In" class="text-sm font-semibold text-[#412f26]">Dine In</label>
                         <option value="Take Away" class="text-sm font-semibold text-[#412f26]">Take Away</label>
+                        <option value="Delivery" class="text-sm font-semibold text-[#412f26]">Delivery</label>
                     </select>
                 </div>
             </div>

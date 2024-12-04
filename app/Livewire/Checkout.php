@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Menu;
 use App\Models\Order;
 use Livewire\Component;
-use App\Events\PesananBaru;
 use App\Models\DetailAddon;
 use App\Models\DetailOrder;
 use Illuminate\Support\Str;
@@ -177,7 +176,7 @@ class Checkout extends Component
     public function updateAddonQuantity($menuId, $addonId, $action)
     {
         Log::info("Menu ID: $menuId, Addon ID: $addonId, Action: $action");
-        // Cari menu dalam cart
+
         foreach ($this->cartItems as &$item) {
             if ($item['id_menu'] === $menuId) {
                 // Cari add-on yang sesuai
@@ -190,15 +189,29 @@ class Checkout extends Component
                         }
                     }
                 }
+
+                // Periksa kembali promo setelah perubahan add-on
+                $now = Carbon::now();
+                $promo = $item['menu']['promo'] ?? null;
+
+                if ($promo && $promo['status'] === 'Aktif' &&
+                    ($promo['hari'] === 'AllDay' || $promo['hari'] === $now->format('l')) &&
+                    $now->between($promo['waktu_mulai'], $promo['waktu_berakhir'])) {
+                    $item['menu']['harga'] = $promo['harga_promo']; // Gunakan harga promo
+                } else {
+                    $item['menu']['harga'] = $item['menu']['harga']; // Harga normal
+                }
             }
         }
 
         // Simpan kembali ke session
         session()->put('cart', $this->cartItems);
+        Log::info("Session setelah update addon quantity: " . json_encode($this->cartItems, JSON_PRETTY_PRINT));
 
         // Hitung ulang total harga
         $this->calculateTotal();
     }
+
 
     public function updateNote($propertyName)
     {
@@ -246,6 +259,8 @@ class Checkout extends Component
             'tipe_order' => 'Dine In',
             'metode_pembayaran' => null,
             'status' => 'Open Bill',
+            'bayar' => 0,
+            'kembalian' => 0,
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => Carbon::now(), // Menggunakan waktu saat ini
         ]);
@@ -294,9 +309,6 @@ class Checkout extends Component
             $count++;
         
         }
-
-        //Event Listener
-        event(new PesananBaru($order));
 
         // Mengosongkan cart di session
         session()->forget('cart');

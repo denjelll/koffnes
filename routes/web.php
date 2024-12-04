@@ -1,9 +1,13 @@
 <?php
 
+use App\Models\Menu;
+use App\Models\Event;
+use App\Models\Kategori;
 use App\Livewire\Checkout;
 use App\Livewire\Dashboard;
 use App\Livewire\Inventory;
 use App\Livewire\OrderMenu;
+use App\Models\Isi_kategori;
 use App\Livewire\CartPesanan;
 use App\Livewire\PesanManual;
 use App\Livewire\HistorySearch;
@@ -11,22 +15,24 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\DailyReportController;
-use App\Models\Event;
-use App\Models\Menu;
-use App\Models\Kategori;
-use App\Models\Isi_kategori;
 
 Route::get('/', function () {
     $events = Event::all();
-    $menus = Menu::all()->take(4);  
-    $kategori_bundle = Kategori::where('nama_kategori', 'Bundling')->first();
-    $bundles = Isi_kategori::where('id_kategori', $kategori_bundle->id_kategori)->get()->take(3);
-    return view('home', compact( 'menus', 'events', 'bundles'));
+    
+    // Ambil best seller dengan id_kategori 1
+    $best_seller = Isi_kategori::where('id_kategori', 1)->take(4)->get();
+    
+    // Ambil bundling dengan id_kategori 4
+    $bundles = Isi_kategori::where('id_kategori', 4)->take(3)->get();
+    
+    return view('home', compact('best_seller', 'events', 'bundles'));
 });
 
+
 Route::get('/home', function () {
-    return view('home');
+    return redirect('/');
 });
 
 Route::get('/events', function () {
@@ -97,11 +103,13 @@ Route::middleware(['role:Admin'])->group(function() {
     });
 });
 
+
 Route::middleware(['role:Kasir|Admin'])->group(function () {
     Route::get('cashier', PesanManual::class)->name('pesan-manual');
     Route::get('cashier/cart', CartPesanan::class)->name('cart-pesanan');
     Route::get('cashier/dashboard', Dashboard::class)->name('dashboard');
     Route::get('cashier/transaksi', HistorySearch::class)->name('history-search');
+    Route::post('/receipt/{id}', [CashierController::class, 'printReceipt'])->name('pos.receipt');
     Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
     Route::get('cashier/stock', Inventory::class)->name('inventory');
 });
@@ -110,11 +118,10 @@ Route::middleware(['check_koffnes'])->group(function () {
     Route::controller(OrderController::class)->group(function() {
         Route::get('/order/meja/{nomorMeja}', 'formMeja')->name('order.formMeja');
         Route::post('/order/meja/{nomorMeja}', 'saveCustomer')->name('order.saveCustomer');
-
+        Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
+        Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
         Route::get('/order/{id_order}', 'orderSuccess')->name('order.successful');
     });
 });
 
-Route::get('/order/meja/{nomorMeja}/menu', OrderMenu::class)->name('order.menu');
-Route::get('/order/meja/{nomorMeja}/checkout', Checkout::class)->name('checkout');
 

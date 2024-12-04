@@ -1,4 +1,4 @@
-<div style="background-color: #fff2e2" class="rounded-lg mt-4 p-4 relative" style="">
+<div style="background-color: #fff2e2" class="rounded-lg mt-4 p-4 relative overflow-hidden">
   <img src="{{ asset('menu/'.$bundle->menu->gambar) }}" alt="Americano" class="w-full h-32 object-cover rounded-lg" />
   <div class="pt-4 mt-5">
     <h3 class="text-lg font-semibold text-gray-800">{{$bundle->menu->nama_menu}}</h3>
@@ -6,7 +6,7 @@
     <p class="text-sm text-gray-600 mt-1">{{$bundle->menu->deskripsi}}</p>
     <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2 mt-4" id="best-seller-controls">
     <!-- Initial ADD TO CART button (responsive size) -->
-      <a class="btn btn-primary mt-2 px-6 py-2 rounded-full text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 bg-[#412F26] text-white hover:bg-white hover:text-[#412F26] border-none shadow-lg active:scale-95 w-full text-center" href="/menugate">
+      <a class="btn btn-primary mt-2 px-6 py-2 rounded-full text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 md:hover:scale-100 bg-[#412F26] text-white hover:bg-white hover:text-[#412F26] border-none shadow-lg active:scale-95 w-full text-center" href="/menugate">
           Order Now
       </a>
       <!-- Quantity controls (hidden initially) -->

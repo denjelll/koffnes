@@ -2,15 +2,16 @@
 
 namespace App\Livewire;
 
-use App\Events\PesananBaru;
-use App\Models\AddOn;
+use Carbon\Carbon;
 use App\Models\Menu;
-use Illuminate\Support\Facades\Session;
-use Livewire\Component;
+use App\Models\AddOn;
 use App\Models\Order;
-use App\Models\DetailOrder;
+use Livewire\Component;
 use App\Models\DetailAddon;
+use App\Models\DetailOrder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CartPesanan extends Component
 {
@@ -28,6 +29,7 @@ class CartPesanan extends Component
     {
         // Ambil data pesanan dari session
         $this->pesanan = Session::get('pesanan', []);
+        Log::info('Item after fetch from cart: ' . json_encode($this->pesanan, JSON_PRETTY_PRINT)); 
         $this->customer = Session::get('customer', $this->customer);
 
         // Ambil Add-On yang berkaitan dengan pesanan
@@ -131,6 +133,31 @@ class CartPesanan extends Component
         $this->updateTotalHarga();
     }
 
+    //Masukkan notes jika ada
+    public function updateNote($propertyName)
+    {
+        // Periksa apakah properti yang diperbarui adalah catatan
+        if (str_contains($propertyName, '.notes')) {
+            // Ekstrak indeks menu dari properti
+            $parts = explode('.', $propertyName);
+            $menuKey = $parts[1] ?? null;
+    
+            if ($menuKey !== null && isset($this->pesanan[$menuKey])) {
+                // Validasi jika diperlukan
+                $this->validateOnly($propertyName, [
+                    "pesanan.$menuKey.notes" => 'nullable|string|max:255',
+                ]);
+    
+                // Sanitasi nilai catatan
+                $this->pesanan[$menuKey]['notes'] = strip_tags($this->pesanan[$menuKey]['notes']);
+    
+                // Simpan pembaruan ke sesi
+                Session::put('pesanan', $this->pesanan);
+            }
+        }
+    }
+    
+
     // Hitung total harga
     private function updateTotalHarga()
     {
@@ -157,13 +184,29 @@ class CartPesanan extends Component
             return;
         }
 
+        $count = 1;
+
         //Antrian
-        $today = now()->toDateString();
-        $lastAntrian = Order::whereDate('waktu_transaksi', $today)->count();
-        $currentAntrian = $lastAntrian + 1;
+        $today = Carbon::today();
+         // Cari order terakhir berdasarkan tanggal yang sama
+         $lastAntrian = Order::whereDate('waktu_transaksi', $today)->orderBy('antrian', 'desc')->first();
+
+         // Jika ada order sebelumnya di hari yang sama
+         if ($lastAntrian) {
+             // Increment antrian
+             $currentAntrian = $lastAntrian->antrian + 1;
+         } else {
+             // Reset antrian ke 1 jika belum ada order di hari ini
+             $currentAntrian = 1;
+         }
 
         // Generate ID Order unik
-        $id_order = 'ORD-' . strtoupper(Str::random(5));
+        if($this->customer['tipe_order'] === 'Dine In')
+            $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-M'. $this->customer['meja'] ;
+        else if($this->customer['tipe_order'] === 'Take Away')
+            $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-TA' ;
+        else
+            $id_order = 'ORD-' . Carbon::now()->format('YmdHis') . '-' . $currentAntrian . '-DV' ;
 
         // Simpan ke tabel orders
         $order = Order::create([
@@ -174,6 +217,8 @@ class CartPesanan extends Component
             'meja' => $this->customer['meja'],
             'tipe_order' => $this->customer['tipe_order'],
             'status' => 'Open Bill',
+            'bayar' => 0,
+            'kembalian' => 0,
             'total_harga' => $this->totalHarga,
             'waktu_transaksi' => now(),
         ]);
@@ -190,23 +235,24 @@ class CartPesanan extends Component
                 $menuDb->save();
             }
 
-            $id_detailorder = 'DO-' . strtoupper(Str::random(5));
+            $id_detailorder = 'DO-' .  Carbon::now()->format('YmdHis') . '-' . $count . '-' . $menu['id_menu'];
             $detailOrder = DetailOrder::create([
                 'id_detailorder' => $id_detailorder,
                 'id_order' => $id_order,
                 'id_menu' => $menu['id_menu'],
                 'kuantitas' => $menu['kuantitas'],
-                'harga_menu' => $menu['harga'],
+                'harga_menu' => $menu['harga'], // Harga Final
                 'notes' => $menu['notes'] ?? '',
                 'waktu_transaksi' => now(),
             ]);
 
             // Simpan Add-On ke detail_addons jika ada
             if (isset($this->addOns[$menu['id_menu']])) {
+                $countAddon = 1;
                 foreach ($this->addOns[$menu['id_menu']] as $addon) {
                     if ($this->addOnQty[$addon->id_addon] > 0) {
                         DetailAddon::create([
-                            'id_detailaddon' => 'DA-' . strtoupper(Str::random(5)),
+                            'id_detailaddon' => 'DA-'. Carbon::now()->format('YmdHis') . '-' .$countAddon . '-'. $menu['id_menu'] ,
                             'id_addon' => $addon->id_addon,
                             'id_detailorder' => $id_detailorder,
                             'kuantitas' => $this->addOnQty[$addon->id_addon],
@@ -214,12 +260,11 @@ class CartPesanan extends Component
                             'waktu_transaksi' => now(),
                         ]);
                     }
+                $countAddon++;
                 }
             }
+            $count++;
         }
-
-        //Event listener
-        event(new PesananBaru($order));
 
         // Hapus sesi
         $this->pesanan = [];
@@ -230,36 +275,9 @@ class CartPesanan extends Component
 
         session()->flash('success', 'Pesanan berhasil disimpan.');
         $this->updateTotalHarga(); // Reset total harga
+
         return redirect()->route('dashboard');
     }
-
-    public function payment()
-    {
-        // Kirim pesanan dan add-on ke halaman payment
-        $pesananAddOn = [];
-
-        foreach ($this->pesanan as $menu) {
-            if (isset($this->addOns[$menu['id_menu']])) {
-                foreach ($this->addOns[$menu['id_menu']] as $addon) {
-                    if ($this->addOnQty[$addon->id_addon] > 0) {
-                        $pesananAddOn[] = [
-                            'nama_addon' => $addon->nama_addon,
-                            'harga' => $addon->harga,
-                            'kuantitas' => $this->addOnQty[$addon->id_addon],
-                            'total' => $this->addOnQty[$addon->id_addon] * $addon->harga,
-                        ];
-                    }
-                }
-            }
-        }
-
-        return redirect()->route('payment')->with([
-            'pesanan' => $this->pesanan,
-            'pesananAddOn' => $pesananAddOn,
-            'totalHarga' => $this->totalHarga,
-        ]);
-    }
-
 
     public function render()
     {

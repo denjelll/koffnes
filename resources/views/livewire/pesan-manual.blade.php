@@ -55,11 +55,6 @@
                         href="{{ url('cashier/stock') }}"
                         class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                 </li>
-                <li>
-                    <a
-                        href="#"
-                        class="hover:bg-opacity-50 p-2 block rounded">Table</a>
-                </li>
             </ul>
         </nav>
 
@@ -76,15 +71,18 @@
                         wire:model.defer="customer.nama"
                         style="background-color: #cbb89d; color: white;">
                     <select
+                        id="orderType"
                         wire:model="customer.tipe_order"
                         class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
                         style="background-color: #cbb89d; color: white;">
                         <option value="Dine In">Dine In</option>
                         <option value="Take Away">Take Away</option>
+                        <option value="Delivery">Delivery</option>
                     </select>
                 </div>
-                <div class="flex flex-col md:flex-row items-center gap-4">
+                <div id="tableNumberContainer" class="flex flex-col md:flex-row items-center gap-4">
                     <input
+                        id="tableNumber"
                         placeholder="Table Number"
                         wire:model="customer.meja"
                         type="number"
@@ -114,20 +112,42 @@
             <!-- Menu Utama -->
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
                 @foreach ($items as $item)
-                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card bg-[#e8d2b7] shadow-md rounded-lg overflow-hidden w-full">
+                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card shadow-md rounded-lg overflow-hidden w-full relative {{ $item->stock == 0 ? 'bg-[#f0c999]' : 'bg-[#e8d2b7]' }}">
+                    
+                        @if ($item->stock == 0)
+                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">Stock Habis</span>
+                            </div>
+                        @endif
+
                         <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
 
                         <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
                             <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
                             <div class="flex justify-between items-center mt-2 sm:mt-4">
-                                <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @php
+                                    $currentTime = now()->format('H:i:s');
+                                    $isPromoActive = $item->promo && $item->promo->status === 'Aktif' && $currentTime >= $item->promo->waktu_mulai && $currentTime <= $item->promo->waktu_berakhir;
+                                @endphp
 
-                                <!-- Kuantitas -->
-                                <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                </button>
+
+                                @if ($isPromoActive)
+                                    <div class="flex flex-col">
+                                        <p class = "text-[#412f26] font-semibold text-sm sm:text-base">Promo:</p>
+                                        <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->promo->harga_promo, 0, ',', '.') }}</span>
+                                    </div>
+                                @else
+                                    <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                @endif
+
+                                <!-- Tombol tambah menu -->
+                                @if ($item->stock != 0)
+                                    <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -163,3 +183,34 @@
 
     </div>
 </div>
+
+<script>
+    // Ambil elemen yang dibutuhkan
+    const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
+    const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
+
+    // Event listener untuk tombol hamburger menu
+    menuToggle.addEventListener('click', () => {
+        // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
+        mobileNav.classList.toggle('hidden');
+    });
+
+    //Buar ilangin table menu sesuai ama tipe order
+    document.addEventListener('DOMContentLoaded', function () {
+        const orderType = document.getElementById('orderType');
+        const tableNumberContainer = document.getElementById('tableNumberContainer');
+
+        // Listener untuk perubahan tipe order
+        orderType.addEventListener('change', function () {
+            if (orderType.value === 'Dine In') {
+                tableNumberContainer.style.display = 'flex'; // Tampilkan input
+            } else {
+                tableNumberContainer.style.display = 'none'; // Sembunyikan input
+            }
+        });
+
+        // Panggil event pertama kali untuk memastikan sesuai default
+        orderType.dispatchEvent(new Event('change'));
+    });
+
+</script>

@@ -14,9 +14,12 @@ class Promo extends Model
     
     protected $fillable = [
         'id_promo',
-        'diskon',
+        'judul_promo',
+        'harga_promo',
+        'hari',
         'waktu_mulai',
         'waktu_berakhir',
+        'status'
     ];
     
     public function menu(){
