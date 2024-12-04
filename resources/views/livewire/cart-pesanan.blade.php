@@ -23,7 +23,7 @@
     </nav>
 
     <!-- Main Content (for spacing) -->
-    <div class="pt-20 min-h-screen pb-20">
+    <div class="pt-20 min-h-screen pb-[15rem]">
         <!-- Card Makanan -->
         @foreach ($pesanan as $item)
         <div class="rounded-lg shadow-lg bg-coconut p-4 mt-4" style="margin-right: 20px; margin-left: 20px">

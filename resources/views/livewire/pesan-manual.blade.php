@@ -68,13 +68,13 @@
                     <input
                         type="text"
                         placeholder="Customer Name"
-                        class="p-3 w-full md:w-2/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="p-2 w-full md:w-[80rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         wire:model.defer="customer.nama"
                         style="background-color: #f5f5f5; color: #333;">
                     <select
                         id="orderType"
                         wire:model="customer.tipe_order"
-                        class="p-3 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         style="background-color: #f5f5f5; color: #333;">
                         <option value="Dine In">Dine In</option>
                         <option value="Take Away">Take Away</option>
@@ -89,29 +89,29 @@
                         type="number"
                         placeholder="Table Number"
                         wire:model="customer.meja"
-                        class="p-3 w-full md:w-1/2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         style="background-color: #f5f5f5; color: #333;">
                 </div>
 
                 <!-- Input untuk Pencarian Menu -->
-                <div class="relative w-full md:w-2/3">
+                <div class="flex flex-col md:flex-row items-center gap-4">
                 <!-- Input Box -->
-                <input
-                    type="text"
-                    placeholder="Search menu"
-                    class="p-3 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
-                    wire:model.defer="search"
-                    wire:keydown.enter="searchMenu"
-                    style="background-color: #f5f5f5; color: #333;">
-                
+                <div class="relative w-full md:w-[100rem]">
+                    <input
+                        type="text"
+                        placeholder="Search menu"
+                        class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                        wire:model.defer="search"
+                        wire:keydown.enter="searchMenu"
+                        style="background-color: #f5f5f5; color: #333;">
                 <!-- Search Icon -->
-                <button
-                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-500"
-                    wire:click="searchMenu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.35 4.35a7.5 7.5 0 0012.3 12.3z" />
-                    </svg>
-                </button>
+                    <button
+                        class="absolute inset-y-0 right-0 flex items-center text-gray-500 hover:text-blue-500 px-3"
+                        wire:click="searchMenu">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.35 4.35a7.5 7.5 0 0012.3 12.3z" />
+                        </svg>
+                    </button>
             </div>
 
             </div>
