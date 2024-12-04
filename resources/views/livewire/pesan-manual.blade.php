@@ -71,6 +71,7 @@
                         wire:model.defer="customer.nama"
                         style="background-color: #cbb89d; color: white;">
                     <select
+                        id="orderType"
                         wire:model="customer.tipe_order"
                         class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-500"
                         style="background-color: #cbb89d; color: white;">
@@ -79,8 +80,9 @@
                         <option value="Delivery">Delivery</option>
                     </select>
                 </div>
-                <div class="flex flex-col md:flex-row items-center gap-4">
+                <div id="tableNumberContainer" class="flex flex-col md:flex-row items-center gap-4">
                     <input
+                        id="tableNumber"
                         placeholder="Table Number"
                         wire:model="customer.meja"
                         type="number"
@@ -192,4 +194,23 @@
         // Toggle visibility navbar dengan menambah atau menghapus kelas 'hidden'
         mobileNav.classList.toggle('hidden');
     });
+
+    //Buar ilangin table menu sesuai ama tipe order
+    document.addEventListener('DOMContentLoaded', function () {
+        const orderType = document.getElementById('orderType');
+        const tableNumberContainer = document.getElementById('tableNumberContainer');
+
+        // Listener untuk perubahan tipe order
+        orderType.addEventListener('change', function () {
+            if (orderType.value === 'Dine In') {
+                tableNumberContainer.style.display = 'flex'; // Tampilkan input
+            } else {
+                tableNumberContainer.style.display = 'none'; // Sembunyikan input
+            }
+        });
+
+        // Panggil event pertama kali untuk memastikan sesuai default
+        orderType.dispatchEvent(new Event('change'));
+    });
+
 </script>

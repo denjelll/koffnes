@@ -70,9 +70,14 @@
                     @else
                     @foreach ($filteredOrders as $order)
                         <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
-                                <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
+                            <div class="flex flex-col text-left ml-3">
+                                <div>
+                                    <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
+                                    <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-[#4b3621]">{{ $order->id_order }}</span>
+                                </div>
                             </div>
                             <div class="flex items-center ml-auto space-x-3">
                                 <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
