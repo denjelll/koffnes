@@ -1,5 +1,5 @@
 <div>
-    <div class="font-sans" style="background-color: #fff2e2;">
+<div class="font-sans" style="background-image: url('{{ asset('storage/asset/gambar/motif.png') }}'); background-size: 400px 400px; background-repeat: repeat; ">
         <!-- Top Navbar -->
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
