@@ -66,7 +66,7 @@
                     @endphp
 
                     @if ($filteredOrders->isEmpty())
-                    <p class="flex justify-center items-center">Tidak Ada Orderan</p>
+                    <p class="flex justify-center items-center mt-4">Tidak Ada Orderan</p>
                     @else
                     @foreach ($filteredOrders as $order)
                         <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">

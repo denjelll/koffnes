@@ -1,22 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            background-image: url("{{ asset('storage/asset/gambar/motif.png') }}");
-            background-repeat: repeat;
-            background-position: top left;
-            background-size: 400px 400px;
-            margin: 0;
-            min-height: 100vh;
-        }
-    </style>
-</head>
-<body>
-<div class="font-sans">
+<div class="font-sans" style="background-image: url('{{ asset('storage/asset/gambar/motif.png') }}'); background-size: 400px 400px; background-repeat: repeat; ">
 
 <!-- Top Navbar -->
 <header
@@ -165,5 +147,4 @@
         mobileNav.classList.toggle('hidden');
     });
 </script>
-</body>
-</html>
+
