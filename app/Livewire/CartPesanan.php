@@ -89,9 +89,15 @@ class CartPesanan extends Component
             }
         }
 
+        $this->pesanan = array_values($this->pesanan);
+
         // Simpan kembali ke session
         Session::put('pesanan', $this->pesanan);
         $this->updateTotalHarga();
+
+        if (empty($this->pesanan)) {
+            return redirect()->route('pesan-manual');
+        }
     }
 
     // Tambah kuantitas Add-On

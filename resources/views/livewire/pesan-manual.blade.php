@@ -83,7 +83,7 @@
                 </div>
 
                 <!-- Input untuk Nomor Meja -->
-                <div id="tableNumberContainer" class="flex flex-col md:flex-row items-center gap-4">
+                <div id="tableNumberContainer" class="flex flex-col md:flex-row items-center gap-4" style="{{ $customer['tipe_order'] !== 'Dine In' ? 'display: none;' : '' }}">
                     <input
                         id="tableNumber"
                         type="number"
@@ -229,9 +229,9 @@
         // Listener untuk perubahan tipe order
         orderType.addEventListener('change', function () {
             if (orderType.value === 'Dine In') {
-                tableNumberContainer.style.display = 'flex'; // Tampilkan input
+                tableNumberContainer.style.display = 'flex';
             } else {
-                tableNumberContainer.style.display = 'none'; // Sembunyikan input
+                tableNumberContainer.style.display = 'none';
             }
         });
 
