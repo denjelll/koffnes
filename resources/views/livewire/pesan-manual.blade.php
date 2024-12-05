@@ -68,14 +68,14 @@
                     <input
                         type="text"
                         placeholder="Customer Name"
-                        class="p-2 w-full md:w-[80rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="p-2 w-full md:w-[80rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600"
                         wire:model.defer="customer.nama"
-                        style="background-color: #f5f5f5; color: #333;">
+                        style="background-color: #cbb89d; color: #333;">
                     <select
                         id="orderType"
                         wire:model="customer.tipe_order"
-                        class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="background-color: #f5f5f5; color: #333;">
+                        class="p-2 w-full md:w-1/3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600"
+                        style="background-color: #cbb89d; color: #333;">
                         <option value="Dine In">Dine In</option>
                         <option value="Take Away">Take Away</option>
                         <option value="Delivery">Delivery</option>
@@ -89,8 +89,8 @@
                         type="number"
                         placeholder="Table Number"
                         wire:model="customer.meja"
-                        class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="background-color: #f5f5f5; color: #333;">
+                        class="p-2 w-full md:w-[100rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600"
+                        style="background-color: #cbb89d; color: #333;">
                 </div>
 
                 <!-- Input untuk Pencarian Menu -->
@@ -100,10 +100,10 @@
                         <input
                             type="text"
                             placeholder="Search menu"
-                            class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                            class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 placeholder-gray-600"
                             wire:model.defer="search"
                             wire:keydown.enter="searchMenu"
-                            style="background-color: #f5f5f5; color: #333;">
+                            style="background-color: #cbb89d; color: #333;">
                     <!-- Search Icon -->
                         <button
                             class="absolute inset-y-0 right-0 flex items-center text-gray-500 hover:text-blue-500 px-3"

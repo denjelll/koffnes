@@ -149,25 +149,20 @@
                         </p>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block mb-2 text-[#412f26]">Metode Pembayaran</label>
-                            <select wire:model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
-                                <option value="edc">EDC</option>
-                                <option value="debit">Debit</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                            
-                    </div>
-
-                    @if ($paymentMethod === 'cash')
-                        <div class="mb-6">
+                    <div x-data="{ paymentMethod: @entangle('paymentMethod') }">
+                        <select x-model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
+                            <option value="edc">EDC</option>
+                            <option value="debit">Debit</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    
+                        <div x-show="paymentMethod === 'cash'" class="mb-6">
                             <label class="block mb-2 text-[#412f26]">Jumlah Uang yang Diberikan</label>
                             <input 
                                 type="number" 
-                                wire:model="amountPaid" 
+                                wire:model.defer="amountPaid" 
                                 class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]" 
                                 placeholder="Masukkan jumlah uang">
-                            
                             <div class="mt-2 text-[#412f26]">
                                 @if ($amountPaid >= $approveDetails['totalHarga'])
                                     <p><strong>Kembalian:</strong> Rp. {{ number_format($amountPaid - $approveDetails['totalHarga'], 0, ',', '.') }}</p>
@@ -176,7 +171,7 @@
                                 @endif
                             </div>
                         </div>
-                    @endif
+                    </div>
 
                     <div class="flex justify-between font-bold mt-4">
                         <span>Total Harga</span>

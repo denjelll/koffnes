@@ -211,7 +211,7 @@ class CartPesanan extends Component
         // Simpan ke tabel orders
         $order = Order::create([
             'id_order' => $id_order,
-            'id_user' => 1, // Asumsikan pengguna saat ini login
+            'id_user' =>  session('id_user'), // Asumsikan pengguna saat ini login
             'antrian' => $currentAntrian,
             'customer' => $this->customer['nama'],
             'meja' => $this->customer['meja'],
