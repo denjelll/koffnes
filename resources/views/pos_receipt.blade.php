@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('storage/asset/gambar/icon.png') }}">
     <title>Struk Pembayaran</title>
     <style>
         /* Ukuran kertas 58mm x auto */
