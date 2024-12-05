@@ -9,7 +9,7 @@
     </div>
     <div class="bg-white shadow-md rounded-lg p-6">
         <div class="mb-4">
-            <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
+            <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y H:i', strtotime($order->waktu_transaksi)) }}</p>
             <p class="text-gray-700"><strong>ID Order:</strong> {{ $order->id_order }}</p>
             <p class="text-gray-700"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
             <p class="text-gray-700"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
@@ -28,6 +28,11 @@
                 <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
                 <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
                 @endforeach
+            </div>
+            @endif
+            @if($detail->notes != null) 
+            <div class="flex justify-between">
+                <p class="text-black">Notes: {{$detail->notes}}</p>
             </div>
             @endif
             @endforeach
@@ -79,6 +84,11 @@
                 <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
                 <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
                 @endforeach
+            </div>
+            @endif
+            @if($detail->notes != null) 
+            <div class="flex justify-between">
+                <p class="text-black">Notes: {{$detail->notes}}</p>
             </div>
             @endif
             @endforeach
