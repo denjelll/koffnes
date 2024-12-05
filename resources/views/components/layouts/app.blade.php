@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="{{ asset('storage/asset/gambar/icon.png') }}">
         @stack('styles')
         @livewireStyles
         @vite(['resources/css/app.css'])
