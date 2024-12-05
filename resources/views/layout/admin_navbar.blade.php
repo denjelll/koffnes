@@ -76,6 +76,14 @@
     </nav>
     
     @yield('content')
+    <script>
+        const burgerMenu = document.getElementById("burger-menu");
+        const navLinks = document.getElementById("nav-links");
+
+        burgerMenu.addEventListener("click", () => {
+            navLinks.classList.toggle("hidden");
+        });
+    </script>
 </body>
 <footer
   class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"

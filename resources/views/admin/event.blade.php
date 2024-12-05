@@ -75,12 +75,5 @@
     function hideDeleteModal() {
         document.getElementById('deleteModal').classList.add('hidden');
     }
-
-    const burgerMenu = document.getElementById("burger-menu");
-    const navLinks = document.getElementById("nav-links");
-
-    burgerMenu.addEventListener("click", () => {
-        navLinks.classList.toggle("hidden");
-    });
 </script>
 @endsection
