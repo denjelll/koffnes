@@ -10,7 +10,7 @@
     </title>
     @vite(['resources/css/app.css'])
     <style>
-        html, body {
+        html{
             height: 100%;
             margin: 0;
             padding: 0;
