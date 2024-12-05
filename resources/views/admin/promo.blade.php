@@ -26,7 +26,7 @@
             @foreach ($promos as $promo)
                 <div class="card w-60 bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden" >
                     <div class="h-40 bg-gray-200 flex items-center justify-center">
-                        <img src="{{ asset('menu/' . $promo->menu->gambar) }}" alt="promo" class="w-full h-full object-cover">
+                        <img src="{{ asset('menu/' . $promo->menu->gambar) }}" alt="{{$promo->menu->nama_menu}}" class="w-full h-full object-cover">
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-[#412f26]">{{ $promo->judul_promo }}</h3>
