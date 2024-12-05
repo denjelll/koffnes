@@ -66,7 +66,7 @@ class HistorySearch extends Component
                     'nama_menu' => $detail->menu->nama_menu,
                     'kuantitas' => $detail->kuantitas,
                     'harga' => $detail->menu->harga, // Mengambil harga dari tabel menus
-                    'total_harga' => $detail->kuantitas * $detail->menu->harga, // Menghitung total harga per menu
+                    'total_harga' => $detail->kuantitas * $detail->harga_menu, // Menghitung total harga per menu
                 ];
             });
 

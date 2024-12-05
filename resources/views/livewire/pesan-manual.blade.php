@@ -9,6 +9,11 @@
             alt="Logo"
             class="h-8 w-auto"
             style="max-width: 96px;">
+
+        <button class="bg-[#301c1c] hover:bg-red-500 text-white font-semibold py-1 px-4 rounded-full transition hover:scale-105 duration-300 ease-in-out  shadow-lg">
+            <a href="{{ route('logout') }}" class="text-white">Logout</a>
+        </button>
+        
         <!-- Mobile Menu Toggle Button -->
         <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
             <svg
@@ -36,24 +41,19 @@
             style="transition: transform 0.3s ease-in-out;">
             <ul class="space-y-4">
                 <li>
-                    <a
-                        href=""
-                        class="hover:bg-opacity-50 p-2 block rounded">Home</a>
+                    <a href="{{ url('cashier') }}" class="hover:bg-opacity-50 p-2 block rounded">Home</a>
                 </li>
                 <li>
-                    <a
-                        href="{{ url('cashier/dashboard') }}"
-                        class="hover:bg-opacity-50 p-2 block rounded">Order</a>
+                    <a href="{{ url('cashier/dashboard') }}" class="hover:bg-opacity-50 p-2 block rounded">Order</a>
                 </li>
                 <li>
-                    <a
-                        href="{{ url('cashier/transaksi') }}"
-                        class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
+                    <a href="{{ url('cashier/transaksi') }}" class="hover:bg-opacity-50 p-2 block rounded">History<br>Transaksi</a>
                 </li>
                 <li>
-                    <a
-                        href="{{ url('cashier/stock') }}"
-                        class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                    <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                </li>
+                <li>
+                    <a href="{{ route('koffnesstatus') }}" class="hover:bg-opacity-50 p-2 block rounded">Koffnes Status</a>
                 </li>
             </ul>
         </nav>

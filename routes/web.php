@@ -54,6 +54,7 @@ Route::controller( LoginController::class)->group(function(){
     Route::post('/login/verify', 'verify')
     ->middleware('throttle:5,1')
     ->name('login.verify');
+    Route::get('/logout', 'logout')->name('logout');
 });
 
 Route::middleware(['role:Admin'])->group(function() {
@@ -112,6 +113,8 @@ Route::middleware(['role:Kasir|Admin'])->group(function () {
     Route::post('/receipt/{id}', [CashierController::class, 'printReceipt'])->name('pos.receipt');
     Route::post('/daily-report', [DailyReportController::class, 'generateDailyReport'])->name('daily.report');
     Route::get('cashier/stock', Inventory::class)->name('inventory');
+    Route::get('cashier/status', [CashierController::class, 'status'])->name('koffnesstatus');
+    Route::post('cashier/status', [CashierController::class, 'toggleStatus'])->name('toggleStatus');
 });
 
 Route::middleware(['check_koffnes'])->group(function () {

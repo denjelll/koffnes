@@ -25,7 +25,7 @@ class DailyReportController extends Controller
 
         // Generate PDF menggunakan view
         $pdf = Pdf::loadView('reports.dailyClosing', compact('orders', 'printedBy'))
-                ->setPaper('a4', 'landscape');;
+                ->setPaper('a3', 'landscape');;
 
         // Set nama file
         $fileName = 'daily-report-koffnes-' . Carbon::today()->format('Y-m-d') . '.pdf';

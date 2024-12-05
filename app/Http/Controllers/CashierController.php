@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\KoffnesStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class CashierController extends Controller
@@ -52,6 +54,25 @@ class CashierController extends Controller
 
         // Render view template struk menjadi HTML
         return view('pos_receipt', compact('order', 'cashier'));
+    }
+
+    public function status()
+    {
+        $status = KoffnesStatus::first();
+
+        return view('statusKoffnes', compact('status'));
+    }
+
+    public function toggleStatus()
+    {
+        $status = KoffnesStatus::first();
+        $newStatus = $status->status_koffnes === 'open' ? 'close' : 'open';
+
+        $status->update(['status_koffnes' => $newStatus]);
+
+        // Perbarui cache
+        Cache::forget('koffnes_status');
+        return back()->with('success', 'Status updated successfully!');
     }
 
 

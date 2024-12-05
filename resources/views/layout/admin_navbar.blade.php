@@ -16,7 +16,7 @@
         background-repeat: repeat;
         background-position: top left;
         background-size: 400px 400px;
-        padding-bottom: 240px;
+        padding-bottom: 350px;
         margin: 0;
       }
     </style>
