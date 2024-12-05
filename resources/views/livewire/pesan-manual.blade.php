@@ -95,100 +95,100 @@
 
                 <!-- Input untuk Pencarian Menu -->
                 <div class="flex flex-col md:flex-row items-center gap-4">
-                <!-- Input Box -->
-                <div class="relative w-full md:w-[100rem]">
-                    <input
-                        type="text"
-                        placeholder="Search menu"
-                        class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
-                        wire:model.defer="search"
-                        wire:keydown.enter="searchMenu"
-                        style="background-color: #f5f5f5; color: #333;">
-                <!-- Search Icon -->
-                    <button
-                        class="absolute inset-y-0 right-0 flex items-center text-gray-500 hover:text-blue-500 px-3"
-                        wire:click="searchMenu">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.35 4.35a7.5 7.5 0 0012.3 12.3z" />
-                        </svg>
-                    </button>
-            </div>
+                    <!-- Input Box -->
+                    <div class="relative w-full md:w-[100rem]">
+                        <input
+                            type="text"
+                            placeholder="Search menu"
+                            class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                            wire:model.defer="search"
+                            wire:keydown.enter="searchMenu"
+                            style="background-color: #f5f5f5; color: #333;">
+                    <!-- Search Icon -->
+                        <button
+                            class="absolute inset-y-0 right-0 flex items-center text-gray-500 hover:text-blue-500 px-3"
+                            wire:click="searchMenu">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.35 4.35a7.5 7.5 0 0012.3 12.3z" />
+                            </svg>
+                        </button>
+                    </div>
 
-            </div>
+                </div>
+
+                <!-- Menu Utama -->
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
+                    @foreach ($items as $item)
+                        <div wire:key="menu-{{ $item->id_menu }}" class="menu-card shadow-md rounded-lg overflow-hidden w-full relative {{ $item->stock == 0 ? 'bg-[#f0c999]' : 'bg-[#e8d2b7]' }}">
+                        
+                            @if ($item->stock == 0)
+                                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                    <span class="text-white font-bold text-lg">Stock Habis</span>
+                                </div>
+                            @endif
+
+                            <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
+
+                            <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
+                                <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
+                                <div class="flex justify-between items-center mt-2 sm:mt-4">
+                                    @php
+                                        $currentTime = now()->format('H:i:s');
+                                        $isPromoActive = $item->promo && $item->promo->status === 'Aktif' && $currentTime >= $item->promo->waktu_mulai && $currentTime <= $item->promo->waktu_berakhir;
+                                    @endphp
 
 
-            <!-- Menu Utama -->
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-3 px-2 py-6">
-                @foreach ($items as $item)
-                    <div wire:key="menu-{{ $item->id_menu }}" class="menu-card shadow-md rounded-lg overflow-hidden w-full relative {{ $item->stock == 0 ? 'bg-[#f0c999]' : 'bg-[#e8d2b7]' }}">
-                    
-                        @if ($item->stock == 0)
-                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                                <span class="text-white font-bold text-lg">Stock Habis</span>
-                            </div>
-                        @endif
+                                    @if ($isPromoActive)
+                                        <div class="flex flex-col">
+                                            <p class = "text-[#412f26] font-semibold text-sm sm:text-base">Promo:</p>
+                                            <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->promo->harga_promo, 0, ',', '.') }}</span>
+                                        </div>
+                                    @else
+                                        <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                    @endif
 
-                        <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
-
-                        <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
-                            <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
-                            <div class="flex justify-between items-center mt-2 sm:mt-4">
-                                @php
-                                    $currentTime = now()->format('H:i:s');
-                                    $isPromoActive = $item->promo && $item->promo->status === 'Aktif' && $currentTime >= $item->promo->waktu_mulai && $currentTime <= $item->promo->waktu_berakhir;
-                                @endphp
-
-
-                                @if ($isPromoActive)
-                                    <div class="flex flex-col">
-                                        <p class = "text-[#412f26] font-semibold text-sm sm:text-base">Promo:</p>
-                                        <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->promo->harga_promo, 0, ',', '.') }}</span>
-                                    </div>
-                                @else
-                                    <span class="font-bold text-[#412f26]">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
-                                @endif
-
-                                <!-- Tombol tambah menu -->
-                                @if ($item->stock != 0)
-                                    <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                        </svg>
-                                    </button>
-                                @endif
+                                    <!-- Tombol tambah menu -->
+                                    @if ($item->stock != 0)
+                                        <button class="bg-[#76634c] text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" wire:click="tambahMenu('{{ $item->id_menu }}')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                            </svg>
+                                        </button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-                
+                    @endforeach
+                    
 
-                <!-- Total Section -->
-                <button id="confirmOrderButton">
-                    <div
-                        class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
-                        <span>Total Harga: Rp. {{ number_format($totalHarga, 0, ',', '.') }}</span>
-                        <img
-                            src="{{ asset('storage/uploads/Cashnes.png') }}"
-                            alt="Chart Icon"
-                            class="ml-auto h-5 w-5">
-                    </div>
-                </button>
+                    <!-- Total Section -->
+                    <button id="confirmOrderButton">
+                        <div
+                            class="fixed bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-between px-5 py-2 bg-[#7d6550] text-white rounded-lg shadow-lg w-11/12 max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
+                            <span>Total Harga: Rp. {{ number_format($totalHarga, 0, ',', '.') }}</span>
+                            <img
+                                src="{{ asset('storage/uploads/Cashnes.png') }}"
+                                alt="Chart Icon"
+                                class="ml-auto h-5 w-5">
+                        </div>
+                    </button>
+                </div>
+
             </div>
 
+            <!-- Footer -->
+            <footer
+                class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
+                style="background-color: #412f26;">
+                <img
+                    src="{{ asset('storage/uploads/8.png') }}"
+                    alt="Footer Logo"
+                    class="h-7 md:h-7 mb-2"
+                    style="max-width: 180px;">
+                <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
+            </footer>
+
         </div>
-
-        <!-- Footer -->
-        <footer
-            class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
-            style="background-color: #412f26;">
-            <img
-                src="{{ asset('storage/uploads/8.png') }}"
-                alt="Footer Logo"
-                class="h-7 md:h-7 mb-2"
-                style="max-width: 180px;">
-            <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
-        </footer>
-
     </div>
 </div>
 
