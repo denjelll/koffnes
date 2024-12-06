@@ -25,7 +25,7 @@
     @if (count($events) == 0)
         <p>No data</p>
     @else
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-6">
             @foreach ($events as $event)
                 <div class="card bg-white shadow-lg relative overflow-hidden">
                     <!-- Image as background -->
