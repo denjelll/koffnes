@@ -89,7 +89,7 @@
                         @foreach ($promoMenus as $menuPromo)
                             <div class="p-2 menu-card items-center bg-[#FFF2E2] shadow-md rounded-lg overflow-hidden w-full sm:w-3/4 md:w-1/2 lg:w-1/3 mx-auto">
                                 <!-- Gambar Menu -->
-                                <img class="w-full h-32 sm:h-48 object-cover" src="{{ $menuPromo->gambar }}" alt="{{ $menuPromo->nama_menu }}">
+                                <img class="w-full h-32 sm:h-48 object-cover" src="{{ asset('menu/'.$menuPromo->gambar) }}" alt="{{ $menuPromo->nama_menu }}">
 
                                 <div class="p-2 sm:p-4 flex flex-col h-26">
                                     <!-- Nama dan Harga Menu -->
@@ -130,7 +130,7 @@
                             @if ($selectedCategory == 4) 
                                 <div class="rounded-2xl mt-4 bg-[#FFF2E2] shadow-lg relative w-full md:w-[230px]">
                                     <!-- Gambar Menu -->
-                                    <img src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}" class="w-full h-44 rounded-t-xl object-cover" />
+                                    <img src="{{ asset('menu/'.$menu->gambar) }}" alt="{{ $menu->nama_menu }}" class="w-full h-44 rounded-t-xl object-cover" />
                                     
                                     <!-- Nama, deskripsi, dan Harga Menu -->
                                     <div class="pt-4 pb-6 p-4">
@@ -149,7 +149,7 @@
                                 <!-- Card Menu Normal -->
                                 <div class="p-2 menu-card bg-[#FFF2E2] shadow-md rounded-lg overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto" style="width: 100%;">
                                     <!-- Gambar Menu -->
-                                    <img class="w-full h-28 sm:h-44 object-cover rounded-t-lg" src="{{ $menu->gambar }}" alt="{{ $menu->nama_menu }}">
+                                    <img class="w-full h-28 sm:h-44 object-cover rounded-t-lg" src="{{ asset('menu/'.$menu->gambar) }}" alt="{{ $menu->nama_menu }}">
 
                                     <div class="p-2 sm:p-4 flex flex-col">
                                         <!-- Nama dan Harga Menu -->

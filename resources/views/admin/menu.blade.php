@@ -48,7 +48,12 @@
                     <div class="p-4">
                         <h3 class="text-lg font-bold text-[#412f26]">{{ $menu->nama_menu }}</h3>
                         <p class="text-black font-medium">Rp. {{ $menu->harga }}</p>
+                        @if ($menu->stock == 0)
+                            <p class="text-red-500 font-medium">Out of Stock</p>
+                        
+                        @else
                         <p class="text-black font-medium">Stok : {{ $menu->stock }}</p>
+                        @endif
                     </div>
                     <div class="p-4 pt-0">
                         <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
