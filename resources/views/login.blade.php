@@ -33,11 +33,11 @@
 </head>
 <body class="h-screen flex items-end bg-[#EDE1D2] relative">
     <!-- Logo -->
-    <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Logo" class="absolute -top-7 left-5 w-28 sm:w-24 md:w-20 lg:w-28">
 
     <!-- Header (Teks Welcome Back!) -->
-    <div class="absolute top-44 sm:top-40 lg:top-48 w-full text-center z-10">
+    <div class="flex flex-col items-center absolute top-44 sm:top-40 lg:top-48 w-full text-center z-10">
         <h1 class="text-4xl sm:text-3xl lg:text-5xl font-bold text-[#412F26]">Welcome Back!</h1>
+        <img src="{{ asset('storage/asset/gambar/koffnes.png') }}" alt="Logo" class="w-48 mt-8">
     </div>
 
     <div class="w-full sm:w-96 bg-white shadow-lg p-6 rounded-t-[40px] rounded-b-lg mx-auto z-10 relative">
