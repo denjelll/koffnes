@@ -39,37 +39,38 @@
     @if ($menus->count() == 0)
         <p>No menu available</p>
     @else
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            @foreach ($menus as $menu)
-                <div class="card w-60 bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden" data-category="{{ $menu->isi_kategori->pluck('id_kategori')->implode(',') }}">
-                    <div class="h-40 bg-gray-200 flex items-center justify-center">
-                        <img src="{{ asset('menu/'.$menu->gambar) }}" alt="Menu Image" class="w-full h-full object-cover">
+        <div class="flex md:mr-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                @foreach ($menus as $menu)
+                    <div class="card w-60 bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden md:mr-4 md:space-x-4" data-category="{{ $menu->isi_kategori->pluck('id_kategori')->implode(',') }}">
+                        <div class="h-40 bg-gray-200 flex items-center justify-center">
+                            <img src="{{ asset('menu/'.$menu->gambar) }}" alt="Menu Image" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold text-[#412f26]">{{ $menu->nama_menu }}</h3>
+                            <p class="text-black font-medium">Rp. {{ $menu->harga }}</p>
+                            @if ($menu->stock == 0)
+                                <p class="text-red-500 font-medium">Out of Stock</p>
+                            @else
+                                <p class="text-black font-medium">Stok : {{ $menu->stock }}</p>
+                            @endif
+                        </div>
+                        <div class="p-4 pt-0">
+                            <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
+                                class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]"
+                                style="background-color: #412f26"
+                            >
+                                Edit
+                            </a>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-danger text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
+                                Delete
+                            </button>
+                        </div>
                     </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-bold text-[#412f26]">{{ $menu->nama_menu }}</h3>
-                        <p class="text-black font-medium">Rp. {{ $menu->harga }}</p>
-                        @if ($menu->stock == 0)
-                            <p class="text-red-500 font-medium">Out of Stock</p>
-                        
-                        @else
-                        <p class="text-black font-medium">Stok : {{ $menu->stock }}</p>
-                        @endif
-                    </div>
-                    <div class="p-4 pt-0">
-                        <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
-                            class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]"
-                            style="background-color: #412f26"
-                        >
-                            Edit
-                        </a>
-                    </div>
-                    <div class="p-4 pt-0">
-                        <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-danger text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     @endif
 </div>
