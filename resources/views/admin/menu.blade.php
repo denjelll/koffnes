@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Menu Management
     </div>
-    <div class="flex items-center gap-4 mb-8">
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-8">
         <!-- Add Menu Button -->
         <a
             class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#5a3e2f] cursor-pointer whitespace-nowrap"
@@ -16,19 +16,18 @@
             Add Menu
         </a>
 
-        <!-- Search Bar -->
         <input
             type="text"
             placeholder="Search Menu"
             id="searchInput"
             oninput="filterMenu()"
-            class="input w-full bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+            class="input w-full sm:w-auto bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
         />
         <!-- Category Filter -->
         <select
             id="categoryFilter"
             onchange="filterMenu()"
-            class="select bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+            class="select w-full sm:w-auto bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
         >
             <option value="All">All Categories</option>
             @foreach ($kategoris as $kategori)
