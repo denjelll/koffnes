@@ -20,6 +20,7 @@
         margin: 0;
       }
     </style>
+    <link rel="icon" href="{{ asset('storage/asset/gambar/icon.png') }}" type="image/png">
 </head>
 <body>
     @if (session('role')!='Admin' || session('role')==null)

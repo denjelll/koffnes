@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AddOn extends Model
+class Addon extends Model
 {
     protected $table = 'add_ons';
     protected $primaryKey = 'id_addon';
