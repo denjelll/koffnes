@@ -113,6 +113,7 @@ class PesanManual extends Component
                 }
 
                 $this->pesanan[] = [
+                    'gambar' => $item->gambar,
                     'id_menu' => $item->id_menu,
                     'nama_menu' => $item->nama_menu,
                     'kuantitas' => $this->qtyMenu[$item->id_menu],
