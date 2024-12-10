@@ -93,45 +93,53 @@ class DummySeeder extends Seeder
             ['id_menu' => 36, 'id_promo' => null, 'nama_menu' => 'Mie Sedaap Korean Spicy Chicken', 'stock' => 40, 'harga' => 15000, 'deskripsi' => 'Mie ayam pedas Korea.', 'gambar' => 'Mie Sedaap Korean Spicy Chicken.webp'],
             ['id_menu' => 37, 'id_promo' => null, 'nama_menu' => 'Indomie Soto Banjar Limau Kuit', 'stock' => 90, 'harga' => 15000, 'deskripsi' => 'Mie kuah soto khas Banjar.', 'gambar' => 'Indomie Soto Banjar Limau Kuit.webp'],
             ['id_menu' => 38, 'id_promo' => null, 'nama_menu' => 'Mie Sedaap White Curry', 'stock' => 100, 'harga' => 15000, 'deskripsi' => 'Mie kuah kari putih.', 'gambar' => 'Mie Sedaap White Curry.webp'],
-            ['id_menu' => 39, 'id_promo' => null, 'nama_menu' => 'Nessy Coffee', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Kopi khas Nessy.', 'gambar' => 'Nessy Coffee.webp'],
+            ['id_menu' => 39, 'id_promo' => 3, 'nama_menu' => 'Nessy Coffee', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Kopi khas Nessy.', 'gambar' => 'Nessy Coffee.webp'],
             ['id_menu' => 40, 'id_promo' => null, 'nama_menu' => 'Matcha Coffee', 'stock' => 50, 'harga' => 24000, 'deskripsi' => 'Kopi matcha dengan matcha premium.', 'gambar' => 'Matcha Coffee.webp'],
-            ['id_menu' => 41, 'id_promo' => null, 'nama_menu' => 'Pandan Coffee', 'stock' => 100, 'harga' => 22000, 'deskripsi' => 'Kopi dengan aroma pandan.', 'gambar' => 'Pandan Coffee.webp'],
+            ['id_menu' => 41, 'id_promo' => 6, 'nama_menu' => 'Pandan Coffee', 'stock' => 100, 'harga' => 22000, 'deskripsi' => 'Kopi dengan aroma pandan.', 'gambar' => 'Pandan Coffee.webp'],
             ['id_menu' => 42, 'id_promo' => null, 'nama_menu' => 'Coconut Island Coffee', 'stock' => 60, 'harga' => 22000, 'deskripsi' => 'Kopi kelapa spesial.', 'gambar' => 'Coconut Island Coffee.webp'],
-            ['id_menu' => 43, 'id_promo' => null, 'nama_menu' => 'Raspberry Blush Coffee', 'stock' => 80, 'harga' => 22000, 'deskripsi' => 'Kopi rasa raspberry.', 'gambar' => 'Raspberry Blush Coffee.webp'],
-            ['id_menu' => 44, 'id_promo' => null, 'nama_menu' => 'Vanilla Coffee', 'stock' => 30, 'harga' => 22000, 'deskripsi' => 'Kopi dengan vanilla.', 'gambar' => 'Vanilla Coffee.webp'],
+            ['id_menu' => 43, 'id_promo' => 8, 'nama_menu' => 'Raspberry Blush Coffee', 'stock' => 80, 'harga' => 22000, 'deskripsi' => 'Kopi rasa raspberry.', 'gambar' => 'Raspberry Blush Coffee.webp'],
+            ['id_menu' => 44, 'id_promo' => 10, 'nama_menu' => 'Vanilla Coffee', 'stock' => 30, 'harga' => 22000, 'deskripsi' => 'Kopi dengan vanilla.', 'gambar' => 'Vanilla Coffee.webp'],
             ['id_menu' => 45, 'id_promo' => null, 'nama_menu' => 'Hazelnut Coffee', 'stock' => 90, 'harga' => 22000, 'deskripsi' => 'Kopi dengan hazelnut.', 'gambar' => 'Hazelnut Coffee.webp'],
             ['id_menu' => 46, 'id_promo' => null, 'nama_menu' => 'Affogato', 'stock' => 80, 'harga' => 20000, 'deskripsi' => 'Es krim dengan espresso.', 'gambar' => 'Affogato.webp'],
             ['id_menu' => 47, 'id_promo' => null, 'nama_menu' => 'Iced Latte', 'stock' => 70, 'harga' => 20000, 'deskripsi' => 'Kopi latte dingin.', 'gambar' => 'Iced Latte.webp'],
-            ['id_menu' => 48, 'id_promo' => null, 'nama_menu' => 'Caffe Latte', 'stock' => 100, 'harga' => 22000, 'deskripsi' => 'Kopi susu klasik.', 'gambar' => 'Caffe Latte.webp'],
+            ['id_menu' => 48, 'id_promo' => 4, 'nama_menu' => 'Caffe Latte', 'stock' => 100, 'harga' => 22000, 'deskripsi' => 'Kopi susu klasik.', 'gambar' => 'Caffe Latte.webp'],
             ['id_menu' => 49, 'id_promo' => null, 'nama_menu' => 'Americano', 'stock' => 60, 'harga' => 20000, 'deskripsi' => 'Kopi hitam tanpa gula.', 'gambar' => 'Americano.webp'],
             ['id_menu' => 50, 'id_promo' => null, 'nama_menu' => 'Vietnam Drip', 'stock' => 30, 'harga' => 20000, 'deskripsi' => 'Kopi Vietnam Otentik.', 'gambar' => 'Vietnam Drip.webp'],
             ['id_menu' => 51, 'id_promo' => null, 'nama_menu' => 'V60', 'stock' => 60, 'harga' => 22000, 'deskripsi' => 'Kopi V60 manual brew.', 'gambar' => 'V60.webp'],
             ['id_menu' => 52, 'id_promo' => null, 'nama_menu' => 'Espresso', 'stock' => 50, 'harga' => 12000, 'deskripsi' => 'Kopi shot pekat.', 'gambar' => 'Espresso.webp'],
-            ['id_menu' => 53, 'id_promo' => null, 'nama_menu' => 'Matcha Latte', 'stock' => 30, 'harga' => 22000, 'deskripsi' => 'Matcha dengan susu lembut.', 'gambar' => 'Matcha Latte.webp'],
+            ['id_menu' => 53, 'id_promo' => 7, 'nama_menu' => 'Matcha Latte', 'stock' => 30, 'harga' => 22000, 'deskripsi' => 'Matcha dengan susu lembut.', 'gambar' => 'Matcha Latte.webp'],
             ['id_menu' => 54, 'id_promo' => null, 'nama_menu' => 'Ice Blue Matcha', 'stock' => 40, 'harga' => 22000, 'deskripsi' => 'matcha dingin biru.', 'gambar' => 'Ice Blue Matcha.webp'],
             ['id_menu' => 55, 'id_promo' => null, 'nama_menu' => 'Iced Tea', 'stock' => 60, 'harga' => 17000, 'deskripsi' => 'Teh dingin klasik.', 'gambar' => 'Iced Tea.webp'],
-            ['id_menu' => 56, 'id_promo' => null, 'nama_menu' => 'Lemon Tea', 'stock' => 40, 'harga' => 17000, 'deskripsi' => 'Teh dengan lemon segar.', 'gambar' => 'Lemon Tea.webp'],
-            ['id_menu' => 57, 'id_promo' => null, 'nama_menu' => 'Thai Tea', 'stock' => 90, 'harga' => 17000, 'deskripsi' => 'Teh Thailand otentik.', 'gambar' => 'Thai Tea.webp'],
-            ['id_menu' => 58, 'id_promo' => null, 'nama_menu' => 'Cinema Tea', 'stock' => 50, 'harga' => 17000, 'deskripsi' => 'Teh manis khas bioskop.', 'gambar' => 'Cinema Tea.webp'],
+            ['id_menu' => 56, 'id_promo' => 12, 'nama_menu' => 'Lemon Tea', 'stock' => 40, 'harga' => 17000, 'deskripsi' => 'Teh dengan lemon segar.', 'gambar' => 'Lemon Tea.webp'],
+            ['id_menu' => 57, 'id_promo' => 14, 'nama_menu' => 'Thai Tea', 'stock' => 90, 'harga' => 17000, 'deskripsi' => 'Teh Thailand otentik.', 'gambar' => 'Thai Tea.webp'],
+            ['id_menu' => 58, 'id_promo' => 16, 'nama_menu' => 'Cinema Tea', 'stock' => 50, 'harga' => 17000, 'deskripsi' => 'Teh manis khas bioskop.', 'gambar' => 'Cinema Tea.webp'],
             ['id_menu' => 59, 'id_promo' => null, 'nama_menu' => 'Lychee Tea', 'stock' => 60, 'harga' => 17000, 'deskripsi' => 'Teh dengan leci.', 'gambar' => 'Lychee Tea.webp'],
-            ['id_menu' => 60, 'id_promo' => null, 'nama_menu' => 'Butterfly Pea Lemon Tea', 'stock' => 100, 'harga' => 18000, 'deskripsi' => 'Teh bunga telang lemon.', 'gambar' => 'Butterfly Pea Lemon Tea.webp'],
-            ['id_menu' => 61, 'id_promo' => null, 'nama_menu' => 'Nessy Tea', 'stock' => 80, 'harga' => 18000, 'deskripsi' => 'Teh khas Nessy.', 'gambar' => 'Nessy Tea.webp'],
+            ['id_menu' => 60, 'id_promo' => 15, 'nama_menu' => 'Butterfly Pea Lemon Tea', 'stock' => 100, 'harga' => 18000, 'deskripsi' => 'Teh bunga telang lemon.', 'gambar' => 'Butterfly Pea Lemon Tea.webp'],
+            ['id_menu' => 61, 'id_promo' => 5, 'nama_menu' => 'Nessy Tea', 'stock' => 80, 'harga' => 18000, 'deskripsi' => 'Teh khas Nessy.', 'gambar' => 'Nessy Tea.webp'],
             ['id_menu' => 62, 'id_promo' => null, 'nama_menu' => 'Soda Gembira', 'stock' => 60, 'harga' => 20000, 'deskripsi' => 'Minuman soda segar.', 'gambar' => 'Soda Gembira.webp'],
             ['id_menu' => 63, 'id_promo' => null, 'nama_menu' => 'Berry Float', 'stock' => 80, 'harga' => 22000, 'deskripsi' => 'Minuman float dengan berry.', 'gambar' => 'Berry Float.webp'],
-            ['id_menu' => 64, 'id_promo' => null, 'nama_menu' => 'Berryness', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Mocktail berry spesial.', 'gambar' => 'Berryness.webp'],
+            ['id_menu' => 64, 'id_promo' => 9, 'nama_menu' => 'Berryness', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Mocktail berry spesial.', 'gambar' => 'Berryness.webp'],
             ['id_menu' => 65, 'id_promo' => null, 'nama_menu' => 'Lemon Float', 'stock' => 70, 'harga' => 22000, 'deskripsi' => 'Float lemon segar.', 'gambar' => 'Lemon Float.webp'],
             ['id_menu' => 66, 'id_promo' => null, 'nama_menu' => 'Lemonness', 'stock' => 20, 'harga' => 20000, 'deskripsi' => 'Mocktail dengan lemon segar.', 'gambar' => 'Lemonness.webp'],
             ['id_menu' => 67, 'id_promo' => null, 'nama_menu' => 'Yakult Berry', 'stock' => 90, 'harga' => 22000, 'deskripsi' => 'Yakult dengan berry.', 'gambar' => 'Yakult Berry.webp'],
             ['id_menu' => 68, 'id_promo' => null, 'nama_menu' => 'Yakult Lemon', 'stock' => 40, 'harga' => 22000, 'deskripsi' => 'Yakult dengan lemon.', 'gambar' => 'Yakult Lemon.webp'],
             ['id_menu' => 69, 'id_promo' => null, 'nama_menu' => 'Red Velvet', 'stock' => 50, 'harga' => 22000, 'deskripsi' => 'Milkshake red velvet.', 'gambar' => 'Red Velvet.webp'],
             ['id_menu' => 70, 'id_promo' => null, 'nama_menu' => 'Taro', 'stock' => 100, 'harga' => 22000, 'deskripsi' => 'Milkshake taro.', 'gambar' => 'Taro.webp'],
-            ['id_menu' => 71, 'id_promo' => null, 'nama_menu' => 'Chocolate', 'stock' => 80, 'harga' => 22000, 'deskripsi' => 'Milkshake Coklat.', 'gambar' => 'Chocolate.webp'],
-            ['id_menu' => 72, 'id_promo' => null, 'nama_menu' => 'Hazelnut Chocolate', 'stock' => 70, 'harga' => 22000, 'deskripsi' => 'Milkshake hazelnut coklat.', 'gambar' => 'Hazelnut Chocolate.webp'],
+            ['id_menu' => 71, 'id_promo' => 11, 'nama_menu' => 'Chocolate', 'stock' => 80, 'harga' => 22000, 'deskripsi' => 'Milkshake Coklat.', 'gambar' => 'Chocolate.webp'],
+            ['id_menu' => 72, 'id_promo' => 13, 'nama_menu' => 'Hazelnut Chocolate', 'stock' => 70, 'harga' => 22000, 'deskripsi' => 'Milkshake hazelnut coklat.', 'gambar' => 'Hazelnut Chocolate.webp'],
             ['id_menu' => 73, 'id_promo' => null, 'nama_menu' => 'Cookies & Cream', 'stock' => 60, 'harga' => 22000, 'deskripsi' => 'Milkshake cookies & cream.', 'gambar' => 'Cookies & Cream.webp'],
             ['id_menu' => 74, 'id_promo' => null, 'nama_menu' => 'Mango', 'stock' => 50, 'harga' => 22000, 'deskripsi' => 'Milkshake rasa mangga.', 'gambar' => 'Mango.webp'],
             ['id_menu' => 75, 'id_promo' => null, 'nama_menu' => 'Milo Dinosaur', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Milo dengan taburan coklat.', 'gambar' => 'Milo Dinosaur.webp'],
             ['id_menu' => 76, 'id_promo' => null, 'nama_menu' => 'Hot Chocolate', 'stock' => 70, 'harga' => 22000, 'deskripsi' => 'Coklat panas spesial.', 'gambar' => 'Hot Chocolate.webp'],
             ['id_menu' => 77, 'id_promo' => null, 'nama_menu' => 'Mineral Water', 'stock' => 150, 'harga' => 8000, 'deskripsi' => 'Air mineral segar.', 'gambar' => 'Mineral Water.webp'],
+            ['id_menu' => 78, 'id_promo' => null, 'nama_menu' => 'Butter Croissant', 'stock' => 100, 'harga' => 18000, 'deskripsi' => 'Butter Croissant.', 'gambar' => 'Butter Croissant.webp'],
+            ['id_menu' => 79, 'id_promo' => null, 'nama_menu' => 'Pain Au Chocolat', 'stock' => 100, 'harga' => 20000, 'deskripsi' => 'Pain Au Chocolat.', 'gambar' => 'Pain Au Chocolat.webp'],
+            ['id_menu' => 80, 'id_promo' => null, 'nama_menu' => 'Soft-Bake Cookie', 'stock' => 50, 'harga' => 17000, 'deskripsi' => 'Cookie lembut yang dipanggang.', 'gambar' => 'Soft-Bake Cookie.webp'],
+            ['id_menu' => 81, 'id_promo' => null, 'nama_menu' => 'Katsu Sandwich', 'stock' => 50, 'harga' => 22000, 'deskripsi' => 'Sandwich dengan ayam katsu renyah.', 'gambar' => 'Katsu Sandwich.webp'],
+            ['id_menu' => 82, 'id_promo' => null, 'nama_menu' => 'Koffnes Cheese Burger Set', 'stock' => 50, 'harga' => 34000, 'deskripsi' => 'Special housemade beef patty, cheese, bun, & fries.', 'gambar' => 'Koffnes Cheese Burger Set.webp'],
+            ['id_menu' => 83, 'id_promo' => null, 'nama_menu' => 'Chicken Burger Set', 'stock' => 50, 'harga' => 30000, 'deskripsi' => 'Housemade chicken Katsu, bun, & fries.', 'gambar' => 'Chicken Burger Set.webp'],
+            ['id_menu' => 84, 'id_promo' => null, 'nama_menu' => 'Burger Sliders', 'stock' => 50, 'harga' => 38000, 'deskripsi' => '3 different mini burgers', 'gambar' => 'Burger Sliders.webp'],
+
         ];
 
 
@@ -145,30 +153,22 @@ class DummySeeder extends Seeder
         ]);
 
         // Menambahkan data promo
-        DB::table('promos')->insert([
-            [
-                'id_promo' => 1,
-                'judul_promo' => 'Diskon Pagi',
-                'harga_promo' => 5000,
-                'hari' => 'AllDay',
-                'waktu_mulai' => '06:00:00',
-                'waktu_berakhir' => '10:00:00',
-                'status' => 'Aktif',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id_promo' => 2,
-                'judul_promo' => 'Diskon Siang',
-                'harga_promo' => 10000,
-                'hari' => 'AllDay',
-                'waktu_mulai' => '12:00:00',
-                'waktu_berakhir' => '14:00:00',
-                'status' => 'Aktif',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
+DB::table('promos')->insert([
+    ['id_promo' => 3, 'judul_promo' => 'Happy Hour Nessy Coffee', 'harga_promo' => 12000, 'hari' => 'AllDay', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 4, 'judul_promo' => 'Happy Hour Caffe Latte', 'harga_promo' => 12000, 'hari' => 'AllDay', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 5, 'judul_promo' => 'Happy Hour Nessy Tea', 'harga_promo' => 12000, 'hari' => 'AllDay', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 6, 'judul_promo' => 'Happy Hour Pandan Coffee', 'harga_promo' => 12000, 'hari' => 'Monday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 7, 'judul_promo' => 'Happy Hour Matcha Latte', 'harga_promo' => 12000, 'hari' => 'Monday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 8, 'judul_promo' => 'Happy Hour Raspberry Coffee', 'harga_promo' => 12000, 'hari' => 'Tuesday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 9, 'judul_promo' => 'Happy Hour Berryness', 'harga_promo' => 12000, 'hari' => 'Tuesday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 10, 'judul_promo' => 'Happy Hour Vanilla Coffee', 'harga_promo' => 12000, 'hari' => 'Wednesday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 11, 'judul_promo' => 'Happy Hour Chocolate Milkshake', 'harga_promo' => 12000, 'hari' => 'Wednesday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 12, 'judul_promo' => 'Lemon Tea', 'harga_promo' => 12000, 'hari' => 'Thursday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 13, 'judul_promo' => 'Happy Hour Hazelnut Coffee', 'harga_promo' => 12000, 'hari' => 'Friday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 14, 'judul_promo' => 'Happy Hour Thai Tea', 'harga_promo' => 12000, 'hari' => 'Friday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 15, 'judul_promo' => 'Happy Hour Butterfly Pea Lemon Tea', 'harga_promo' => 12000, 'hari' => 'Saturday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+    ['id_promo' => 16, 'judul_promo' => 'Happy Hour Cinema Tea', 'harga_promo' => 12000, 'hari' => 'Sunday', 'waktu_mulai' => '08:00:00', 'waktu_berakhir' => '14:00:00', 'status' => 'Aktif', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+]);
 
         // Menambahkan data menu dengan id_menu auto increment
         foreach ($menus as $menu) {
@@ -303,7 +303,27 @@ class DummySeeder extends Seeder
             ['id_addon' => 87, 'nama_addon' => 'Sosis', 'harga' => 10000, 'id_menu' => 38],
             ['id_addon' => 88, 'nama_addon' => 'Double Mie Instan', 'harga' => 7000, 'id_menu' => 38],
             
+            ['id_addon' => 89, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 68],
+            ['id_addon' => 90, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 69],
+            ['id_addon' => 91, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 70],
+            ['id_addon' => 92, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 71],
+            ['id_addon' => 93, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 72],
+            ['id_addon' => 94, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 73],
+            ['id_addon' => 95, 'nama_addon' => 'Ice Cream', 'harga' => 5000, 'id_menu' => 74],
+        
+            
+
+
         ]);
+        $j = 39;
+        for ($i = 96; $i < 124; $i += 2) {
+                DB::table('add_ons')->insert([
+                    ['id_addon' => $i, 'nama_addon' => 'Oat Milk', 'harga' => 5000, 'id_menu' => $j],
+                    ['id_addon' => $i + 1, 'nama_addon' => 'Extra Shot', 'harga' => 7000, 'id_menu' => $j],
+                ]);
+                $j++;
+            }
+        
 
         // Menambahkan data user dengan id_user 'NOT_PICK_UP'
         DB::table('users')->insert([
