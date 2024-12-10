@@ -199,19 +199,30 @@
     const menuToggle = document.getElementById('menu-toggle');  // Tombol hamburger
     const mobileNav = document.getElementById('mobile-nav');    // Sidebar navbar
 
-     // Ambil elemen tombol dan input nama customer
+    // Ambil elemen tombol dan input nama customer
     const confirmOrderButton = document.getElementById('confirmOrderButton');
     const customerNameInput = document.querySelector('input[wire\\:model\\.defer="customer.nama"]');
+    const tipeOrderSelect = document.querySelector('select[wire\\:model="customer.tipe_order"]');
+    const nomorMejaInput = document.getElementById('tableNumber');
 
     // Tambahkan event listener untuk tombol confirm order
     confirmOrderButton.addEventListener('click', function (event) {
+        let errorMessage = '';
+
         // Cek apakah input nama customer kosong
         if (!customerNameInput.value.trim()) {
-            event.preventDefault(); // Hentikan aksi default tombol
-            alert('Nama customer belum diisi. Silakan isi nama customer sebelum melanjutkan.');
+            errorMessage += 'Nama customer belum diisi. Silakan isi nama customer sebelum melanjutkan.\n'
+        }
+
+        if (tipeOrderSelect.value === 'Dine In' && (!nomorMejaInput.value.trim() || parseInt(nomorMejaInput.value) <= 0)) {
+            errorMessage += 'Nomor meja harus diisi untuk tipe order dine in'
+        }
+
+        if(errorMessage) {
+            event.preventDefault();
+            alert(errorMessage);
         } else {
-            // Jika sudah terisi, lakukan aksi seperti biasa
-            @this.call('confirmOrder'); // Panggil fungsi Livewire (opsional)
+            @this.call('confirmOrder');
         }
     });
 
