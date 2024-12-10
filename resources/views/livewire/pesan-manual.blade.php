@@ -127,7 +127,7 @@
                                 </div>
                             @endif
 
-                            <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ $item->gambar }}" alt="Foto menu {{ $item->nama_menu }}">
+                            <img loading="lazy" class="w-full h-32 sm:h-48 object-cover" src="{{ asset('menu/'.$item->gambar) }}" alt="Foto menu {{ $item->nama_menu }}">
 
                             <div class="p-2 sm:p-4 flex flex-col justify-between min-h-[150px]">
                                 <h2 class="text-[#412f26] font-semibold text-sm sm:text-base">{{ $item->nama_menu }}</h2>
