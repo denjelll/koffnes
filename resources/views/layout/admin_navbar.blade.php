@@ -17,17 +17,16 @@
         background-repeat: repeat;
         background-position: top left;
         background-size: 400px 400px;
-        padding-bottom: 350px;
         margin: 0;
         }
     </style>
     </head>
-<body>
+<body class="min-h-screen flex flex-col">
     @if (session('role')!='Admin' || session('role')==null)
         <script>window.location = "/login";</script>
     @endif
     <nav
-      class="bg-[#412F26] text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg"
+      class="bg-[#412F26] w-full text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg fixed z-50"
       style="background-color: #412f26"
     >
       <!-- Logo -->
@@ -84,19 +83,20 @@
       </script>
     </nav>
     
-    @yield('content')
-    
+    <main class="flex-grow">
+        @yield('content')
+    </main>
     </body>
-<footer
-  class="w-full p-4 fixed bottom-0 left-0 z-30 flex flex-col items-center text-white"
-  style="background-color: #412f26; height: 64px"
->
-  <img
-    src="{{asset('storage/asset/gambar/koffnes_putih.png')}}"
-    alt="Footer Logo"
-    class="h-9 md:h-4 mb-2"
-    style="max-width: 180px"
-  />
-  <p class="text-sm">&copy; 2024 Koffnes. All rights reserved.</p>
+<footer class="bg-[#412f26] text-white py-4">
+  <div class="container mx-auto text-center">
+    <p class="text-sm font-medium">© 2024 Koffnes. Admin Panel.</p>
+    <div class="flex justify-center mt-2 space-x-4">
+      <a href="{{ route('admin.menu') }}" class="text-sm hover:underline">Menu Management</a>
+      <a href="{{ route('admin.transaction') }}" class="text-sm hover:underline">Transcaction</a>
+      <a href="{{ route('admin.logout') }}" class="text-sm hover:underline">Log out</a>
+    </div>
+    <p class="text-xs mt-4 opacity-75">Version 1.0.0 | All rights reserved.</p>
+  </div>
 </footer>
+
 </html>
