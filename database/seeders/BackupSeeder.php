@@ -20,9 +20,9 @@ class DummySeeder extends Seeder
         DB::table('events')->insert([
             [
                 'id_event' => 1,
-                'nama_event' => 'Festival Musim Panas',
+                'nama_event' => 'Beyblade Competition',
                 'banner_event' => 'event/banner1.jpg',
-                'hadiah_event' => 'Hadiah Utama: Liburan ke Bali',
+                'hadiah_event' => 'Beyblade Competition',
                 'tanggal_event' => Carbon::create(2023, 6, 21),
                 'jam_event' => Carbon::createFromTime(18, 0, 0),
                 'deskripsi_event' => 'Festival Musim Panas terbesar tahun ini dengan berbagai kegiatan menarik dan hadiah besar.',
@@ -31,9 +31,9 @@ class DummySeeder extends Seeder
             ],
             [
                 'id_event' => 2,
-                'nama_event' => 'Lomba Makan Burger',
+                'nama_event' => 'Fifa Competition',
                 'banner_event' => 'event/banner2.jpg',
-                'hadiah_event' => 'Voucher Makan Gratis Selama Setahun',
+                'hadiah_event' => 'Fifa Competition',
                 'tanggal_event' => Carbon::create(2023, 7, 4),
                 'jam_event' => Carbon::createFromTime(12, 0, 0),
                 'deskripsi_event' => 'Lomba makan burger cepat dengan berbagai hadiah menarik.',
@@ -154,6 +154,7 @@ class DummySeeder extends Seeder
             ['id_kategori' => 9, 'nama_kategori' => 'Coffee', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_kategori' => 10, 'nama_kategori' => 'Matcha & Tea', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_kategori' => 11, 'nama_kategori' => 'Mocktail', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_kategori' => 12, 'nama_kategori' => 'Milkshake', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
 
         // Menambahkan data promo
@@ -351,17 +352,6 @@ class DummySeeder extends Seeder
         
 
         // Menambahkan data untuk relasi kategori dan menu (isi_kategoris)
-        for ($i = 1; $i <= 25; $i++) {
-            $id_kategori = ($i >= 21 && $i <= 25) ? 4 : rand(1, 3);
-            DB::table('isi_kategoris')->insert([
-                'id_isi_kategori' => $i,
-                'id_kategori' => $id_kategori,
-                'id_menu' => $i,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }
-
         DB::table('isi_kategoris')->insert([
             ['id_isi_kategori' => 1, 'id_kategori' => 2, 'id_menu' => 39, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_isi_kategori' => 2, 'id_kategori' => 2, 'id_menu' => 40, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
@@ -461,6 +451,82 @@ class DummySeeder extends Seeder
             ['id_isi_kategori' => 96, 'id_kategori' => 5, 'id_menu' => 25, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_isi_kategori' => 97, 'id_kategori' => 5, 'id_menu' => 26, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_isi_kategori' => 98, 'id_kategori' => 5, 'id_menu' => 27, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // Snacks & Desserts
+            ['id_isi_kategori' => 99, 'id_kategori' => 6, 'id_menu' => 1, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 100, 'id_kategori' => 6, 'id_menu' => 2, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 101, 'id_kategori' => 6, 'id_menu' => 4, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 102, 'id_kategori' => 6, 'id_menu' => 6, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 103, 'id_kategori' => 6, 'id_menu' => 9, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 104, 'id_kategori' => 6, 'id_menu' => 11, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 105, 'id_kategori' => 6, 'id_menu' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 106, 'id_kategori' => 6, 'id_menu' => 5, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 107, 'id_kategori' => 6, 'id_menu' => 8, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 108, 'id_kategori' => 6, 'id_menu' => 10, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 109, 'id_kategori' => 6, 'id_menu' => 12, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // Rice Menu
+            ['id_isi_kategori' => 110, 'id_kategori' => 7, 'id_menu' => 13, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 111, 'id_kategori' => 7, 'id_menu' => 14, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 112, 'id_kategori' => 7, 'id_menu' => 15, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 113, 'id_kategori' => 7, 'id_menu' => 16, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 114, 'id_kategori' => 7, 'id_menu' => 17, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 115, 'id_kategori' => 7, 'id_menu' => 18, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 116, 'id_kategori' => 7, 'id_menu' => 19, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 117, 'id_kategori' => 7, 'id_menu' => 20, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 118, 'id_kategori' => 7, 'id_menu' => 21, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // Set Potato
+            ['id_isi_kategori' => 119, 'id_kategori' => 8, 'id_menu' => 22, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 120, 'id_kategori' => 8, 'id_menu' => 23, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 121, 'id_kategori' => 8, 'id_menu' => 24, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // Coffee
+            ['id_isi_kategori' => 122, 'id_kategori' => 9, 'id_menu' => 39, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 123, 'id_kategori' => 9, 'id_menu' => 40, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 124, 'id_kategori' => 9, 'id_menu' => 42, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 125, 'id_kategori' => 9, 'id_menu' => 43, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 126, 'id_kategori' => 9, 'id_menu' => 44, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 127, 'id_kategori' => 9, 'id_menu' => 45, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 128, 'id_kategori' => 9, 'id_menu' => 46, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 129, 'id_kategori' => 9, 'id_menu' => 47, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 130, 'id_kategori' => 9, 'id_menu' => 48, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 131, 'id_kategori' => 9, 'id_menu' => 49, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 132, 'id_kategori' => 9, 'id_menu' => 50, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 133, 'id_kategori' => 9, 'id_menu' => 51, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 134, 'id_kategori' => 9, 'id_menu' => 52, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // Matcha & Tea
+            ['id_isi_kategori' => 135, 'id_kategori' => 10, 'id_menu' => 53, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 136, 'id_kategori' => 10, 'id_menu' => 54, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 137, 'id_kategori' => 10, 'id_menu' => 55, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 138, 'id_kategori' => 10, 'id_menu' => 56, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 139, 'id_kategori' => 10, 'id_menu' => 57, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 140, 'id_kategori' => 10, 'id_menu' => 58, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 141, 'id_kategori' => 10, 'id_menu' => 59, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 142, 'id_kategori' => 10, 'id_menu' => 60, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 143, 'id_kategori' => 10, 'id_menu' => 61, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 144, 'id_kategori' => 10, 'id_menu' => 77, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            //Mocktail
+            ['id_isi_kategori' => 145, 'id_kategori' => 11, 'id_menu' => 62, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 146, 'id_kategori' => 11, 'id_menu' => 63, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 147, 'id_kategori' => 11, 'id_menu' => 64, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 148, 'id_kategori' => 11, 'id_menu' => 65, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 149, 'id_kategori' => 11, 'id_menu' => 66, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 150, 'id_kategori' => 11, 'id_menu' => 67, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 151, 'id_kategori' => 11, 'id_menu' => 68, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 152, 'id_kategori' => 11, 'id_menu' => 75, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 153, 'id_kategori' => 11, 'id_menu' => 76, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            // //Milkshake
+            ['id_isi_kategori' => 154, 'id_kategori' => 12, 'id_menu' => 69, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 155, 'id_kategori' => 12, 'id_menu' => 70, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 156, 'id_kategori' => 12, 'id_menu' => 71, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 157, 'id_kategori' => 12, 'id_menu' => 72, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 158, 'id_kategori' => 12, 'id_menu' => 73, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 159, 'id_kategori' => 12, 'id_menu' => 74, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
         ]);
     }
 }
