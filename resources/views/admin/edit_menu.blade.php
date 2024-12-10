@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Edit Menu
     </div>
-    <form action="{{ route('admin.update.menu') }}" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-6">
+    <form action="{{ route('admin.update.menu') }}" method="post" enctype="multipart/form-data" class="bg-[#f1e8d4] shadow-md rounded-lg p-6">
         @csrf
         <input type="hidden" name="id_menu" value="{{ $menu->id_menu }}">
         <div class="mb-4">

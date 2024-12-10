@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Add Kategori
     </div>
-    <form action="{{ route('admin.kategori.store') }}" method="post" style="background-color: #fff2e2"class="shadow-md rounded-lg p-6">
+    <form action="{{ route('admin.kategori.store') }}" method="post" class="shadow-md rounded-lg p-6 bg-[#f1e8d4]">
         @csrf
         <div class="mb-4">
             <label for="nama_kategori" class="block text-gray-700 text-sm font-bold mb-2">Nama Kategori:</label>

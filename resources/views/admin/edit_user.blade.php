@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Edit User
     </div>
-    <form action="{{ route('admin.update_user', $user->id_user) }}" method="post" class="bg-white shadow-md rounded-lg p-6">
+    <form action="{{ route('admin.update_user', $user->id_user) }}" method="post" class="bg-[#f1e8d4] shadow-md rounded-lg p-6">
         @csrf
         @if (session('error'))
             <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
