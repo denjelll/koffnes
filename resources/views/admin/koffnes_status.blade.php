@@ -3,7 +3,7 @@
     Status Kafe
 @endsection
 @section('content')
-<div class="flex flex-col justify-center items-center px-4 py-6">
+<div class="flex flex-col justify-center items-center min-h-screen px-4 py-6">
     <div class="text-3xl font-semibold mb-8 text-[#412f26]">
         Status Koffnes
     </div>

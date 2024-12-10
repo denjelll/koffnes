@@ -6,7 +6,7 @@
 
 
 
-<div class="px-8 py-6 pb-[4rem]">
+<div class="px-8 py-6 pb-[4rem] pt-[5rem]">
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Transaction Recap
     </div>

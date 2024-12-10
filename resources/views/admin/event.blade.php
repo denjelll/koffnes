@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 
-<div class="px-8 py-6 pb-[4rem]">
+<div class="px-8 py-6 pb-[4rem] pt-[5rem]">
     <div class="flex items-center justify-between mb-6">
         <div class="text-2xl font-semibold text-[#412f26]">
             Event Management
