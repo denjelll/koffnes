@@ -95,7 +95,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="fixed bottom-0 w-full bg-[#f3e6dd] p-4 rounded-t-lg shadow-md">
+    <footer class="fixed bottom-0 w-full bg-[#f3e6dd] p-3 rounded-t-lg shadow-md">
         <div
             class="flex flex-col md:flex-row md:justify-between items-start space-y-4 md:space-y-0">
             <!-- Total Price -->
@@ -114,24 +114,6 @@
                         wire:model="customer.nama"
                         class="p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26] w-1/2 md:w-auto">
                 </div>
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-semibold text-[#412f26]">Table:</label>
-                    @if ($customer['tipe_order'] === 'Take Away' || $customer['tipe_order'] === 'Delivery')
-                        <input
-                        type="number"
-                        id="table_number"
-                        wire:model="customer.meja"
-                        min="0"
-                        class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]"  readonly>
-                    @else
-                        <input
-                        type="number"
-                        id="table_number"
-                        wire:model="customer.meja"
-                        min="0"
-                        class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]">
-                    @endif
-                </div>
                 <div class="flex items-center space-x-4">
                     <label for="tipe_order" class="text-sm font-semibold text-[#412f26]">Tipe Order:</label>
                     <select
@@ -143,6 +125,16 @@
                         <option value="Take Away" class="text-sm font-semibold text-[#412f26]">Take Away</label>
                         <option value="Delivery" class="text-sm font-semibold text-[#412f26]">Delivery</label>
                     </select>
+                </div>
+                <div class="flex items-center space-x-2" x-data 
+                :class="{ 'hidden': $wire.get('customer.tipe_order') !== 'Dine In' }">
+                    <label class="text-sm font-semibold text-[#412f26]">Table:</label>
+                    <input
+                    type="number"
+                    id="table_number"
+                    wire:model="customer.meja"
+                    min="0"
+                    class="w-12 p-1 text-sm border rounded border-[#412f26] focus:outline-none focus:border-[#412f26]">
                 </div>
             </div>
         </div>

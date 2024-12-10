@@ -51,6 +51,9 @@ class CartPesanan extends Component
     // Buat Edit Data Customer
     public function updatedCustomer()
     {
+        if($this->customer['tipe_order'] == 'Take Away' || $this->customer['tipe_order'] == 'Delivery')
+            $this->customer['meja'] = 0;
+
         Session::put('customer', $this->customer);
         session()->flash('success', 'Informasi customer berhasil diperbarui.');
     }

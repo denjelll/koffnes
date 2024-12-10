@@ -56,7 +56,7 @@
             </nav>
     
             <!-- Content Area -->
-            <div class="md:ml-40 p-4 w-full overflow-auto relative pt-20">
+            <div class="md:ml-44 p-4 w-full overflow-auto relative pt-20">
     
                 <!-- Filter and Category Buttons -->
                 <div class="flex items-center gap-2 md:justify-start">
