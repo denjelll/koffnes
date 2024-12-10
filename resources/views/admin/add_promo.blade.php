@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Add Promo
     </div>
-    <form action="{{ route('admin.promo.store') }}" method="post" class=" shadow-md rounded-lg p-6" style="background-color: #fff2e2">
+    <form action="{{ route('admin.promo.store') }}" method="post" class=" shadow-md rounded-lg p-6 bg-[#f1e8d4]">
         @csrf
         <div class="mb-4">
             <label for="judul_promo" class="block text-gray-700 text-sm font-bold mb-2">Judul Promo:</label>
