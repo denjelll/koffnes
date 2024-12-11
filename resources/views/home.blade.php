@@ -42,13 +42,13 @@
     <div class="lg:h-80 lg:w-90 sm:h-60 md:h-60 rounded-xl relative overflow-hidden">
       <!-- Slides -->
       <div class="slide active flex items-center justify-center h-full">
-      <img src="{{ asset('storage/asset/gambar/1.png') }}" alt="1" class="w-full h-full object-contain">
+      <img src="{{ asset('storage/asset/gambar/1.webp') }}" alt="1" class="w-full h-full object-contain">
       </div>
       <div class="slide flex items-center justify-center h-full">
-      <img src="{{ asset('storage/asset/gambar/2.png') }}" alt="2" class="w-full h-full object-contain">
+      <img src="{{ asset('storage/asset/gambar/2.webp') }}" alt="2" class="w-full h-full object-contain">
       </div>
       <div class="slide flex items-center justify-center h-full">
-      <img src="{{ asset('storage/asset/gambar/3.png') }}" alt="3" class="w-full h-full object-contain">
+      <img src="{{ asset('storage/asset/gambar/3.webp') }}" alt="3" class="w-full h-full object-contain">
       </div>
 
       <!-- Indicators -->
