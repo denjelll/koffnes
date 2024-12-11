@@ -39,34 +39,23 @@
   <main class="flex-grow p-4">
     <x-customer_header />
     <!-- Slideshow Container -->
-    <div
-      class="w-100 h-50 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
-    >
+    <div class="lg:h-80 lg:w-90 sm:h-60 md:h-60 rounded-xl relative overflow-hidden">
       <!-- Slides -->
       <div class="slide active flex items-center justify-center h-full">
-        <img src="{{ asset('storage/asset/gambar/1.png') }}" alt="1" class="w-full h-full object-contain">
+      <img src="{{ asset('storage/asset/gambar/1.png') }}" alt="1" class="w-full h-full object-contain">
       </div>
-      <div class="slide active flex items-center justify-center h-full">
-        <img src="{{ asset('storage/asset/gambar/2.png') }}" alt="2" class="w-full h-full object-contain">
+      <div class="slide flex items-center justify-center h-full">
+      <img src="{{ asset('storage/asset/gambar/2.png') }}" alt="2" class="w-full h-full object-contain">
       </div>
-      <div class="slide active flex items-center justify-center h-full">
-        <img src="{{ asset('storage/asset/gambar/3.png') }}" alt="3" class="w-full h-full object-contain">
+      <div class="slide flex items-center justify-center h-full">
+      <img src="{{ asset('storage/asset/gambar/3.png') }}" alt="3" class="w-full h-full object-contain">
       </div>
-      
 
       <!-- Indicators -->
-      <div
-        class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2"
-      >
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
-        <span
-          class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"
-        ></span>
+      <div class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+      <span class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"></span>
+      <span class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"></span>
+      <span class="indicator h-2 w-2 bg-gray-500 rounded-full opacity-50 cursor-pointer"></span>
       </div>
     </div>
     <!-- Best Seller Card Content -->
@@ -78,21 +67,25 @@
     </div>
 
     <!-- Bundling Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center md:justify-start">Bundling & Deals</h1>
+    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center">Bundling & Deals</h1>
       @foreach($bundles as $bundle)
         <x-customer_bundle_card :bundle="$bundle"/>
       @endforeach
     <!-- Event Card Content -->
-    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center md:justify-start">Event News</h1>
-    @foreach($events as $event)
-      <x-customer_event_home :event="$event"/>
-    @endforeach
+    <!-- Event Card Content -->
+    <h1 class="text-3xl font-bold mb-4 mt-5 flex justify-center items-center">Event News</h1>
+    <div class="flex flex-wrap justify-center gap-2">
+      @foreach($events as $event)
+        <x-customer_event_home :event="$event"/>
+      @endforeach
+    </div>
     <div class="flex items-center justify-center mt-3">
       <a
           href="{{ url('/events') }}"
           class="inline-block px-4 py-2 mt-4 text-white font-semibold bg-[#412f26] rounded-xl text-xl">
           See More Events
       </a>
+    </div>
   </div>
   
     

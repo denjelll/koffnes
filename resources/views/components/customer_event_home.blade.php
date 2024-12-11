@@ -1,6 +1,6 @@
 @php use Carbon\Carbon; @endphp
 
-<div class="container p-5">
+<div class="container p-5 items-center justify-center">
     <div class="relative w-92 rounded-lg overflow-hidden shadow-lg mt-5">
         <img src="{{ asset('event/'.$event->banner_event) }}" alt="Event Image" class="w-full h-56 object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent"></div>
