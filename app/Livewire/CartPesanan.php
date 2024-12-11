@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Menu;
-use App\Models\AddOn;
+use App\Models\Addon;
 use App\Models\Order;
 use Livewire\Component;
 use App\Models\DetailAddon;
@@ -34,7 +34,7 @@ class CartPesanan extends Component
 
         // Ambil Add-On yang berkaitan dengan pesanan
         foreach ($this->pesanan as $item) {
-            $this->addOns[$item['id_menu']] = AddOn::where('id_menu', $item['id_menu'])->get();
+            $this->addOns[$item['id_menu']] = Addon::where('id_menu', $item['id_menu'])->get();
         }
 
         // Inisialisasi kuantitas Add-On

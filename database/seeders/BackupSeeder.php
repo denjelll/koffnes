@@ -126,7 +126,8 @@ class BackupSeeder extends Seeder
             ['id_menu' => 82, 'id_promo' => null, 'nama_menu' => 'Koffnes Cheese Burger Set', 'stock' => 50, 'harga' => 34000, 'deskripsi' => 'Special housemade beef patty, cheese, bun, & fries.', 'gambar' => 'Koffnes Cheese Burger Set.webp'],
             ['id_menu' => 83, 'id_promo' => null, 'nama_menu' => 'Chicken Burger Set', 'stock' => 50, 'harga' => 30000, 'deskripsi' => 'Housemade chicken Katsu, bun, & fries.', 'gambar' => 'Chicken Burger Set.webp'],
             ['id_menu' => 84, 'id_promo' => null, 'nama_menu' => 'Burger Sliders', 'stock' => 50, 'harga' => 38000, 'deskripsi' => '3 different mini burgers', 'gambar' => 'Burger Sliders.webp'],
-
+            ['id_menu' => 85, 'id_promo' => null, 'nama_menu' => 'Koffnes 1', 'stock' => 50, 'harga' => 38000, 'deskripsi' => 'Soft Cookie + Caffe Latte / Nessy Coffee', 'gambar' => 'Koffnes 1.webp'],
+            ['id_menu' => 86, 'id_promo' => null, 'nama_menu' => 'Koffnes 2', 'stock' => 50, 'harga' => 38000, 'deskripsi' => 'Croissant + Caffe Latte / Nessy Coffee', 'gambar' => 'Koffnes 2.webp'],
         ];
 
         // Menambahkan data kategori
@@ -514,6 +515,10 @@ class BackupSeeder extends Seeder
             ['id_isi_kategori' => 157, 'id_kategori' => 12, 'id_menu' => 72, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_isi_kategori' => 158, 'id_kategori' => 12, 'id_menu' => 73, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['id_isi_kategori' => 159, 'id_kategori' => 12, 'id_menu' => 74, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            //Bundling
+            ['id_isi_kategori' => 160, 'id_kategori' => 4, 'id_menu' => 85, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['id_isi_kategori' => 161, 'id_kategori' => 4, 'id_menu' => 86, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
 
         ]);
     }

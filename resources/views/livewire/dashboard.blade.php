@@ -78,7 +78,7 @@
                     <p class="flex justify-center items-center mt-4">Tidak Ada Orderan</p>
                     @else
                     @foreach ($filteredOrders as $order)
-                        <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
+                        <div class="flex items-center justify-between w-full px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
                             <div class="flex flex-col text-left ml-3">
                                 <div>
                                     <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
@@ -128,8 +128,8 @@
     <!-- Pop Up Approve -->
     <div>
         @if ($isApproveModalOpen)
-            <div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
-                <div class="bg-[#e8d2b7] p-12 rounded-lg w-1/2 shadow-lg max-h-[80vh] overflow-y-auto">
+<div class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+        <div class="bg-[#e8d2b7] p-6 sm:p-4 rounded-lg w-11/12 sm:w-3/4 sm:translate-x-[5rem] md:w-1/2 mx-auto shadow-lg max-h-[80vh] overflow-y-auto">
                     <h3 class="text-2xl font-bold text-[#412f26] mb-6">Konfirmasi Pembayaran</h2>
                     <div class="mb-6">
                         <p class="text-[#412f26]"><strong>Detail Pesanan:</strong></p>
