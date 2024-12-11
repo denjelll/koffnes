@@ -9,47 +9,47 @@
     </div>
     <div class="bg-white shadow-md rounded-lg p-6">
         <div class="mb-4">
-            <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
+            <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y H:i', strtotime($order->waktu_transaksi)) }}</p>
             <p class="text-gray-700"><strong>ID Order:</strong> {{ $order->id_order }}</p>
             <p class="text-gray-700"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
             <p class="text-gray-700"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
             <p class="text-gray-700"><strong>Tipe Order:</strong> {{ $order->tipe_order }}</p>
             <p class="text-gray-700"><strong>Kasir:</strong> {{ $order->cashier->nama }}</p>
         </div>
-        <div class="overflow-x-auto">
-            <table class="table-auto w-full text-center">
-                <thead class="bg-[#412f26] text-white">
-                    <tr>
-                        <th class="p-4">Nama Menu</th>
-                        <th class="p-4">Kuantitas</th>
-                        <th class="p-4">Harga</th>
-                        <th class="p-4">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-[#f1e8d4] text-black">
-                    @foreach ($order->detailOrders as $detail)
-                        <tr class="border-b border-gray-300">
-                            <td class="p-4">{{ $detail->menu->nama_menu }}</td>
-                            <td class="p-4">{{ $detail->kuantitas }}</td>
-                            <td class="p-4">Rp{{ number_format($detail->harga_menu, 0, ',', '.') }}</td>
-                            <td class="p-4">Rp{{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</td>
-                        </tr>
-                        @if ($detail->detailAddon != null)
-                            @foreach ($detail->detailAddon as $addon)
-                                <tr class="border-b border-gray-300 bg-white text-[#412f26]">
-                                    <td class="p-4">{{ $addon->addon->nama_addon }}</td>
-                                    <td class="p-4">{{ $addon->kuantitas }}</td>
-                                    <td class="p-4">Rp{{ number_format($addon->harga, 0, ',', '.') }}</td>
-                                    <td class="p-4">Rp{{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        @foreach ($order->detailOrders as $detail)
+            <strong class="text-black">{{$detail->menu->nama_menu}}</strong>
+            <div class="flex justify-between">
+                <p class="text-black">{{$detail->kuantitas}} x @ {{$detail->harga_menu}}</p>
+                <p class="text-black">{{ number_format($detail->harga_menu*$detail->kuantitas, 0, ',', '.') }}</p>
+            </div>
+            @if ($detail->detailAddon != null)
+            <div class="flex justify-between">
+                @foreach ($detail->detailAddon as $addon)
+                <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
+                <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
+                @endforeach
+            </div>
+            @endif
+            @if($detail->notes != null) 
+            <div class="flex justify-between">
+                <p class="text-black">Notes: {{$detail->notes}}</p>
+            </div>
+            @endif
+            @endforeach
         <div class="mt-6">
-            <p class="text-xl font-semibold text-gray-700"><strong>Total Harga:</strong> Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Total Harga :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Bayar :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->bayar, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Kembalian :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->kembalian, 0, ',', '.') }}</p>
+            </div>
+
         </div>
         <div class="mt-6">
             <button onclick="showPrintModal()" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -65,38 +65,45 @@
         <h2 class="text-xl font-semibold mb-4">Print Preview</h2>
         <div id="printContent">
             <div class="mb-4">
-                <p class="text-gray-700"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
-                <p class="text-gray-700"><strong>ID Order:</strong> {{ $order->id_order }}</p>
-                <p class="text-gray-700"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
-                <p class="text-gray-700"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
-                <p class="text-gray-700"><strong>Tipe Order:</strong> {{ $order->tipe_order }}</p>
-                <p class="text-gray-700"><strong>Kasir:</strong> {{ $order->cashier->nama }}</p>
+                <p class="text-black"><strong>Tanggal Transaksi:</strong> {{ date('d F Y', strtotime($order->waktu_transaksi)) }}</p>
+                <p class="text-black"><strong>ID Order:</strong> {{ $order->id_order }}</p>
+                <p class="text-black"><strong>Nama Customer:</strong> {{ $order->customer }}</p>
+                <p class="text-black"><strong>Nomor Meja:</strong> {{ $order->meja }}</p>
+                <p class="text-black"><strong>Tipe Order:</strong> {{ $order->tipe_order }}</p>
+                <p class="text-black"><strong>Kasir:</strong> {{ $order->cashier->nama }}</p>
             </div>
-            <div class="overflow-x-auto">
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="font-bold p-4 text-black">Nama Menu</div>
-                    <div class="font-bold p-4 text-black">Kuantitas</div>
-                    <div class="font-bold p-4 text-black">Harga</div>
-                    <div class="font-bold p-4 text-black">Subtotal</div>
-                    @foreach ($order->detailOrders as $detail)
-                        <div class="border-b border-gray-300 p-4"><strong>{{ $detail->menu->nama_menu }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>{{ $detail->kuantitas }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>Rp{{ number_format($detail->harga_menu, 0, ',', '.') }}</strong></div>
-                        <div class="border-b border-gray-300 p-4"><strong>Rp{{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</strong></div>
-                        @if ($detail->detailAddon != null)
-                            @foreach ($detail->detailAddon as $addon)
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">+ {{ $addon->addon->nama_addon }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">{{ $addon->kuantitas }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">Rp{{ number_format($addon->harga, 0, ',', '.') }}</div>
-                                <div class="border-b border-gray-300 p-4 bg-white text-[#412f26]">Rp{{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</div>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </div>
+            @foreach ($order->detailOrders as $detail)
+            <strong class="text-black">{{$detail->menu->nama_menu}}</strong>
+            <div class="flex justify-between">
+                <p class="text-black">{{$detail->kuantitas}} x @ {{$detail->harga_menu}}</p>
+                <p class="text-black">{{ number_format($detail->harga_menu*$detail->kuantitas, 0, ',', '.') }}</p>
             </div>
-            <div class="mt-6 flex justify-between">
-                <p class="text-xl font-bold text-black col-span-3 text-right">Total Harga:</p>
-                <p class="text-xl font-bold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            @if ($detail->detailAddon != null)
+            <div class="flex justify-between">
+                @foreach ($detail->detailAddon as $addon)
+                <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
+                <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
+                @endforeach
+            </div>
+            @endif
+            @if($detail->notes != null) 
+            <div class="flex justify-between">
+                <p class="text-black">Notes: {{$detail->notes}}</p>
+            </div>
+            @endif
+            @endforeach
+        <div class="mt-6">
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Total Harga :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->total_harga, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Bayar :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->bayar, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex justify-between">
+                <p class="font-semibold text-black"><strong>Kembalian :</strong></p>
+                <p class="font-semibold text-black">Rp{{ number_format($order->kembalian, 0, ',', '.') }}</p>
             </div>
         </div>
         <div class="flex justify-end mt-6">

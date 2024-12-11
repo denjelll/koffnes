@@ -33,6 +33,8 @@ class TransactionExport implements FromCollection, WithHeadings
                         'Nama Menu' => $detail->menu->nama_menu,
                         'Kuantitas' => $detail->kuantitas,
                         'Harga' => $detail->menu->harga,
+                        'Bayar' => $order->bayar,
+                        'Kembalian' => $order->kembalian,
                         'Nama Addon' => '',
                         'Kuantitas Add On' => '',
                         'Harga Add On' => ''
@@ -49,6 +51,8 @@ class TransactionExport implements FromCollection, WithHeadings
                             'Nama Menu' => $detail->menu->nama_menu,
                             'Kuantitas' => $detail->kuantitas,
                             'Harga' => $detail->menu->harga,
+                            'Bayar' => $order->bayar,
+                            'Kembalian' => $order->kembalian,
                             'Nama Addon' => $addon->addon->nama_addon,
                             'Kuantitas Add On' => $addon->kuantitas,
                             'Harga Add On' => $addon->harga
@@ -73,6 +77,8 @@ class TransactionExport implements FromCollection, WithHeadings
             'Nama Menu',
             'Kuantitas',
             'Harga',
+            'Bayar',
+            'Kembalian',
             'Nama Addon',
             'Kuantitas Add On',
             'Harga Add On'

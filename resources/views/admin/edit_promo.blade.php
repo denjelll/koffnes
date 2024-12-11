@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Edit Promo
     </div>
-    <form action="{{route('admin.promo.update', $promo->id_promo)}}" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-6">
+    <form action="{{route('admin.promo.update', $promo->id_promo)}}" method="post" enctype="multipart/form-data" class="bg-[#f1e8d4] shadow-md rounded-lg p-6">
         @csrf
         <input type="hidden" name="id_promo" value="{{$promo->id_promo}}">
         <div class="mb-4">

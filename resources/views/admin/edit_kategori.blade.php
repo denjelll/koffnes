@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Edit Kategori
     </div>
-    <form action="{{route('admin.kategori.update', $kategori->id_kategori)}}" method="post" class="bg-white shadow-md rounded-lg p-6">
+    <form action="{{route('admin.kategori.update', $kategori->id_kategori)}}" method="post" class="bg-[#f1e8d4] shadow-md rounded-lg p-6">
         @csrf
         <input type="hidden" name="id_kategori" value="{{$kategori->id_kategori}}">
         <div class="mb-4">

@@ -3,11 +3,11 @@
     Menu Management
 @endsection
 @section('content')
-<div class="px-8 py-6 pb-[4rem]">
+<div class="px-8 py-6 pb-[4rem] pt-[5rem]" >
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Menu Management
     </div>
-    <div class="flex items-center gap-4 mb-8">
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-8">
         <!-- Add Menu Button -->
         <a
             class="bg-[#412f26] text-white px-4 py-2 rounded-md hover:bg-[#5a3e2f] cursor-pointer whitespace-nowrap"
@@ -16,19 +16,18 @@
             Add Menu
         </a>
 
-        <!-- Search Bar -->
         <input
             type="text"
             placeholder="Search Menu"
             id="searchInput"
             oninput="filterMenu()"
-            class="input w-full bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+            class="input w-full sm:w-auto bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
         />
         <!-- Category Filter -->
         <select
             id="categoryFilter"
             onchange="filterMenu()"
-            class="select bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
+            class="select w-full sm:w-auto bg-white border-[#412f26] text-[#412f26] focus:outline-none focus:ring focus:ring-[#412f26]"
         >
             <option value="All">All Categories</option>
             @foreach ($kategoris as $kategori)
@@ -40,32 +39,38 @@
     @if ($menus->count() == 0)
         <p>No menu available</p>
     @else
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            @foreach ($menus as $menu)
-                <div class="card w-60 bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden" data-category="{{ $menu->isi_kategori->pluck('id_kategori')->implode(',') }}">
-                    <div class="h-40 bg-gray-200 flex items-center justify-center">
-                        <img src="{{ asset('menu/'.$menu->gambar) }}" alt="Menu Image" class="w-full h-full object-cover">
+        <div class="flex justify-center items-center">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                @foreach ($menus as $menu)
+                    <div class="card w-60 md:w-full bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden" data-category="{{ $menu->isi_kategori->pluck('id_kategori')->implode(',') }}">
+                        <div class="h-40 bg-gray-200 flex items-center justify-center">
+                            <img src="{{ asset('menu/'.$menu->gambar) }}" alt="Menu Image" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold text-[#412f26]">{{ $menu->nama_menu }}</h3>
+                            <p class="text-black font-medium">Rp. {{ $menu->harga }}</p>
+                            @if ($menu->stock == 0)
+                                <p class="text-red-500 font-medium">Out of Stock</p>
+                            @else
+                                <p class="text-black font-medium">Stok : {{ $menu->stock }}</p>
+                            @endif
+                        </div>
+                        <div class="p-4 pt-0">
+                            <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
+                                class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]"
+                                style="background-color: #412f26"
+                            >
+                                Edit
+                            </a>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-danger text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
+                                Delete
+                            </button>
+                        </div>
                     </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-[#412f26]">{{ $menu->nama_menu }}</h3>
-                        <p class="text-gray-500 font-medium">Rp. {{ $menu->harga }}</p>
-                        <p class="text-gray-500 font-medium">Stok : {{ $menu->stock }}</p>
-                    </div>
-                    <div class="p-4 pt-0">
-                        <a href="{{ route('admin.menu.edit', $menu->nama_menu) }}"
-                            class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]"
-                            style="background-color: #412f26"
-                        >
-                            Edit
-                        </a>
-                    </div>
-                    <div class="p-4 pt-0">
-                        <button onclick="showDeleteModal('{{ route('admin.menu.delete', $menu->id_menu) }}')" class="btn bg-[#412f26] text-white w-full rounded-md hover:bg-[#593c2e]" style="background-color: #412f26">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     @endif
 </div>

@@ -5,7 +5,7 @@
 @section('content')
 
 
-<div class="px-8 py-6 pb-[4rem]">
+<div class="px-8 py-6 pb-[4rem] pt-[5rem]">
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Promo Management
     </div>
@@ -26,7 +26,7 @@
             @foreach ($promos as $promo)
                 <div class="card w-60 bg-[#f1e8d4] shadow-md rounded-lg overflow-hidden" >
                     <div class="h-40 bg-gray-200 flex items-center justify-center">
-                        <img src="{{ asset('menu/' . $promo->menu->gambar) }}" alt="{{ $promo->menu->nama_menu }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('menu/' . $promo->menu->gambar) }}" alt="{{$promo->menu->nama_menu}}" class="w-full h-full object-cover">
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-[#412f26]">{{ $promo->judul_promo }}</h3>

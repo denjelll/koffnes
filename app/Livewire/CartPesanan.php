@@ -51,6 +51,9 @@ class CartPesanan extends Component
     // Buat Edit Data Customer
     public function updatedCustomer()
     {
+        if($this->customer['tipe_order'] == 'Take Away' || $this->customer['tipe_order'] == 'Delivery')
+            $this->customer['meja'] = 0;
+
         Session::put('customer', $this->customer);
         session()->flash('success', 'Informasi customer berhasil diperbarui.');
     }
@@ -89,9 +92,15 @@ class CartPesanan extends Component
             }
         }
 
+        $this->pesanan = array_values($this->pesanan);
+
         // Simpan kembali ke session
         Session::put('pesanan', $this->pesanan);
         $this->updateTotalHarga();
+
+        if (empty($this->pesanan)) {
+            return redirect()->route('pesan-manual');
+        }
     }
 
     // Tambah kuantitas Add-On
@@ -211,7 +220,7 @@ class CartPesanan extends Component
         // Simpan ke tabel orders
         $order = Order::create([
             'id_order' => $id_order,
-            'id_user' => 1, // Asumsikan pengguna saat ini login
+            'id_user' =>  session('id_user'), // Asumsikan pengguna saat ini login
             'antrian' => $currentAntrian,
             'customer' => $this->customer['nama'],
             'meja' => $this->customer['meja'],

@@ -7,7 +7,7 @@
     <div class="text-2xl font-semibold mb-6" style="color: #412f26">
         Add Event
     </div>
-    <form action="{{ route('admin.store_event') }}" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-6">
+    <form action="{{ route('admin.store_event') }}" method="post" enctype="multipart/form-data" class="bg-[#f1e8d4] shadow-md rounded-lg p-6">
         @csrf
         <div class="mb-4">
             <label for="nama_event" class="block text-gray-700 text-sm font-bold mb-2">Nama Event:</label>

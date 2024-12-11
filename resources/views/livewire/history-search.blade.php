@@ -1,10 +1,14 @@
-<div class="font-sans" style="background-color: #fff2e2;">
+<div class="font-sans" style="background-image: url('{{ asset('storage/asset/gambar/motif.png') }}'); background-size: 400px 400px; background-repeat: repeat; ">
     <!-- Top Navbar -->
     <header
         class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
         style="background-color: #412f26;">
         <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
-
+        
+        <button class="bg-[#301c1c] hover:bg-red-500 text-white font-semibold py-1 px-4 rounded-full transition hover:scale-105 duration-300 ease-in-out  shadow-lg">
+            <a href="{{ route('logout') }}" class="text-white">Logout</a>
+        </button>
+        
         <!-- Mobile Menu Toggle Button -->
         <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
             <svg
@@ -42,6 +46,9 @@
                 </li>
                 <li>
                     <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
+                </li>
+                <li>
+                    <a href="{{ route('koffnesstatus') }}" class="hover:bg-opacity-50 p-2 block rounded">Koffnes Status</a>
                 </li>
             </ul>
         </nav>
@@ -143,16 +150,16 @@
                     <ul class="text-[#412f26] mb-4">
                         @foreach ($showDetails['menuItems'] as $menu)
                             <div class="flex justify-between">
-                                <span>{{ $menu['nama_menu'] }}</span>
-                                <span>{{ $menu['kuantitas'] }} x Rp. {{ number_format($menu['harga'], 0, ',', '.') }}</span>
+                                <span>{{ $menu['nama_menu'] }} (x{{ $menu['kuantitas'] }})</span>
+                                <span>Rp. {{ number_format($menu['total_harga'], 0, ',', '.') }}</span>
                             </div>
                         @endforeach
                         @if (!empty($showDetails['addOns']))
                             <h4 class="font-semibold mt-2">Add-Ons</h4>
                             @foreach ($showDetails['addOns'] as $addon)
                                 <div class="flex justify-between">
-                                    <span>{{ $addon['nama_addon'] }}</span>
-                                    <span>{{ $addon['kuantitas'] }} x Rp. {{ number_format($addon['harga'], 0, ',', '.') }}</span>
+                                    <span>{{ $addon['nama_addon'] }} (x{{ $addon['kuantitas'] }})</span>
+                                    <span>Rp. {{ number_format($addon['harga'], 0, ',', '.') }}</span>
                                 </div>
                             @endforeach
                         @endif

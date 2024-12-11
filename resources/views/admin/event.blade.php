@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 
-<div class="px-8 py-6 pb-[4rem]">
+<div class="px-8 py-6 pb-[4rem] pt-[5rem]">
     <div class="flex items-center justify-between mb-6">
         <div class="text-2xl font-semibold text-[#412f26]">
             Event Management
@@ -25,7 +25,7 @@
     @if (count($events) == 0)
         <p>No data</p>
     @else
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-6">
             @foreach ($events as $event)
                 <div class="card bg-white shadow-lg relative overflow-hidden">
                     <!-- Image as background -->
@@ -38,7 +38,7 @@
                                 <!-- Text Content -->
                                 <div class="text-left">
                                     <h2 class="text-[#412f26] font-bold text-xl">{{ $event->nama_event }}</h2>
-                                    <p class="text-[#412f26] text-sm mt-1">{{ $event->deskripsi_event }}</p>
+                                    <p class="text-[#412f26] text-sm mt-1">{{ Str::limit($event->deskripsi_event, 40) }}</p>
                                 </div>
                                 <!-- Button -->
                                 <div class="flex flex-row items-center space-x-2">
@@ -75,12 +75,5 @@
     function hideDeleteModal() {
         document.getElementById('deleteModal').classList.add('hidden');
     }
-
-    const burgerMenu = document.getElementById("burger-menu");
-    const navLinks = document.getElementById("nav-links");
-
-    burgerMenu.addEventListener("click", () => {
-        navLinks.classList.toggle("hidden");
-    });
 </script>
 @endsection

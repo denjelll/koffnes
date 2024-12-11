@@ -1,10 +1,16 @@
 <div>
-    <div class="font-sans" style="background-color: #fff2e2;">
+<div class="font-sans" style="background-image: url('{{ asset('storage/asset/gambar/motif.png') }}'); background-size: 400px 400px; background-repeat: repeat; ">
         <!-- Top Navbar -->
         <header
             class="w-full p-4 fixed top-0 left-0 z-10 flex items-center justify-between"
             style="background-color: #412f26;">
             <img src="{{ asset('storage/uploads/7.png') }}" alt="Logo" class="h-8 w-auto" style="max-width: 96px;">
+
+            
+            <button class="bg-[#301c1c] hover:bg-red-500 text-white font-semibold py-1 px-4 rounded-full transition hover:scale-105 duration-300 ease-in-out  shadow-lg">
+                <a href="{{ route('logout') }}" class="text-white">Logout</a>
+            </button>
+
             <!-- Mobile Menu Toggle Button -->
             <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
                 <svg
@@ -43,11 +49,14 @@
                     <li>
                         <a href="{{ url('cashier/stock') }}" class="hover:bg-opacity-50 p-2 block rounded">Inventory</a>
                     </li>
+                    <li>
+                        <a href="{{ route('koffnesstatus') }}" class="hover:bg-opacity-50 p-2 block rounded">Koffnes Status</a>
+                    </li>
                 </ul>
             </nav>
     
             <!-- Content Area -->
-            <div class="md:ml-40 p-4 w-full overflow-auto relative pt-20">
+            <div class="md:ml-44 p-4 w-full overflow-auto relative pt-20">
     
                 <!-- Filter and Category Buttons -->
                 <div class="flex items-center gap-2 md:justify-start">
@@ -66,15 +75,23 @@
                     @endphp
 
                     @if ($filteredOrders->isEmpty())
-                    <p class="flex justify-center items-center">Tidak Ada Orderan</p>
+                    <p class="flex justify-center items-center mt-4">Tidak Ada Orderan</p>
                     @else
                     @foreach ($filteredOrders as $order)
                         <div class="flex items-center justify-between w-100 px-4 py-3 bg-[#f5e7d9] rounded-full shadow-md mt-6">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
-                                <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
+                            <div class="flex flex-col text-left ml-3">
+                                <div>
+                                    <span class="text-2xl font-bold text-[#4b3621]">{{ $order->antrian }}#</span>
+                                    <span class="font-semibold text-[#4b3621]">{{ $order->customer }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-[#4b3621]">{{ $order->id_order }}</span>
+                                </div>
                             </div>
                             <div class="flex items-center ml-auto space-x-3">
+                                <button onclick="printReceipt('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
+                                    <h2 class="text-sm">🖶</h2>
+                                </button>
                                 <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
                                     <h2 class="text-sm">✓</h2>
                                 </button>
@@ -144,25 +161,20 @@
                         </p>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block mb-2 text-[#412f26]">Metode Pembayaran</label>
-                            <select wire:model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
-                                <option value="edc">EDC</option>
-                                <option value="debit">Debit</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                            
-                    </div>
-
-                    @if ($paymentMethod === 'cash')
-                        <div class="mb-6">
+                    <div x-data="{ paymentMethod: @entangle('paymentMethod') }">
+                        <select x-model="paymentMethod" class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]">
+                            <option value="edc">EDC</option>
+                            <option value="debit">Debit</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    
+                        <div x-show="paymentMethod === 'cash'" class="mb-6">
                             <label class="block mb-2 text-[#412f26]">Jumlah Uang yang Diberikan</label>
                             <input 
                                 type="number" 
-                                wire:model="amountPaid" 
+                                wire:model.defer="amountPaid" 
                                 class="w-full p-3 border border-gray-300 rounded-md bg-[#f5e7d9]" 
                                 placeholder="Masukkan jumlah uang">
-                            
                             <div class="mt-2 text-[#412f26]">
                                 @if ($amountPaid >= $approveDetails['totalHarga'])
                                     <p><strong>Kembalian:</strong> Rp. {{ number_format($amountPaid - $approveDetails['totalHarga'], 0, ',', '.') }}</p>
@@ -171,7 +183,7 @@
                                 @endif
                             </div>
                         </div>
-                    @endif
+                    </div>
 
                     <div class="flex justify-between font-bold mt-4">
                         <span>Total Harga</span>
@@ -276,6 +288,15 @@
             }
         });
     });
+
+    // function formatAmountPaid() {
+    //     let amountInput = document.getElementById('amountPaid');
+    //     let value = amountInput.value.replace(/[^\d]/g, ''); // Menghapus selain angka
+    //     if (value.length > 3) {
+    //         value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap 3 digit
+    //     }
+    //     amountInput.value = value;
+    // }
 
 
     function printReceipt(orderId) {

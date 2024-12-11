@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('storage/asset/gambar/icon.png') }}">
     <title>Struk Pembayaran</title>
     <style>
         /* Ukuran kertas 58mm x auto */
@@ -68,6 +69,10 @@
                 <span>{{ $cashier->nama_depan }} {{ $cashier->nama_belakang }}</span>
             </div>
             <div class="item">
+                <span>Status:</span>
+                <span>{{ $order->status }}</span>
+            </div>
+            <div class="item">
                 <span>Metode Pembayaran:</span>
                 <span>{{ $order->metode_pembayaran }}</span>
             </div>
@@ -77,12 +82,35 @@
         <!-- Detail Pesanan -->
         <div class="details">
             @foreach ($order->detailOrders as $detail)
+                @php
+                    $now = \Carbon\Carbon::parse($order->waktu_transaksi);
+                    $promo = $detail->menu->promo;
+
+                    Log::info('Transaction Time: ' . $order->waktu_transaksi);
+                    Log::info('Current Promo: ', (array) $promo);
+                    Log::info('Current Time Check: ' . $now);
+
+                    // Periksa apakah promo berlaku
+                    $hargaMenu = $detail->menu->harga;
+                    if (
+                        $promo && 
+                        $promo->status === 'Aktif' &&
+                        ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
+                        ($now->format('H:i:s') >= $promo->waktu_mulai && $now->format('H:i:s') <= $promo->waktu_berakhir)
+                    ) {
+                        $hargaMenu = $promo->harga_promo;
+                    }
+
+                    Log::info('Hari sekarang: ' . $now->format('l'));
+
+                @endphp
+
                 <div class="item">
                     <span>{{ $detail->menu->nama_menu }}</span>
-                    <span>{{ $detail->kuantitas }} x Rp {{ number_format($detail->harga_menu, 0, ',', '.') }}</span>
+                    <span>Rp {{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</span>
                 </div>
                 <div class="item" style="padding-left: 10px;">
-                    <span>@ Rp. {{ number_format($detail->menu->harga, 0, ',', '.') }}</span>
+                    <span>@ Rp. {{ number_format($hargaMenu, 0, ',', '.') }} (x{{ $detail->kuantitas }})</span>
                 </div>
                 @if (!empty($detail->notes))
                     <div class="item" style="padding-left: 10px;">
