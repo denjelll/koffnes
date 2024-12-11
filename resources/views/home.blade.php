@@ -40,7 +40,7 @@
     <x-customer_header />
     <!-- Slideshow Container -->
     <div
-      class="w-100 h-60 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
+      class="w-100 h-50 bg-amber-100 rounded-xl shadow-lg relative overflow-hidden"
     >
       <!-- Slides -->
       <div class="slide active flex items-center justify-center h-full">
