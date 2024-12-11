@@ -26,11 +26,11 @@
         <script>window.location = "/login";</script>
     @endif
     <nav
-      class="bg-[#412F26] w-full text-white py-3 px-6 flex flex-col md:flex-row justify-between items-center shadow-lg fixed z-50"
+      class="bg-[#412F26] w-full text-white py-3 px-6 flex flex-col lg:flex-row justify-between items-center shadow-lg fixed z-50"
       style="background-color: #412f26"
     >
       <!-- Logo -->
-      <div class="flex items-center justify-between w-full md:w-auto">
+      <div class="flex items-center justify-between w-full lg:w-auto">
         <img
           src="{{ asset('storage/asset/gambar/koffnes_putih.png') }}"
           alt="Koffnes Logo"
@@ -38,7 +38,7 @@
         />
         <button
           id="burger-menu"
-          class="md:hidden text-white focus:outline-none"
+          class="lg:hidden text-white focus:outline-none ml-auto"
           aria-label="Toggle Navigation"
         >
           <svg
@@ -60,7 +60,7 @@
       <!-- Menu -->
       <div
         id="nav-links"
-        class="hidden md:flex md:flex-row md:space-x-6 flex-col text-center mt-4 md:mt-0 w-full md:w-auto"
+        class="hidden lg:flex lg:flex-row lg:space-x-6 flex-col text-center mt-4 md:mt-0 w-full md:w-auto"
       >
         <a href="{{ route('admin.menu') }}" class="hover:underline">Menu Management</a>
         <a href="{{ route('admin.kategori') }}" class="hover:underline">Kategori</a>
