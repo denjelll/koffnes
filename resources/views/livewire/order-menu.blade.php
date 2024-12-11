@@ -70,7 +70,7 @@
                                 type="text"
                                 wire:model.live.debounce.300ms="search"
                                 placeholder="Search menu"
-                                class="p-2 w-full mt-2 md:w-1/3 bg-white rounded-lg"
+                                class="p-2 w-full m-3 md:w-1/3 bg-white rounded-lg"
                                 
                     >
                 </div>

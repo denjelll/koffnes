@@ -9,17 +9,17 @@
             <p class="text-sm mt-1">
                 {{ \Illuminate\Support\Str::words($event->deskripsi_event, 7, '...') }}
             </p>
-            <label for="event-modal-{{ $event->id }}" class="btn inline-block mt-3 p-4 text-white font-semibold rounded-lg shadow-md bg-cocoa cursor-pointer">
+            <label for="event-modal-{{ $event->id_event }}" class="btn inline-block mt-3 p-4 text-white font-semibold rounded-lg shadow-md bg-cocoa cursor-pointer">
                 See More
             </label>
         </div>
     </div>
 
     <!-- DaisyUI Modals -->
-    <input type="checkbox" id="event-modal-{{ $event->id }}" class="modal-toggle">
+    <input type="checkbox" id="event-modal-{{ $event->id_event }}" class="modal-toggle">
     <div class="modal">
         <div class="modal-box relative">
-            <label for="event-modal-{{ $event->id }}" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+            <label for="event-modal-{{ $event->id_event }}" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
             <h3 class="text-lg font-bold">{{ $event->nama_event }}</h3>
             <p class="text-sm text-gray-700 mt-2">
                 {{ $event->deskripsi_event }}
