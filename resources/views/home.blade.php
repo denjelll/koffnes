@@ -44,14 +44,15 @@
     >
       <!-- Slides -->
       <div class="slide active flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 1</h2>
+        <img src="{{ asset('storage/asset/gambar/1.png') }}" alt="1" class="w-full h-full object-contain">
       </div>
-      <div class="slide flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 2</h2>
+      <div class="slide active flex items-center justify-center h-full">
+        <img src="{{ asset('storage/asset/gambar/2.png') }}" alt="2" class="w-full h-full object-contain">
       </div>
-      <div class="slide flex items-center justify-center h-full">
-        <h2 class="text-2xl text-gray-700">Slide 3</h2>
+      <div class="slide active flex items-center justify-center h-full">
+        <img src="{{ asset('storage/asset/gambar/3.png') }}" alt="3" class="w-full h-full object-contain">
       </div>
+      
 
       <!-- Indicators -->
       <div
