@@ -81,7 +81,7 @@
     </nav>
 
     <!-- Content Area -->
-    <div class="flex flex-col items-center justify-center min-h-screen p-7 w-full relative bg-transparent">
+    <div class="flex flex-col items-center justify-center ml-20 min-h-screen p-7 w-full relative bg-transparent">
         <div class="text-3xl font-semibold mb-8 text-[#412f26]">
             Status Koffnes
         </div>
