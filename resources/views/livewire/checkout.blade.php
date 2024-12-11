@@ -41,7 +41,7 @@
             <div id="addonsCard" class="rounded-lg shadow-lg bg-coconut p-4 mt-4" style="margin-right: 20px; margin-left: 20px">
                 <!-- Header: Menu Title and Price -->
                 <div class="flex items-center mb-4">
-                    <img src="{{ $item['menu']->gambar }}" alt="{{ $item['menu']->nama_menu }}" class="w-12 h-12 rounded-full">
+                    <img src="{{ asset('menu/'.$item['menu']->gambar) }}" alt="{{ $item['menu']->nama_menu }}" class="w-12 h-12 rounded-full">
                     <div class="ml-4">
                         <h2 class="font-semibold text-lg text-gray-800">{{ $item['menu']->nama_menu }}</h2>
                         <p class=" text-gray-600">Rp {{ number_format($item['menu']->harga, 0, ',', '.' ) }}</p>
