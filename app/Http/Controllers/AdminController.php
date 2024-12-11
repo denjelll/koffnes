@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\User;
-use App\Models\AddOn;
+use App\Models\Addon;
 use App\Models\Event;
 use App\Models\Promo;
 use App\Models\Kategori;

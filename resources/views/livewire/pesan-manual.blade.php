@@ -98,11 +98,11 @@
                     <!-- Input Box -->
                     <div class="relative w-full md:w-[100rem]">
                         <input
-                            type="text"
-                            placeholder="Search menu"
-                            class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 placeholder-gray-600"
-                            wire:model.defer="search"
-                            wire:keydown.enter="searchMenu"
+                        type="text"
+            placeholder="Search Menu"
+            id="searchInput"
+            oninput="filterMenu()"
+            class="p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 placeholder-gray-600"
                             style="background-color: #cbb89d; color: #333;">
                     <!-- Search Icon -->
                         <button
@@ -249,5 +249,32 @@
         // Panggil event pertama kali untuk memastikan sesuai default
         orderType.dispatchEvent(new Event('change'));
     });
+    function filterMenu() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.menu-card');
+
+    cards.forEach(card => {
+        const title = card.querySelector('h2').textContent.toLowerCase();
+
+        // Jika pencarian input tidak kosong dan judul menu mengandung kata kunci pencarian
+        if (title.includes(searchInput) || searchInput === '') {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+let intervalId;
+
+document.getElementById('searchInput').addEventListener('input', function() {
+    if (intervalId) {
+        clearInterval(intervalId);  // Hentikan interval sebelumnya
+    }
+
+    intervalId = setInterval(function() {
+        filterMenu();  // Jalankan fungsi filterMenu setiap 300ms
+    }, 1);
+});
+
 
 </script>
