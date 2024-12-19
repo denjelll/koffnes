@@ -81,19 +81,21 @@
     </nav>
 
     <!-- Content Area -->
-    <div class="flex flex-col items-center justify-center ml-20 min-h-screen p-7 w-full relative bg-transparent">
-        <div class="text-3xl font-semibold mb-8 text-[#412f26]">
+    <div class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8 bg-transparent">
+        <div class="text-3xl font-semibold mb-6 sm:mb-8 text-[#412f26] text-center">
             Status Koffnes
         </div>
-        <div class="bg-[#f1e8d4] shadow-lg rounded-lg p-8 w-full max-w-lg">
-            <div class="mb-6 text-center">
-                <h3 class="text-xl font-semibold text-gray-700">Status Sekarang: 
+        <div class="bg-[#f1e8d4] shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-md md:max-w-lg">
+            <div class="mb-4 sm:mb-6 text-center">
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-700">
+                    Status Sekarang: 
                     <span class="text-[#412f26]">{{ $status->status_koffnes }}</span>
                 </h3>
             </div>
             <form action="{{ route('admin.toggleStatus') }}" method="POST" class="flex justify-center">
                 @csrf
-                <button type="submit" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-6 rounded-full transition duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+                <button type="submit" 
+                        class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 sm:px-6 rounded-full transition duration-300 ease-in-out focus:outline-none focus:shadow-outline">
                     {{ $status->status_koffnes === 'open' ? 'Tutup' : 'Buka' }}
                 </button>
             </form>
