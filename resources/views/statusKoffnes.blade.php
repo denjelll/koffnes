@@ -92,7 +92,7 @@
                     <span class="text-[#412f26]">{{ $status->status_koffnes }}</span>
                 </h3>
             </div>
-            <form action="{{ route('admin.toggleStatus') }}" method="POST" class="flex justify-center">
+            <form action="{{ route('toggleStatus') }}" method="POST" class="flex justify-center">
                 @csrf
                 <button type="submit" 
                         class="bg-[#412f26] hover:bg-[#5a3e2f] text-white font-bold py-2 px-4 sm:px-6 rounded-full transition duration-300 ease-in-out focus:outline-none focus:shadow-outline">
