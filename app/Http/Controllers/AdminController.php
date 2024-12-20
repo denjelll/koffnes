@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\User;
-use App\Models\AddOn;
+use App\Models\Addon;
 use App\Models\Event;
 use App\Models\Promo;
 use App\Models\Kategori;
@@ -126,6 +126,10 @@ class AdminController extends Controller
     }
     public function DeleteMenu($id){
         $menu = Menu::find($id);
+        if($menu->id_promo != null){
+            $promo = Promo::where('id_promo', $menu->id_promo)->first();
+            $promo->delete();
+        }
         $menu->delete();
         unlink(public_path('menu/'.$menu->gambar));
         return redirect('/admin/menu');

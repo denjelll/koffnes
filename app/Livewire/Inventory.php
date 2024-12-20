@@ -16,7 +16,7 @@ class Inventory extends Component
 
     public function mount()
     {
-        $this->menus = Menu::all();
+        $this->menus = Menu::orderBy('nama_menu', 'asc')->get();
     }
 
     public function openAddStockPopup($id)
@@ -36,7 +36,7 @@ class Inventory extends Component
         $menu->save();
 
         // Refresh the menu list
-        $this->menus = Menu::all();
+        $this->menus = Menu::orderBy('nama_menu', 'asc')->get();
 
         // Close popup
         $this->resetPopup();

@@ -23,12 +23,12 @@
                 <p class="text-black">{{ number_format($detail->harga_menu*$detail->kuantitas, 0, ',', '.') }}</p>
             </div>
             @if ($detail->detailAddon != null)
+            @foreach ($detail->detailAddon as $addon)
             <div class="flex justify-between">
-                @foreach ($detail->detailAddon as $addon)
                 <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
                 <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
-                @endforeach
             </div>
+            @endforeach
             @endif
             @if($detail->notes != null) 
             <div class="flex justify-between">
@@ -79,12 +79,12 @@
                 <p class="text-black">{{ number_format($detail->harga_menu*$detail->kuantitas, 0, ',', '.') }}</p>
             </div>
             @if ($detail->detailAddon != null)
-            <div class="flex justify-between">
                 @foreach ($detail->detailAddon as $addon)
+                <div class="flex justify-between">
                 <p class="text-black">{{$addon->kuantitas}} x {{$addon->addon->nama_addon}} @ {{$addon->harga}} </p>
                 <p class="text-black">+ {{ number_format($addon->harga * $addon->kuantitas, 0, ',', '.') }}</p>
+                </div>
                 @endforeach
-            </div>
             @endif
             @if($detail->notes != null) 
             <div class="flex justify-between">
