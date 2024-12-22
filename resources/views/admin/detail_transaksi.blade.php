@@ -107,8 +107,12 @@
             </div>
         </div>
         <div class="flex justify-end mt-6">
-            <button onclick="hidePrintModal()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Close</button>
-            <button onclick="printReceipt( '{{ $order->id_order }}' )" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white px-4 py-2 rounded">Print</button>
+            <form action="{{ route('cashier.printReceipt') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_order" value="{{ $order->id_order }}">
+                <button type="submit" class="bg-[#412f26] hover:bg-[#5a3e2f] text-white px-4 py-2 rounded">Print</button>
+            </form>
+            <button onclick="hidePrintModal()" class="bg-gray-500 text-white px-4 py-2 rounded mx-2">Close</button>
         </div>
     </div>
 </div>
@@ -120,31 +124,6 @@
 
     function hidePrintModal() {
         document.getElementById('printModal').classList.add('hidden');
-    }
-
-    function printReceipt(orderId) {
-    // Lakukan permintaan POST menggunakan Fetch API
-    fetch(`{{ url('/receipt/') }}/${orderId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ id_order: orderId })
-    })
-    .then(response => response.text()) // Dapatkan konten HTML dari respons
-    .then(html => {
-        // Buka jendela baru dengan ukuran tertentu dan cetak struk
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.onload = function () {
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        };
-    })
-    .catch(error => console.error('Error:', error));
     }
 </script>
 @endsection

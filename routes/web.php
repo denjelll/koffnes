@@ -115,6 +115,7 @@ Route::middleware(['role:Kasir|Admin'])->group(function () {
     Route::get('cashier/stock', Inventory::class)->name('inventory');
     Route::get('cashier/status', [CashierController::class, 'status'])->name('koffnesstatus');
     Route::post('cashier/status', [CashierController::class, 'toggleStatus'])->name('toggleStatus');
+    Route::post('/cashier/print-receipt', [CashierController::class, 'printReceipt'])->name('cashier.printReceipt');
 });
 
 Route::middleware(['check_koffnes'])->group(function () {

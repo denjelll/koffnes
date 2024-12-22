@@ -8,7 +8,7 @@
     <style>
         /* Ukuran kertas 58mm x auto */
         @page {
-            size: 58mm auto;
+            size: 58mm 50mm;
             margin: 0;
         }
         body {
@@ -18,7 +18,7 @@
             padding: 0;
         }
         .receipt {
-            width: 58mm;
+            width: 58mm auto;
             padding: 5px;
             box-sizing: border-box;
             text-align: center;
@@ -34,9 +34,10 @@
         .details {
             text-align: left;
         }
-        .details .item {
+        .item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 5px;
         }
         .footer {
@@ -44,7 +45,7 @@
             text-align: center;
         }
         .fontSmall {
-            font-size: 7px;
+            font-size: 10px;
             margin-top: 5px;
         }
     </style>
@@ -61,12 +62,16 @@
         <!-- Info Transaksi -->
         <div class="details">
             <div class="item">
+                <span>ID Order:</span>
+                <strong>{{ $order->id_order }}</strong>
+            </div>
+            <div class="item">
                 <span>Tanggal:</span>
                 <span>{{ $order->waktu_transaksi }}</span>
             </div>
             <div class="item">
                 <span>Cashier:</span>
-                <span>{{ $cashier->nama_depan }} {{ $cashier->nama_belakang }}</span>
+                <span>{{ $order->cashier->nama_depan }} {{ $order->cashier->nama_belakang }}</span>
             </div>
             <div class="item">
                 <span>Status:</span>
@@ -83,45 +88,27 @@
         <div class="details">
             @foreach ($order->detailOrders as $detail)
                 @php
-                    $now = \Carbon\Carbon::parse($order->waktu_transaksi);
-                    $promo = $detail->menu->promo;
-
-                    Log::info('Transaction Time: ' . $order->waktu_transaksi);
-                    Log::info('Current Promo: ', (array) $promo);
-                    Log::info('Current Time Check: ' . $now);
-
-                    // Periksa apakah promo berlaku
-                    $hargaMenu = $detail->menu->harga;
-                    if (
-                        $promo && 
-                        $promo->status === 'Aktif' &&
-                        ($promo->hari === 'AllDay' || $promo->hari === $now->format('l')) &&
-                        ($now->format('H:i:s') >= $promo->waktu_mulai && $now->format('H:i:s') <= $promo->waktu_berakhir)
-                    ) {
-                        $hargaMenu = $promo->harga_promo;
-                    }
-
-                    Log::info('Hari sekarang: ' . $now->format('l'));
-
+                    // Hitung harga satuan
+                    $hargaSatuan = $detail->harga_menu / $detail->kuantitas;
                 @endphp
 
                 <div class="item">
-                    <span>{{ $detail->menu->nama_menu }}</span>
-                    <span>Rp {{ number_format($detail->harga_menu * $detail->kuantitas, 0, ',', '.') }}</span>
+                    <strong>- {{ $detail->menu->nama_menu }}</strong>
+                    <span>Rp {{ number_format($hargaSatuan * $detail->kuantitas, 0, ',', '.') }}</span>
                 </div>
                 <div class="item" style="padding-left: 10px;">
-                    <span>@ Rp. {{ number_format($hargaMenu, 0, ',', '.') }} (x{{ $detail->kuantitas }})</span>
+                    <span>@ Rp. {{ number_format($hargaSatuan, 0, ',', '.') }} (x{{ $detail->kuantitas }})</span>
                 </div>
                 @if (!empty($detail->notes))
                     <div class="item" style="padding-left: 10px;">
-                        <span>Catatan:</span>
+                        <span>Notes:</span>
                         <span>{{ $detail->notes }}</span>
                     </div>
                 @endif
                 @foreach ($detail->detailAddon as $addon)
                     <div class="item" style="padding-left: 10px;">
                         <span>+ {{ $addon->addon->nama_addon }}</span>
-                        <span>{{ $addon->kuantitas }} x Rp {{ number_format($addon->harga, 0, ',', '.') }}</span>
+                        <span>(x{{ $addon->kuantitas }}) x Rp {{ number_format($addon->harga, 0, ',', '.') }}</span>
                     </div>
                 @endforeach
             @endforeach
@@ -153,9 +140,5 @@
             Terima kasih telah berkunjung!
         </div>
     </div>
-
-    <script> 
-        window.onload = function() { window.print(); } 
-    </script>
 </body>
 </html>
