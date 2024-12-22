@@ -89,9 +89,14 @@
                                 </div>
                             </div>
                             <div class="flex items-center ml-auto space-x-3">
-                                <button onclick="printReceipt('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
-                                    <h2 class="text-sm">🖶</h2>
-                                </button>
+                                <form action="{{ route('cashier.printReceipt') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="id_order" value="{{ $order->id_order }}">
+                                    <button type="submit" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
+                                        <h2 class="text-sm">🖶</h2>
+                                    </button>
+                                </form>
+                                
                                 <button wire:click="approveOrder('{{ $order->id_order }}')" class="flex items-center justify-center bg-[#412f26] text-white rounded-full w-8 h-8">
                                     <h2 class="text-sm">✓</h2>
                                 </button>
@@ -198,7 +203,12 @@
                             Konfirmasi
                         </button>
                     </div>
-                    
+
+                    <form id="hiddenPrintForm" action="{{ route('cashier.printReceipt') }}" method="POST" style="display: none;">
+                        @csrf
+                        <input type="hidden" name="id_order" id="hiddenOrderId">
+                    </form>
+         
                 </div>
             </div>
         @endif
@@ -273,16 +283,26 @@
         mobileNav.classList.toggle('hidden');
     });
 
-    //Listener dari Livewire dispatch untuk panggil function printReceipt
+    // //Listener dari Livewire dispatch untuk panggil function printReceipt
     document.addEventListener('livewire:initialized', () => {
         console.log('Livewire initialized'); // Pastikan ini muncul di console.
 
         // Tambahkan listener untuk event 'bayarBerhasil'
         Livewire.on('bayarBerhasil', (event) => {
-            if (event && event[0] && event[0].orderId) {
-                const orderId = event[0].orderId;
-                console.log('Order ID:', orderId); // Pastikan orderId diterima dengan benar
-                printReceipt(orderId); // Panggil fungsi printReceipt dengan orderId
+            console.log('Event diterima:', event); // Debugging untuk memastikan event diterima
+
+            // Periksa apakah event adalah array dan ambil elemen pertama
+            if (Array.isArray(event) && event[0]?.orderId) {
+                const orderId = event[0].orderId; // Ambil orderId dari elemen pertama
+                console.log('Order ID diterima:', orderId); // Debugging orderId
+
+                // Isi input hidden dengan orderId
+                const hiddenForm = document.getElementById('hiddenPrintForm');
+                const hiddenOrderId = document.getElementById('hiddenOrderId');
+                hiddenOrderId.value = orderId;
+
+                // Submit form
+                hiddenForm.submit();
             } else {
                 console.error('Order ID tidak ditemukan di event');
             }

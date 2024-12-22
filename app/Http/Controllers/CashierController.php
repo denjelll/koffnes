@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\KoffnesStatus;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -35,26 +36,25 @@ class CashierController extends Controller
         }
     }
 
-    public function printReceipt(Request $request, $id)
+    public function printReceipt(Request $request)
     {
-        Log::info('Print Receipt Called for Order ID:', ['id' => $id]);
+        $request->validate([
+            'id_order' => 'required|exists:orders,id_order',
+        ]);
 
-        // Validasi ID order
-        $order = Order::with(['detailOrders.detailAddon', 'cashier'])->find($id);
+        $order = Order::with(['cashier', 'detailOrders.detailAddon.addon'])->findOrFail($request->id_order);
+
         if (!$order) {
-            Log::error('Order not found:', ['id' => $id]);
-            abort(404, 'Order tidak ditemukan.');
+            return redirect()->back()->with('error', 'Order tidak ditemukan.');
         }
 
-        $cashier = $order->cashier;
+        $pdf = Pdf::loadView('pos_receipt', compact('order'))->setPaper([0, 0, 200, 400]); // Ukuran kertas 58mm
+        $fileName = 'receipt-' . $order->id_order . '.pdf';
 
-        // Log data untuk memastikan semuanya benar
-        Log::info('Order Data:', $order->toArray());
-        Log::info('Cashier Data:', $cashier->toArray());
-
-        // Render view template struk menjadi HTML
-        return view('pos_receipt', compact('order', 'cashier'));
+        // Return PDF for browser to print/download
+        return $pdf->stream($fileName); // Opens the PDF in the browser for printing
     }
+
 
     public function status()
     {

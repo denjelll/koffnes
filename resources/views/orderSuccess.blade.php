@@ -50,6 +50,13 @@
                                         (x{{ $itemMenu->kuantitas }})
                                         - Rp {{ number_format($itemMenu->harga_menu, 0, ',', '.') }}
                                     </div>
+                                    <!-- Tampilkan Notes Jika Ada -->
+                                    @if (!empty($itemMenu->notes))
+                                        <div class="ml-4 mt-2 text-gray-700 italic">
+                                            Notes: "{{ $itemMenu->notes }}"
+                                        </div>
+                                    @endif
+                                    
                                     @if ($itemMenu->detailAddon->isNotEmpty())
                                         <div class="ml-4 mt-2">
                                             <strong>Add-ons:</strong>

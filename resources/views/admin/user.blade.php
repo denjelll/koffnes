@@ -34,7 +34,7 @@
             </thead>
             <tbody class="bg-white text-black">
                 @foreach ($users as $user)
-                @if ($user->id_user != 99999999)
+                @if ($user->id_user > 1)
                 <tr class="border-b border-gray-300">
                     <td class="p-4">{{ $user->nama }}</td>
                     <td class="p-4">{{ $user->email }}</td>
