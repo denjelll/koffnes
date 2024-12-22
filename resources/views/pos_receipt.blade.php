@@ -120,7 +120,7 @@
         <div class="details">
             <div class="item font-bold">
                 <span>Total:</span>
-                <span>Rp {{ number_format($order->total_harga, 0, ',', '.') }}</span>
+                <strong>Rp {{ number_format($order->total_harga, 0, ',', '.') }}</strong>
             </div>
 
             <div class="item">
